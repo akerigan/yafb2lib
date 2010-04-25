@@ -11,7 +11,7 @@
     <artifactId>jgoodies-forms</artifactId>
     <version>1.0.7</version>
     <packaging>jar</packaging>
-    <name>jgoodies animations</name>
+    <name>jgoodies forms</name>
 
     <dependencies>
         <dependency>

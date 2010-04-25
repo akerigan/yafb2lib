@@ -11,7 +11,7 @@
     <artifactId>jgoodies-binding</artifactId>
     <version>1.3.2</version>
     <packaging>jar</packaging>
-    <name>jgoodies animations</name>
+    <name>jgoodies binding</name>
 
     <dependencies>
         <dependency>

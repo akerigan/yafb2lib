@@ -1,5 +1,6 @@
 package akerigan.fb2.gui;
 
+import akerigan.fb2.Fb2Utils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -18,8 +19,10 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.Enumeration;
 import java.util.Iterator;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
+import java.util.Map;
+
+import de.schlichtherle.util.zip.ZipFile;
+import de.schlichtherle.util.zip.ZipEntry;
 
 /**
  * Date: 18.04.2010
@@ -33,7 +36,6 @@ public class BookViewActionListener implements ActionListener {
     private BookInfoTableModel tableModel;
     private final JFileChooser fileChooser = new JFileChooser();
     private Log log = LogFactory.getLog(getClass());
-    private XMLInputFactory factory = XMLInputFactory.newInstance();
 
     public BookViewActionListener(Component parent, BookInfoTableModel tableModel) {
         this.parent = parent;
@@ -47,14 +49,11 @@ public class BookViewActionListener implements ActionListener {
             //This is where a real application would open the file.
             log.info("Opening: " + file.getName() + ".");
             try {
-                ZipFile zipFile = new ZipFile(fileChooser.getSelectedFile());
-                Enumeration<? extends ZipEntry> entries = zipFile.entries();
-                while (entries.hasMoreElements()) {
-                    ZipEntry zipEntry = entries.nextElement();
-                    log.info("Extracting: " + zipEntry.getName());
-                    XMLEventReader reader = factory.createXMLEventReader(zipFile.getInputStream(zipEntry));
-                    fillModel("", reader);
-                    tableModel.fireTableRowsInserted(0, Integer.MAX_VALUE);
+                for (Map<String, String> description: Fb2Utils.getDescriptions(file, "windows-1251")) {
+                    for (Map.Entry<String, String> entry : description.entrySet()) {
+                        tableModel.addEntry(entry.getKey(), entry.getValue());
+                        tableModel.fireTableRowsInserted(0, Integer.MAX_VALUE);
+                    }
                 }
             } catch (Exception ex) {
                 log.error("Error reading file", ex);
@@ -63,53 +62,6 @@ public class BookViewActionListener implements ActionListener {
         } else {
             log.info("Open command cancelled by user.");
         }
-    }
-
-    private boolean fillModel(String parentName, XMLEventReader reader) throws XMLStreamException {
-        StringBuilder value = null;
-        while (true) {
-            XMLEvent event = reader.nextEvent();
-            if (event == null) {
-                break;
-            }
-            if (event.isStartElement()) {
-                StartElement startElement = (StartElement) event;
-                QName qName = startElement.getName();
-                StringBuilder fullName = new StringBuilder(parentName);
-                if (!"FictionBook".equals(qName.getLocalPart())) {
-                    if (parentName.length() > 0) {
-                        fullName.append(".");
-                    }
-                    fullName.append(qName.getLocalPart());
-                }
-                if ("body".equals(qName.getLocalPart())) {
-                    return false;
-                }
-                Iterator attributes = startElement.getAttributes();
-                while (attributes.hasNext()) {
-                    Attribute attribute = (Attribute) attributes.next();
-                    tableModel.addEntry(fullName.toString() + "@" + attribute.getName().getLocalPart(), attribute.getValue());
-                }
-                if (startElement.isEndElement() || !fillModel(fullName.toString(), reader)) {
-                    return false;
-                }
-            } else if (event.isCharacters()) {
-                Characters characters = (Characters) event;
-                if (value == null) {
-                    value = new StringBuilder();
-                }
-                value.append(characters.getData());
-            } else if (event.isEndElement()) {
-                break;
-            }
-        }
-        if (value != null) {
-            String characters = value.toString().trim();
-            if (characters != null && characters.length() > 0) {
-                tableModel.addEntry(parentName, characters);
-            }
-        }
-        return true;
     }
 
 }

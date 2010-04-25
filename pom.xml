@@ -9,7 +9,7 @@
     <name>Yet another fb2 library</name>
 
     <modules>
-        <module>domain</module>
+        <module>core</module>
         <module>gui</module>
         <module>jgoodies-animation</module>
         <module>jgoodies-binding</module>
