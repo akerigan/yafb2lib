@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="akerigan.yafb2lib.domain.fb2.CoverPage" table="CoverPage">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <list name="images" table="CoverPage_Image">
+            <key column="CoverPage_Id" not-null="true"/>
+            <list-index column="Image_Position"/>
+            <one-to-many class="akerigan.yafb2lib.domain.fb2.Image"/>
+        </list>
+    </class>
+</hibernate-mapping>
