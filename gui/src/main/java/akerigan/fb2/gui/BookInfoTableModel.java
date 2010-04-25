@@ -96,9 +96,18 @@ public class BookInfoTableModel implements TableModel {
         log.info("Entry added: name=" + name + ",value=" + value);
     }
 
+    public void clearAll() {
+        entries.clear();
+    }
+
     public void fireTableRowsInserted(int firstRow, int lastRow) {
         fireTableChanged(new TableModelEvent(this, firstRow, lastRow,
                              TableModelEvent.ALL_COLUMNS, TableModelEvent.INSERT));
+    }
+
+    public void fireTableRowsDeleted(int firstRow, int lastRow) {
+        fireTableChanged(new TableModelEvent(this, firstRow, lastRow,
+                             TableModelEvent.ALL_COLUMNS, TableModelEvent.DELETE));
     }
 
     public void fireTableChanged(TableModelEvent e) {
