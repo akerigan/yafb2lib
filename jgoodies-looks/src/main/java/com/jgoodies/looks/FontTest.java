@@ -1,4 +1,4 @@
-
+package com.jgoodies.looks;
 
 import java.awt.*;
 import java.util.Locale;
@@ -58,7 +58,7 @@ public final class FontTest {
         frame.setContentPane(buildContentPane());
         frame.setSize(400, 600);
         locateOnScreen(frame);
-        frame.setTitle("JGoodies Looks :: FontTest");
+        frame.setTitle("JGoodies Looks :: com.jgoodies.looks.FontTest");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }

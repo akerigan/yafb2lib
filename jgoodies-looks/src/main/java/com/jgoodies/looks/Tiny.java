@@ -1,4 +1,4 @@
-/*
+package com.jgoodies.looks;/*
  * Copyright (c) 2001-2007 JGoodies Karsten Lentzsch. All Rights Reserved.
  *
  * Redistribution and use in source and binary forms, with or without 
@@ -41,7 +41,7 @@ import com.jgoodies.looks.Options;
 
 
 /**
- * The main class of the JGoodies Tiny application. 
+ * The main class of the JGoodies com.jgoodies.looks.Tiny application.
  * It configures the UI, builds the main frame and opens it.<p>
  * 
  * The JGoodies Looks Professional comes with Skeleton, a much better sample
@@ -97,7 +97,7 @@ public final class Tiny {
         frame.setContentPane(buildContentPane());
         frame.setSize(600, 400);
         locateOnScreen(frame);
-        frame.setTitle("JGoodies :: Tiny");
+        frame.setTitle("JGoodies :: com.jgoodies.looks.Tiny");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
     }
