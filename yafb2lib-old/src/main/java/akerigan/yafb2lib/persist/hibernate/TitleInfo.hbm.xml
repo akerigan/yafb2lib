@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="akerigan.yafb2lib.domain.fb2.TitleInfo" table="TitleInfo">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <list name="genres" table="TitleInfo_Genre">
+            <key column="TitleInfo_Id" not-null="true"/>
+            <list-index column="Genre_Position"/>
+            <element type="string" column="genre" not-null="true"/>
+        </list>
+        <list name="authors" table="TitleInfo_Author">
+            <key column="TitleInfo_Id" not-null="true"/>
+            <list-index column="Author_Position"/>
+            <composite-element class="akerigan.yafb2lib.domain.fb2.Author"/>
+        </list>
+        <many-to-one name="bookTitle" column="bookTitle" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <property name="annotation2" column="annotation"/>
+        <many-to-one name="keywords" column="keywords" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <many-to-one name="date" column="date" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <many-to-one name="coverPage" column="coverPage" class="akerigan.yafb2lib.domain.fb2.CoverPage" cascade="all"/>
+        <property name="language" column="language"/>
+        <property name="sourceLanguage" column="sourceLanguage"/>
+        <list name="translators" table="TitleInfo_Translator">
+            <key column="TitleInfo_Id" not-null="true"/>
+            <list-index column="Translator_Position"/>
+            <composite-element class="akerigan.yafb2lib.domain.fb2.Author"/>
+        </list>
+        <list name="sequences" table="TitleInfo_Sequence">
+            <key column="TitleInfo_Id" not-null="true"/>
+            <list-index column="Sequence_Position"/>
+            <composite-element class="akerigan.yafb2lib.domain.fb2.Sequence"/>
+        </list>
+    </class>
+</hibernate-mapping>

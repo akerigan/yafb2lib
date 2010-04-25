@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="akerigan.yafb2lib.domain.fb2.Description" table="Description">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="titleInfo" column="titleInfo" class="akerigan.yafb2lib.domain.fb2.TitleInfo" cascade="all"/>
+        <many-to-one name="documentInfo" column="documentInfo" class="akerigan.yafb2lib.domain.fb2.DocumentInfo"
+                     cascade="all"/>
+        <many-to-one name="publishInfo" column="publishInfo" class="akerigan.yafb2lib.domain.fb2.PublishInfo"
+                     cascade="all"/>
+        <list name="customInfos" table="Description_CustomInfo">
+            <key column="Description_Id" not-null="true"/>
+            <list-index column="CustomInfo_Position"/>
+            <composite-element class="akerigan.yafb2lib.domain.fb2.CustomInfo"/>
+        </list>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,11 @@
+<html>
+<head>
+    <title>$title</title>
+</head>
+<body>
+    #foreach ($book in $books)
+    <h3>$book.fileName</h3>
+        $book.description.titleInfo.annotation2
+    #end
+</body>
+</html>

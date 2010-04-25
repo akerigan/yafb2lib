@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <class name="akerigan.yafb2lib.domain.fb2.PublishInfo" table="PublishInfo">
+        <id name="id" column="id">
+            <generator class="native"/>
+        </id>
+        <many-to-one name="bookName" column="bookName" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <many-to-one name="publisher" column="publisher" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <many-to-one name="city" column="city" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <property name="year" column="year"/>
+        <many-to-one name="isbn" column="isbn" class="akerigan.yafb2lib.domain.fb2.TextField" cascade="all"/>
+        <list name="sequences" table="PublishInfo_Sequence">
+            <key column="PublishInfo_Id" not-null="true"/>
+            <list-index column="Sequence_Position"/>
+            <composite-element class="akerigan.yafb2lib.domain.fb2.Sequence"/>
+        </list>
+    </class>
+</hibernate-mapping>
