@@ -49,7 +49,7 @@ public class BookViewActionListener implements ActionListener {
             //This is where a real application would open the file.
             log.info("Opening: " + file.getName() + ".");
             try {
-                for (Map<String, String> description: Fb2Utils.getDescriptions(file, "windows-1251")) {
+                for (Map<String, String> description: Fb2Utils.getDescriptions(file, "windows-1251", true)) {
                     for (Map.Entry<String, String> entry : description.entrySet()) {
                         tableModel.addEntry(entry.getKey(), entry.getValue());
                         tableModel.fireTableRowsInserted(0, Integer.MAX_VALUE);
