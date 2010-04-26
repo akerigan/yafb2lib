@@ -14,6 +14,7 @@
     <name>fb2 core functionality</name>
 
     <dependencies>
+        
         <dependency>
             <groupId>de.schlichtherle.io</groupId>
             <artifactId>truezip</artifactId>
@@ -25,6 +26,19 @@
             <artifactId>h2</artifactId>
             <version>1.2.134</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>3.0.1.RELEASE</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.2.2</version>
+        </dependency>
+        
     </dependencies>
 
 </project>

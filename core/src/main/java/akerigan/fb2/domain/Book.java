@@ -1,4 +1,4 @@
-package akerigan.fb2;
+package akerigan.fb2.domain;
 
 /**
  * User: akerigan
