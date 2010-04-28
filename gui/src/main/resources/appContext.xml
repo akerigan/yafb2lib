@@ -30,7 +30,7 @@
         <constructor-arg ref="dataSource"/>
     </bean>
 
-    <bean id="dbService" class="akerigan.fb2.service.H2DbService">
+    <bean id="dbService" class="akerigan.fb2.service.H2DbService" init-method="init">
         <property name="template" ref="jdbcTemplate"/>
     </bean>
 

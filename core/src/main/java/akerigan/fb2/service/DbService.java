@@ -10,10 +10,12 @@ import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
  */
 public abstract class DbService {
 
-    public SimpleJdbcTemplate template;
+    protected SimpleJdbcTemplate template;
 
     public void setTemplate(SimpleJdbcTemplate template) {
         this.template = template;
-    }    
+    }
+
+    public abstract void init();
 
 }
