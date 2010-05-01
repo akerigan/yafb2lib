@@ -20,6 +20,10 @@ public class FileLister {
     public FileLister() {
     }
 
+    public ArrayList<File> getStartDirs() {
+        return startDirs;
+    }
+
     public void addStartDir(File dir) {
         if (dir.exists()) {
             startDirs.add(dir);
