@@ -8,9 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 13.08.2008
- *         Time: 22:47:48
+ * Date: 13.08.2008
+ * Time: 22:47:48
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Author {

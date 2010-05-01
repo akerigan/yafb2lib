@@ -9,9 +9,10 @@ import java.io.*;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 27.09.2008
- *         Time: 15:37:14
+ * Date: 27.09.2008
+ * Time: 15:37:14
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class BookCopy {
 

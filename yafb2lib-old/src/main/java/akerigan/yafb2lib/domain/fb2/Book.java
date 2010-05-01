@@ -3,9 +3,10 @@ package akerigan.yafb2lib.domain.fb2;
 import javax.xml.bind.annotation.*;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 14.08.2008
- *         Time: 0:24:02
+ * Date: 14.08.2008
+ * Time: 0:24:02
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 @XmlRootElement(name = "FictionBook", namespace = "http://www.gribuser.ru/xml/fictionbook/2.0")
 @XmlAccessorType(XmlAccessType.FIELD)

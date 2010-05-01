@@ -1,12 +1,13 @@
-package akerigan.yafb2lib.utils.file;
+package akerigan.utils.file;
 
 import java.io.File;
 import java.io.FileFilter;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 18.03.2008
- *         Time: 20:51:13
+ * Date: 18.03.2008
+ * Time: 20:51:13
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class DirFilter implements FileFilter {
     public boolean accept(File file) {

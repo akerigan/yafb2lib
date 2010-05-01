@@ -14,9 +14,10 @@ import java.sql.SQLException;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 24.09.2008
- *         Time: 21:17:03
+ * Date: 24.09.2008
+ * Time: 21:17:03
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class JdbcTemplateBookDao implements BookDao {
 

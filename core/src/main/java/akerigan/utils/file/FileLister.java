@@ -1,4 +1,4 @@
-package akerigan.yafb2lib.utils.file;
+package akerigan.utils.file;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -8,9 +8,10 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 18.03.2008
- *         Time: 20:25:11
+ * Date: 18.03.2008
+ * Time: 20:25:11
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class FileLister {
 
@@ -20,7 +21,9 @@ public class FileLister {
     }
 
     public void addStartDir(File dir) {
-        startDirs.add(dir);
+        if (dir.exists()) {
+            startDirs.add(dir);
+        }
     }
 
     public List<File> findFiles(FilePatternType filePatternType, String filePattern) {

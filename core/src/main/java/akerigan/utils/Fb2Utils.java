@@ -1,6 +1,5 @@
-package akerigan.fb2;
+package akerigan.utils;
 
-import akerigan.StringUtils;
 import de.schlichtherle.util.zip.ZipEntry;
 import de.schlichtherle.util.zip.ZipFile;
 

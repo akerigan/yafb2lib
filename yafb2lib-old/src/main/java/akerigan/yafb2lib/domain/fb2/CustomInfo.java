@@ -3,9 +3,10 @@ package akerigan.yafb2lib.domain.fb2;
 import javax.xml.bind.annotation.*;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 14.08.2008
- *         Time: 0:12:04
+ * Date: 14.08.2008
+ * Time: 0:12:04
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class CustomInfo {

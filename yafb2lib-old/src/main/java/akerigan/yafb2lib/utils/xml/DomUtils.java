@@ -12,9 +12,10 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.StringWriter;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 18.09.2008
- *         Time: 22:28:27
+ * Date: 18.09.2008
+ * Time: 22:28:27
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class DomUtils {
 

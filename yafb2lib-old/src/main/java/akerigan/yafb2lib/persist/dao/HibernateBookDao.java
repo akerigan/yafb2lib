@@ -7,9 +7,10 @@ import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 21.09.2008
- *         Time: 21:01:16
+ * Date: 21.09.2008
+ * Time: 21:01:16
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class HibernateBookDao extends HibernateDaoSupport implements BookDao {
 

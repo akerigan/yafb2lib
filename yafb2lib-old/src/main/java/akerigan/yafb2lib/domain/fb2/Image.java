@@ -6,9 +6,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 13.08.2008
- *         Time: 23:25:02
+ * Date: 13.08.2008
+ * Time: 23:25:02
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Image {

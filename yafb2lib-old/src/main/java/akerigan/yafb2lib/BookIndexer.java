@@ -1,9 +1,9 @@
 package akerigan.yafb2lib;
 
+import akerigan.utils.file.FileLister;
+import akerigan.utils.file.FilePatternType;
 import akerigan.yafb2lib.domain.fb2.Book;
 import akerigan.yafb2lib.persist.service.BookService;
-import akerigan.yafb2lib.utils.file.FileLister;
-import akerigan.yafb2lib.utils.file.FilePatternType;
 import de.schlichtherle.util.zip.ZipEntry;
 import de.schlichtherle.util.zip.ZipFile;
 import org.springframework.context.ApplicationContext;
@@ -15,9 +15,10 @@ import java.io.File;
 import java.util.Enumeration;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 13.08.2008
- *         Time: 21:47:10
+ * Date: 13.08.2008
+ * Time: 21:47:10
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class BookIndexer {
 

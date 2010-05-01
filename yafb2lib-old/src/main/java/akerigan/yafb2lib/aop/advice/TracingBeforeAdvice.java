@@ -5,9 +5,10 @@ import org.springframework.aop.MethodBeforeAdvice;
 import java.lang.reflect.Method;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 21.09.2008
- *         Time: 21:03:43
+ * Date: 21.09.2008
+ * Time: 21:03:43
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class TracingBeforeAdvice implements MethodBeforeAdvice {
 

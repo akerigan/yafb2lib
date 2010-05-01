@@ -1,6 +1,6 @@
 package akerigan.fb2.gui;
 
-import akerigan.fb2.Fb2Utils;
+import akerigan.utils.Fb2Utils;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;

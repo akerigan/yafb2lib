@@ -6,9 +6,10 @@ import akerigan.yafb2lib.persist.dao.BookDao;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 21.09.2008
- *         Time: 21:05:50
+ * Date: 21.09.2008
+ * Time: 21:05:50
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class BookServiceImpl implements BookService {
 

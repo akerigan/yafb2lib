@@ -9,10 +9,11 @@ import java.util.List;
 
 /**
  * Generic information about the fb2
+ * <p/>
+ * Date: 13.08.2008
+ * Time: 22:01:18
  *
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 13.08.2008
- *         Time: 22:01:18
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 public class TitleInfo {

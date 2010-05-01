@@ -5,9 +5,10 @@ import akerigan.yafb2lib.domain.fb2.Book;
 import java.util.List;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 21.09.2008
- *         Time: 21:04:44
+ * Date: 21.09.2008
+ * Time: 21:04:44
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public interface BookService {
 

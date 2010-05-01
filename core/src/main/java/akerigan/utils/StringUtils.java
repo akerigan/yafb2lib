@@ -1,4 +1,4 @@
-package akerigan;
+package akerigan.utils;
 
 /**
  * Date: 25.04.2010
@@ -23,5 +23,5 @@ public class StringUtils {
 
         return sb.toString();
     }
-    
+
 }

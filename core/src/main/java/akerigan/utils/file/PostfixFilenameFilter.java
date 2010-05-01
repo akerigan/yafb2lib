@@ -1,12 +1,13 @@
-package akerigan.yafb2lib.utils.file;
+package akerigan.utils.file;
 
 import java.io.File;
 import java.io.FilenameFilter;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 18.03.2008
- *         Time: 20:48:15
+ * Date: 18.03.2008
+ * Time: 20:48:15
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class PostfixFilenameFilter implements FilenameFilter {
     private String postfix;

@@ -17,9 +17,10 @@ import java.util.List;
 import java.util.Properties;
 
 /**
- * @author ���� ��������� (akerigan@gmail.com)
- *         Date: 30.09.2008
- *         Time: 22:39:51
+ * Date: 30.09.2008
+ * Time: 22:39:51
+ *
+ * @author Vlad Vinichenko(akerigan@gmail.com)
  */
 public class BooksAnnotation {
 
