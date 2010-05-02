@@ -15,9 +15,9 @@ import java.io.IOException;
  *
  * @author Vlad Vinichenko(akerigan@gmail.com)
  */
-public class FilerTest {
+public class FileListerTest {
 
-    private static Log log = LogFactory.getLog(FilerTest.class);
+    private static Log log = LogFactory.getLog(FileListerTest.class);
 
     public static void main(String[] args) throws IOException {
         AppProperties appProperties = new AppProperties();
