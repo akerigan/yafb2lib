@@ -30,18 +30,17 @@
 
 package com.jgoodies.forms.layout;
 
-import java.awt.Component;
-import java.awt.Dimension;
+import java.awt.*;
 
 /**
  * A component that is used in the layout tests. It is constructed
  * with fixed minimum and preferred sizes.
- * 
- * @author	Karsten Lentzsch
+ *
  * @version $Revision: 1.7 $
+ * @author Karsten Lentzsch
  */
 public final class TestComponent extends Component {
-    
+
     /**
      * Holds the component's minimum size that can be requested
      * using <code>#getMinimumSize</code>.
@@ -53,58 +52,58 @@ public final class TestComponent extends Component {
      * using <code>#getPreferredSize</code>.
      */
     private final Dimension preferredSize;
-    
-    
+
+
     // Instance Creation ******************************************************
-    
+
     /**
      * Constructs a TestComponent with the given minimum and preferred sizes.
-     * 
-     * @param minimumSize      the component's minimum size
-     * @param preferredSize    the component's preferred size
+     *
+     * @param minimumSize   the component's minimum size
+     * @param preferredSize the component's preferred size
      */
     public TestComponent(Dimension minimumSize, Dimension preferredSize) {
-        this.minimumSize   = minimumSize;
+        this.minimumSize = minimumSize;
         this.preferredSize = preferredSize;
     }
-    
+
     /**
-     * Constructs a TestComponent with the given minimum and preferred 
+     * Constructs a TestComponent with the given minimum and preferred
      * widths and heights.
-     * 
-     * @param minWidth      the component's minimum width
-     * @param minHeight     the component's minimum height
-     * @param prefWidth     the component's preferred width
-     * @param prefHeight    the component's preferred height
+     *
+     * @param minWidth   the component's minimum width
+     * @param minHeight  the component's minimum height
+     * @param prefWidth  the component's preferred width
+     * @param prefHeight the component's preferred height
      */
     public TestComponent(int minWidth, int minHeight, int prefWidth, int prefHeight) {
         this(new Dimension(minWidth, minHeight),
-             new Dimension(prefWidth, prefHeight));
+                new Dimension(prefWidth, prefHeight));
     }
-    
-    
+
+
     // Accessing Properties ***************************************************
-    
+
     /**
      * Returns the minimum size of this component.
-     * 
+     *
      * @return a dimension object indicating this component's minimum size
      * @see #getPreferredSize()
      */
     public Dimension getMinimumSize() {
         return minimumSize;
     }
-    
-    
+
+
     /**
      * Returns the preferred size of this component.
-     * 
+     *
      * @return a dimension object indicating this component's preferred size
      * @see #getMinimumSize()
      */
     public Dimension getPreferredSize() {
         return preferredSize;
     }
-    
-    
+
+
 }
