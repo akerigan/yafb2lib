@@ -21,6 +21,7 @@ public class H2DbService extends DbService {
             template.update("create table books(book_id identity primary key, sha1 char(40)," +
                     " container varchar(256), file varchar(256), bigint size)");
             template.update("create index books_sha1_idx ON books(sha1)");
+            template.update("create index books_container_idx ON books(container)");
         }
         if (!tables.contains("books_description")) {
             template.update("create table books_description(int book_id, name varchar(256), value varchar(4096))");

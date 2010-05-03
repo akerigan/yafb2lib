@@ -30,17 +30,13 @@ public class FileLister {
         }
     }
 
-    public List<File> findFiles(FilePatternType filePatternType, String filePattern) {
-        FilenameFilter filter = null;
-        if (filePatternType == FilePatternType.postfix) {
-            filter = new PostfixFilenameFilter(filePattern);
-        }
+    public List<File> findFiles(FilenameFilter filter) {
         if (filter == null) {
-            throw new UnsupportedOperationException("Unsupported filename filter type");
+            throw new IllegalArgumentException("Filename filter is empty");
         }
         ArrayList<File> dirsFound = new ArrayList<File>();
         ArrayList<File> dirsCurrent = new ArrayList<File>(startDirs);
-        ArrayList<File> dirsPrevious = null;
+        ArrayList<File> dirsPrevious;
         FileFilter dirFilter = new DirFilter();
         while (dirsCurrent.size() != 0) {
             dirsFound.addAll(dirsCurrent);

@@ -1,8 +1,8 @@
 package akerigan.fb2.test;
 
 import akerigan.fb2.AppProperties;
+import akerigan.fb2.Fb2FilenameFilter;
 import akerigan.utils.file.FileLister;
-import akerigan.utils.file.FilePatternType;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -23,7 +23,7 @@ public class FileListerTest {
         AppProperties appProperties = new AppProperties();
         FileLister lister = new FileLister();
         lister.getStartDirs().addAll(appProperties.getBaseDirs());
-        for (File file : lister.findFiles(FilePatternType.postfix, ".zip")) {
+        for (File file : lister.findFiles(new Fb2FilenameFilter())) {
             log.info("file: " + file);
         }
     }

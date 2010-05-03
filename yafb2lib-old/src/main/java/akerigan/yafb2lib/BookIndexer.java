@@ -1,7 +1,7 @@
 package akerigan.yafb2lib;
 
 import akerigan.utils.file.FileLister;
-import akerigan.utils.file.FilePatternType;
+import akerigan.utils.file.SuffixFilenameFilter;
 import akerigan.yafb2lib.domain.fb2.Book;
 import akerigan.yafb2lib.persist.service.BookService;
 import de.schlichtherle.util.zip.ZipEntry;
@@ -40,7 +40,7 @@ public class BookIndexer {
             for (String dirPath : path.split(";")) {
                 lister.addStartDir(new File(dirPath));
             }
-            for (File file : lister.findFiles(FilePatternType.postfix, ".zip")) {
+            for (File file : lister.findFiles(new SuffixFilenameFilter(".zip"))) {
                 System.out.println(file);
                 try {
                     ZipFile zipFile = new ZipFile(file, "windows-1251");

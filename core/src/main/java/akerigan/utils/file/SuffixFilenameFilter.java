@@ -9,10 +9,10 @@ import java.io.FilenameFilter;
  *
  * @author Vlad Vinichenko(akerigan@gmail.com)
  */
-public class PostfixFilenameFilter implements FilenameFilter {
+public class SuffixFilenameFilter implements FilenameFilter {
     private String postfix;
 
-    public PostfixFilenameFilter(String postfix) {
+    public SuffixFilenameFilter(String postfix) {
         this.postfix = postfix;
     }
 
