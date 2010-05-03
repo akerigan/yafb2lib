@@ -30,24 +30,21 @@
 
 package com.jgoodies.binding.tests;
 
-import java.util.Arrays;
-
-import javax.swing.DefaultListModel;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.tests.event.ListDataReport;
+import com.jgoodies.binding.test.event.ListDataReport;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
+import javax.swing.*;
+import java.util.Arrays;
 
 /**
  * Tests the {@link ComboBoxAdapter}.
- * 
- * @author  Jeanette Winzenburg
+ *
+ * @author Jeanette Winzenburg
  * @version $Revision: 1.18 $
- * 
  * @see ComboBoxAdapter
  */
 public final class ComboBoxAdapterTest extends TestCase {
@@ -77,7 +74,7 @@ public final class ComboBoxAdapterTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Checks that the constructors reject null selectionHolders with a NPE.
      */
     public void testConstructorRejectsNullValues() {
@@ -116,7 +113,7 @@ public final class ComboBoxAdapterTest extends TestCase {
 
 
     /**
-     * Tests that the event source for all events fired by 
+     * Tests that the event source for all events fired by
      * ComboBoxModel operations is the ComboBoxModel.
      */
     public void testEventSource() {
@@ -237,14 +234,14 @@ public final class ComboBoxAdapterTest extends TestCase {
         initComboWithSelectionInList();
         String[] anotherArray = new String[]{"one", "two", "three", "four"};
         selectionInList.setListModel(createListModel(anotherArray));
-        assertTrue("combo must fire at least one event, either 1 content change or a combination of add/remove or content/add or content/remove", 
+        assertTrue("combo must fire at least one event, either 1 content change or a combination of add/remove or content/add or content/remove",
                 report.eventCount() >= 1);
     }
 
 
     // Changing the Selection *************************************************
 
-    /** 
+    /**
      * Verifies that a ComboBoxAdapter built with a SelectionInList
      * keeps the selection in synch with an underlying ListModel.
      */
@@ -252,20 +249,20 @@ public final class ComboBoxAdapterTest extends TestCase {
         initComboWithSelectionInList();
         combo.setSelectedItem("two");
         listModel.set(1, "other");
-        assertEquals("combo selection must be changed", 
-                "other", 
+        assertEquals("combo selection must be changed",
+                "other",
                 combo.getSelectedItem());
     }
 
-    /** 
+    /**
      * Verifies that a ComboBoxAdapter built with a selection holder
      * won't update the selection if the underlying ListModel changes.
      */
     public void testSelectionAfterSetElementDecoupled() {
         combo.setSelectedItem("two");
         listModel.set(1, "other");
-        assertEquals("combo selection must be changed", 
-                "two", 
+        assertEquals("combo selection must be changed",
+                "two",
                 combo.getSelectedItem());
     }
 
@@ -281,7 +278,7 @@ public final class ComboBoxAdapterTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Verifies that the selection will be cleared if
      * it has been removed from the underlying list.
      */
@@ -289,21 +286,21 @@ public final class ComboBoxAdapterTest extends TestCase {
         initComboWithSelectionInList();
         combo.setSelectedItem("two");
         listModel.remove(1);
-        assertEquals("Combo's selection must be empty", 
-                null, 
+        assertEquals("Combo's selection must be empty",
+                null,
                 combo.getSelectedItem());
     }
 
 
     /**
-     * Verifies that the selection holder is unchanged 
+     * Verifies that the selection holder is unchanged
      * if the selection is removed from the underlying list.
      */
     public void testSelectionAfterRemoveOnDecoupled() {
         combo.setSelectedItem("two");
         listModel.remove(1);
-        assertEquals("Combo's selection must be empty", 
-                "two", 
+        assertEquals("Combo's selection must be empty",
+                "two",
                 combo.getSelectedItem());
     }
 
@@ -321,9 +318,9 @@ public final class ComboBoxAdapterTest extends TestCase {
     }
 
 
-    /** 
-     * This is for comparison only: 
-     *  taking DefaultComboBoxModel as reference.
+    /**
+     * This is for comparison only:
+     * taking DefaultComboBoxModel as reference.
      */
     //  public void testDefaultComboSelectionAfterRemoveOn() {
     //    DefaultComboBoxModel combo = new DefaultComboBoxModel(someArray);
@@ -369,7 +366,7 @@ public final class ComboBoxAdapterTest extends TestCase {
 
     // List Changes, Requires an Underlying SelectionInList *******************
 
-    /** 
+    /**
      * Tests effects of setting new List when
      * selectionInList controls selection.
      */
@@ -386,7 +383,7 @@ public final class ComboBoxAdapterTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Tests effects of setting new List when
      * selectionInList controls selection.
      */
@@ -402,7 +399,7 @@ public final class ComboBoxAdapterTest extends TestCase {
     }
 
 
-    /** 
+    /**
      * Tests effects of setting new List when
      * selectionInList does not control selection.
      */
@@ -420,7 +417,7 @@ public final class ComboBoxAdapterTest extends TestCase {
      }
      */
 
-    /** 
+    /**
      * Tests effects of setting new List when
      * selectionInList does not control selection.
      */

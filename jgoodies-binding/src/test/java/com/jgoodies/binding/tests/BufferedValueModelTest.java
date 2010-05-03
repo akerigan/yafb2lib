@@ -30,34 +30,35 @@
 
 package com.jgoodies.binding.tests;
 
+import com.jgoodies.binding.beans.PropertyAdapter;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
+import com.jgoodies.binding.test.value.CloningValueHolder;
+import com.jgoodies.binding.test.value.ToUpperCaseStringHolder;
+import com.jgoodies.binding.value.BufferedValueModel;
+import com.jgoodies.binding.value.Trigger;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.beans.PropertyAdapter;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
-import com.jgoodies.binding.tests.value.CloningValueHolder;
-import com.jgoodies.binding.tests.value.ToUpperCaseStringHolder;
-import com.jgoodies.binding.value.*;
-
 /**
  * Tests class {@link BufferedValueModel}.
- * Critical are state changes to and from the state 
+ * Critical are state changes to and from the state
  * where buffered value == subject value.
- * 
+ *
  * @author Jeanette Winzenburg
  * @author Karsten Lentzsch
  * @version $Revision: 1.16 $
- * 
- * @see     BufferedValueModel
+ * @see BufferedValueModel
  */
 public final class BufferedValueModelTest extends TestCase {
 
     private static final Object INITIAL_VALUE = "initial value";
-    private static final Object RESET_VALUE   = "reset value";
+    private static final Object RESET_VALUE = "reset value";
 
     /**
      * Holds a subject that can be reused by tests.
@@ -69,43 +70,43 @@ public final class BufferedValueModelTest extends TestCase {
      * and changed by invoking #commit and #flush.
      */
     private Trigger triggerChannel;
-    
-    
+
+
     // Testing Proper Values **************************************************
 
     /**
      * Tests that the BufferedValueModel returns the subject's values
-     * as long as no value has been assigned. 
+     * as long as no value has been assigned.
      */
     public void testReturnsSubjectValueIfNoValueAssigned() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
         assertEquals(
-            "Buffer value equals the subject value before any changes.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value before any changes.",
+                buffer.getValue(),
+                subject.getValue());
 
         subject.setValue("change1");
         assertEquals(
-            "Buffer value equals the subject value changes as long as no value has been assigned.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value changes as long as no value has been assigned.",
+                buffer.getValue(),
+                subject.getValue());
 
         subject.setValue(null);
         assertEquals(
-            "Buffer value equals the subject value changes as long as no value has been assigned.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value changes as long as no value has been assigned.",
+                buffer.getValue(),
+                subject.getValue());
 
         subject.setValue("change2");
         assertEquals(
-            "Buffer value equals the subject value changes as long as no value has been assigned.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value changes as long as no value has been assigned.",
+                buffer.getValue(),
+                subject.getValue());
     }
 
     /**
      * Tests that the BufferedValueModel returns the buffered values
-     * once a value has been assigned. 
+     * once a value has been assigned.
      */
     public void testReturnsBufferedValueIfValueAssigned() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
@@ -114,37 +115,37 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.setValue(newValue1);
         subject.setValue("subject1");
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue1);
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue1);
 
         Object newValue2 = "change1";
         buffer.setValue(newValue2);
         subject.setValue("subject2");
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue2);
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue2);
 
         Object newValue3 = null;
         buffer.setValue(newValue3);
         subject.setValue(null);
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue3);
-        
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue3);
+
         Object newValue4 = "change2";
         buffer.setValue(newValue4);
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue4);
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue4);
     }
 
     /**
      * Tests that the BufferedValueModel returns the buffered values
-     * once a value has been assigned and ignores subject value changes. 
+     * once a value has been assigned and ignores subject value changes.
      */
     public void testIgnoresSubjectValuesIfValueAssigned() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
@@ -153,72 +154,72 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.setValue(newValue1);
         subject.setValue("change3");
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue1);
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue1);
         subject.setValue(newValue1);
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue1);
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue1);
         subject.setValue(null);
         assertSame(
-            "Buffer value == new value once a value has been assigned.",
-            buffer.getValue(),
-            newValue1);
+                "Buffer value == new value once a value has been assigned.",
+                buffer.getValue(),
+                newValue1);
     }
 
     /**
      * Tests that the BufferedValueModel returns the subject's values
-     * after a commit. 
+     * after a commit.
      */
     public void testReturnsSubjectValueAfterCommit() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
         buffer.setValue("change1");  // shall buffer now
         commit();
         assertEquals(
-            "Buffer value equals the subject value after a commit.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value after a commit.",
+                buffer.getValue(),
+                subject.getValue());
 
         subject.setValue("change2");
         assertEquals(
-            "Buffer value equals the subject value after a commit.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value after a commit.",
+                buffer.getValue(),
+                subject.getValue());
 
         subject.setValue(buffer.getValue());
         assertEquals(
-            "Buffer value equals the subject value after a commit.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value equals the subject value after a commit.",
+                buffer.getValue(),
+                subject.getValue());
     }
 
     /**
      * Tests that the BufferedValueModel returns the subject's values
-     * after a flush. 
+     * after a flush.
      */
     public void testReturnsSubjectValueAfterFlush() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
         buffer.setValue("change1");  // shall buffer now
         flush();
         assertEquals(
-            "Buffer value equals the subject value after a flush.",
-            subject.getValue(),
-            buffer.getValue());
+                "Buffer value equals the subject value after a flush.",
+                subject.getValue(),
+                buffer.getValue());
 
         subject.setValue("change2");
         assertEquals(
-            "Buffer value equals the subject value after a flush.",
-            subject.getValue(),
-            buffer.getValue());
+                "Buffer value equals the subject value after a flush.",
+                subject.getValue(),
+                buffer.getValue());
     }
 
 
     // Testing Proper Value Commit and Flush **********************************
 
     /**
-     * Tests the core of the buffering feature: buffer modifications 
+     * Tests the core of the buffering feature: buffer modifications
      * do not affect the subject before a commit.
      */
     public void testSubjectValuesUnchangedBeforeCommit() {
@@ -226,27 +227,27 @@ public final class BufferedValueModelTest extends TestCase {
         Object oldSubjectValue = subject.getValue();
         buffer.setValue("changedBuffer1");
         assertEquals(
-            "Buffer changes do not change the subject value before a commit.",
-            subject.getValue(),
-            oldSubjectValue
+                "Buffer changes do not change the subject value before a commit.",
+                subject.getValue(),
+                oldSubjectValue
         );
         buffer.setValue(null);
         assertEquals(
-            "Buffer changes do not change the subject value before a commit.",
-            subject.getValue(),
-            oldSubjectValue
+                "Buffer changes do not change the subject value before a commit.",
+                subject.getValue(),
+                oldSubjectValue
         );
         buffer.setValue(oldSubjectValue);
         assertEquals(
-            "Buffer changes do not change the subject value before a commit.",
-            subject.getValue(),
-            oldSubjectValue
+                "Buffer changes do not change the subject value before a commit.",
+                subject.getValue(),
+                oldSubjectValue
         );
         buffer.setValue("changedBuffer2");
         assertEquals(
-            "Buffer changes do not change the subject value before a commit.",
-            subject.getValue(),
-            oldSubjectValue
+                "Buffer changes do not change the subject value before a commit.",
+                subject.getValue(),
+                oldSubjectValue
         );
     }
 
@@ -260,24 +261,24 @@ public final class BufferedValueModelTest extends TestCase {
         Object newValue1 = "change1";
         buffer.setValue(newValue1);
         assertEquals(
-            "Subject value is unchanged before the first commit.",
-            subject.getValue(),
-            oldSubjectValue);
+                "Subject value is unchanged before the first commit.",
+                subject.getValue(),
+                oldSubjectValue);
         commit();
         assertEquals(
-            "Subject value is the new value after the first commit.",
-            subject.getValue(),
-            newValue1);
-        
+                "Subject value is the new value after the first commit.",
+                subject.getValue(),
+                newValue1);
+
         // Set the buffer to the current subject value to check whether 
         // the starts buffering, even if there's no value difference.
         Object newValue2 = subject.getValue();
         buffer.setValue(newValue2);
         commit();
         assertEquals(
-            "Subject value is the new value after the second commit.",
-            subject.getValue(),
-            newValue2);
+                "Subject value is the new value after the second commit.",
+                subject.getValue(),
+                newValue2);
     }
 
     /**
@@ -289,28 +290,28 @@ public final class BufferedValueModelTest extends TestCase {
         Object newValue1 = "new value1";
         buffer.setValue(newValue1);
         assertSame(
-            "Buffer value reflects changes before the first flush.",
-            buffer.getValue(), 
-            newValue1);
+                "Buffer value reflects changes before the first flush.",
+                buffer.getValue(),
+                newValue1);
         flush();
         assertEquals(
-            "Buffer value is the subject value after the first flush.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value is the subject value after the first flush.",
+                buffer.getValue(),
+                subject.getValue());
 
         // Set the buffer to the current subject value to check whether 
         // the starts buffering, even if there's no value difference.
         Object newValue2 = subject.getValue();
         buffer.setValue(newValue2);
         assertSame(
-            "Buffer value reflects changes before the flush.",
-            buffer.getValue(), 
-            newValue2);
+                "Buffer value reflects changes before the flush.",
+                buffer.getValue(),
+                newValue2);
         flush();
         assertEquals(
-            "Buffer value is the subject value after the second flush.",
-            buffer.getValue(),
-            subject.getValue());
+                "Buffer value is the subject value after the second flush.",
+                buffer.getValue(),
+                subject.getValue());
     }
 
     // Tests a Proper Buffering State *****************************************
@@ -321,21 +322,21 @@ public final class BufferedValueModelTest extends TestCase {
     public void testIsNotBufferingIfNoValueAssigned() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
         assertFalse(
-            "Initially the buffer does not buffer.",
-            buffer.isBuffering());
+                "Initially the buffer does not buffer.",
+                buffer.isBuffering());
 
         Object newValue = "change1";
         subject.setValue(newValue);
         assertFalse(
-            "Subject changes do not affect the buffering state.",
-            buffer.isBuffering());
-        
+                "Subject changes do not affect the buffering state.",
+                buffer.isBuffering());
+
         subject.setValue(null);
         assertFalse(
-            "Subject change to null does not affect the buffering state.",
-            buffer.isBuffering());
+                "Subject change to null does not affect the buffering state.",
+                buffer.isBuffering());
     }
-    
+
     /**
      * Tests that the buffer is buffering once a value has been assigned,
      * even if the buffered value is equal to the subject's value.
@@ -344,20 +345,20 @@ public final class BufferedValueModelTest extends TestCase {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
         buffer.setValue("change1");
         assertTrue(
-            "Setting a value (even the subject's value) turns on buffering.",
-            buffer.isBuffering());
-        
+                "Setting a value (even the subject's value) turns on buffering.",
+                buffer.isBuffering());
+
         buffer.setValue("change2");
         assertTrue(
-            "Changing the value doesn't affect the buffering state.",
-            buffer.isBuffering());
-        
+                "Changing the value doesn't affect the buffering state.",
+                buffer.isBuffering());
+
         buffer.setValue(subject.getValue());
         assertTrue(
-            "Resetting the value to the subject's value doesn't affect buffering.",
-            buffer.isBuffering());
+                "Resetting the value to the subject's value doesn't affect buffering.",
+                buffer.isBuffering());
     }
-    
+
     /**
      * Tests that the buffer is not buffering after a commit.
      */
@@ -366,19 +367,19 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.setValue("change1");
         commit();
         assertFalse(
-            "The buffer does not buffer after a commit.",
-            buffer.isBuffering());
+                "The buffer does not buffer after a commit.",
+                buffer.isBuffering());
 
         Object newValue = "change1";
         subject.setValue(newValue);
         assertFalse(
-        "The buffer does not buffer after a commit and subject change1.",
-            buffer.isBuffering());
-        
+                "The buffer does not buffer after a commit and subject change1.",
+                buffer.isBuffering());
+
         subject.setValue(null);
         assertFalse(
-        "The buffer does not buffer after a commit and subject change2.",
-            buffer.isBuffering());
+                "The buffer does not buffer after a commit and subject change2.",
+                buffer.isBuffering());
     }
 
     /**
@@ -389,23 +390,23 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.setValue("change1");
         flush();
         assertFalse(
-            "The buffer does not buffer after a flush.",
-            buffer.isBuffering());
+                "The buffer does not buffer after a flush.",
+                buffer.isBuffering());
 
         Object newValue = "change1";
         subject.setValue(newValue);
         assertFalse(
-        "The buffer does not buffer after a flush and subject change1.",
-            buffer.isBuffering());
-        
+                "The buffer does not buffer after a flush and subject change1.",
+                buffer.isBuffering());
+
         subject.setValue(null);
         assertFalse(
-        "The buffer does not buffer after a flush and subject change2.",
-            buffer.isBuffering());
+                "The buffer does not buffer after a flush and subject change2.",
+                buffer.isBuffering());
     }
 
     /**
-     * Tests that changing the buffering state fires changes of 
+     * Tests that changing the buffering state fires changes of
      * the <i>buffering</i> property.
      */
     public void testFiresBufferingChanges() {
@@ -413,7 +414,7 @@ public final class BufferedValueModelTest extends TestCase {
         BufferedValueModel buffer = new BufferedValueModel(subject, trigger2);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.addPropertyChangeListener("buffering", changeReport);
-        
+
         assertEquals("Initial state.", 0, changeReport.eventCount());
         buffer.getValue();
         assertEquals("Reading initial value.", 0, changeReport.eventCount());
@@ -441,65 +442,65 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.getValue();
         assertEquals("Reading unbuffered value.", 4, changeReport.eventCount());
     }
-    
+
     // Tests Subject Changes **************************************************
-    
+
     /**
      * Checks that #setSubject changes the subject.
      */
     public void testSubjectChange() {
         ValueHolder subject1 = new ValueHolder();
         ValueHolder subject2 = new ValueHolder();
-        
+
         BufferedValueModel buffer = new BufferedValueModel(null, triggerChannel);
         assertNull(
-            "Subject is null if not set in constructor.", 
-            buffer.getSubject());
-        
+                "Subject is null if not set in constructor.",
+                buffer.getSubject());
+
         buffer.setSubject(subject1);
         assertSame(
-            "Subject has been changed.",
-            buffer.getSubject(),
-            subject1);
+                "Subject has been changed.",
+                buffer.getSubject(),
+                subject1);
 
         buffer.setSubject(subject2);
         assertSame(
-            "Subject has been changed.",
-            buffer.getSubject(),
-            subject2);
+                "Subject has been changed.",
+                buffer.getSubject(),
+                subject2);
 
         buffer.setSubject(null);
         assertNull(
-            "Subject has been changed to null.",
-            buffer.getSubject());
-    }
-    
-    public void testSetValueSendsProperValueChangeEvents() {
-        Object obj1  = new Integer(1);
-        Object obj2a = new Integer(2);
-        Object obj2b = new Integer(2);
-        testSetValueFiresProperEvents(null, obj1,   true);
-        testSetValueFiresProperEvents(obj1, null,   true);
-        testSetValueFiresProperEvents(obj1, obj1,   false);
-        testSetValueFiresProperEvents(obj1, obj2a,  true);
-        testSetValueFiresProperEvents(obj2a, obj2b, true); // identity test
-        testSetValueFiresProperEvents(null, null,   false);
+                "Subject has been changed to null.",
+                buffer.getSubject());
     }
 
-    
-    public void testSetValueFiresProperValueChangeEvents() {
-        Object obj1  = new Integer(1);
+    public void testSetValueSendsProperValueChangeEvents() {
+        Object obj1 = new Integer(1);
         Object obj2a = new Integer(2);
         Object obj2b = new Integer(2);
-        testValueChangeSendsProperEvents(null, obj1,   true);
-        testValueChangeSendsProperEvents(obj1, null,   true);
-        testValueChangeSendsProperEvents(obj1, obj1,   false);
-        testValueChangeSendsProperEvents(obj1, obj2a,  true);
-        testValueChangeSendsProperEvents(obj2a, obj2b, true); // identity test
-        testValueChangeSendsProperEvents(null, null,   false);
+        testSetValueFiresProperEvents(null, obj1, true);
+        testSetValueFiresProperEvents(obj1, null, true);
+        testSetValueFiresProperEvents(obj1, obj1, false);
+        testSetValueFiresProperEvents(obj1, obj2a, true);
+        testSetValueFiresProperEvents(obj2a, obj2b, true); // identity test
+        testSetValueFiresProperEvents(null, null, false);
     }
-    
-    
+
+
+    public void testSetValueFiresProperValueChangeEvents() {
+        Object obj1 = new Integer(1);
+        Object obj2a = new Integer(2);
+        Object obj2b = new Integer(2);
+        testValueChangeSendsProperEvents(null, obj1, true);
+        testValueChangeSendsProperEvents(obj1, null, true);
+        testValueChangeSendsProperEvents(obj1, obj1, false);
+        testValueChangeSendsProperEvents(obj1, obj2a, true);
+        testValueChangeSendsProperEvents(obj2a, obj2b, true); // identity test
+        testValueChangeSendsProperEvents(null, null, false);
+    }
+
+
     public void testSetValueFiresIfNewValueAndSubjectChange() {
         Object initialValue = new Integer(0);
         Object oldValue = new Integer(1);
@@ -519,7 +520,7 @@ public final class BufferedValueModelTest extends TestCase {
                 changeReport.eventCount());
 
         assertEquals("The buffered value is 1.",
-                oldValue, 
+                oldValue,
                 buffer.getValue());
         // Setting the buffer from 1 to 2 should fire a value change.
         buffer.setValue(newValue);
@@ -532,8 +533,6 @@ public final class BufferedValueModelTest extends TestCase {
                 changeReport.eventCount());
     }
 
-    
-    
 
     /**
      * Checks that the buffer reports the current subject's value if unbuffered.
@@ -544,39 +543,39 @@ public final class BufferedValueModelTest extends TestCase {
         Object value1_3 = "value1.3";
         Object value2_1 = "value2.1";
         Object value2_2 = "value2.2";
-        
+
         ValueHolder subject1 = new ValueHolder(value1_1);
         ValueHolder subject2 = new ValueHolder(value2_1);
-        
+
         BufferedValueModel buffer = new BufferedValueModel(subject1, triggerChannel);
-        
+
         assertSame(
-            "Buffer returns the subject value of the current subject1.",
-            buffer.getValue(),
-            subject1.getValue());
+                "Buffer returns the subject value of the current subject1.",
+                buffer.getValue(),
+                subject1.getValue());
 
         subject1.setValue(value1_2);
         assertSame(
-            "Buffer returns the new subject value of the current subject1.",
-            buffer.getValue(),
-            subject1.getValue());
+                "Buffer returns the new subject value of the current subject1.",
+                buffer.getValue(),
+                subject1.getValue());
 
         buffer.setSubject(subject2);
         assertSame(
-            "Buffer returns the subject value of the current subject2.",
-            buffer.getValue(),
-            subject2.getValue());
+                "Buffer returns the subject value of the current subject2.",
+                buffer.getValue(),
+                subject2.getValue());
 
         subject1.setValue(value1_3);
         subject2.setValue(value2_2);
         assertSame(
-            "Buffer returns the new subject value of the current subject2.",
-            buffer.getValue(),
-            subject2.getValue());
+                "Buffer returns the new subject value of the current subject2.",
+                buffer.getValue(),
+                subject2.getValue());
     }
 
     /**
-     * Checks that the buffer listens to changes of the current subject 
+     * Checks that the buffer listens to changes of the current subject
      * and moves the value change handler if the subject changes.
      */
     public void testListensToCurrentSubject() {
@@ -584,14 +583,14 @@ public final class BufferedValueModelTest extends TestCase {
         Object value1_2 = "value1.2";
         Object value2_1 = "value2.1";
         Object value2_2 = "value2.2";
-        
+
         ValueHolder subject1 = new ValueHolder(null);
         ValueHolder subject2 = new ValueHolder(null);
-        
+
         BufferedValueModel buffer = new BufferedValueModel(subject1, triggerChannel);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.addValueChangeListener(changeReport);
-        
+
         subject1.setValue(value1_1);
         assertEquals("Value change.", 1, changeReport.eventCount());
 
@@ -600,17 +599,17 @@ public final class BufferedValueModelTest extends TestCase {
 
         buffer.setSubject(subject2);
         assertEquals("Value changed because of subject change.", 2, changeReport.eventCount());
-        
+
         subject1.setValue(value1_2);
         assertEquals("No value change.", 2, changeReport.eventCount());
 
         subject2.setValue(value2_2);
         assertEquals("Value change.", 3, changeReport.eventCount());
     }
-    
-  
+
+
     // Trigger Channel Tests *************************************************
-    
+
     /**
      * Checks that the trigger channel is non-null.
      */
@@ -636,18 +635,18 @@ public final class BufferedValueModelTest extends TestCase {
     public void testTriggerChannelChange() {
         ValueHolder trigger1 = new ValueHolder();
         ValueHolder trigger2 = new ValueHolder();
-        
+
         BufferedValueModel buffer = new BufferedValueModel(subject, trigger1);
         assertSame(
-            "Trigger channel has been changed.",
-            buffer.getTriggerChannel(),
-            trigger1);
+                "Trigger channel has been changed.",
+                buffer.getTriggerChannel(),
+                trigger1);
 
         buffer.setTriggerChannel(trigger2);
         assertSame(
-            "Trigger channel has been changed.",
-            buffer.getTriggerChannel(),
-            trigger2);
+                "Trigger channel has been changed.",
+                buffer.getTriggerChannel(),
+                trigger2);
     }
 
     /**
@@ -657,90 +656,90 @@ public final class BufferedValueModelTest extends TestCase {
     public void testListensToCurrentTriggerChannel() {
         ValueHolder trigger1 = new ValueHolder();
         ValueHolder trigger2 = new ValueHolder();
-        
+
         BufferedValueModel buffer = new BufferedValueModel(subject, trigger1);
         buffer.setValue("change1");
         Object subjectValue = subject.getValue();
         Object bufferedValue = buffer.getValue();
         trigger2.setValue(true);
         assertEquals(
-            "Changing the unrelated trigger2 to true has no effect on the subject.", 
-            subject.getValue(),
-            subjectValue);
+                "Changing the unrelated trigger2 to true has no effect on the subject.",
+                subject.getValue(),
+                subjectValue);
         assertSame(
-            "Changing the unrelated trigger2 to true has no effect on the buffer.", 
-            buffer.getValue(),
-            bufferedValue);
-        
+                "Changing the unrelated trigger2 to true has no effect on the buffer.",
+                buffer.getValue(),
+                bufferedValue);
+
         trigger2.setValue(false);
         assertEquals(
-            "Changing the unrelated trigger2 to false has no effect on the subject.", 
-            subject.getValue(),
-            subjectValue);
+                "Changing the unrelated trigger2 to false has no effect on the subject.",
+                subject.getValue(),
+                subjectValue);
         assertSame(
-            "Changing the unrelated trigger2 to false has no effect on the buffer.", 
-            buffer.getValue(),
-            bufferedValue);
-        
+                "Changing the unrelated trigger2 to false has no effect on the buffer.",
+                buffer.getValue(),
+                bufferedValue);
+
         // Change the trigger channel to trigger2.
         buffer.setTriggerChannel(trigger2);
         assertSame(
-            "Trigger channel has been changed.",
-            buffer.getTriggerChannel(),
-            trigger2);
+                "Trigger channel has been changed.",
+                buffer.getTriggerChannel(),
+                trigger2);
 
         trigger1.setValue(true);
         assertEquals(
-            "Changing the unrelated trigger1 to true has no effect on the subject.", 
-            subject.getValue(),
-            subjectValue);
+                "Changing the unrelated trigger1 to true has no effect on the subject.",
+                subject.getValue(),
+                subjectValue);
         assertSame(
-            "Changing the unrelated trigger1 to true has no effect on the buffer.", 
-            buffer.getValue(),
-            bufferedValue);
-        
+                "Changing the unrelated trigger1 to true has no effect on the buffer.",
+                buffer.getValue(),
+                bufferedValue);
+
         trigger1.setValue(false);
         assertEquals(
-            "Changing the unrelated trigger1 to false has no effect on the subject.", 
-            subject.getValue(),
-            subjectValue);
+                "Changing the unrelated trigger1 to false has no effect on the subject.",
+                subject.getValue(),
+                subjectValue);
         assertSame(
-            "Changing the unrelated trigger1 to false has no effect on the buffer.", 
-            buffer.getValue(),
-            bufferedValue);
-        
+                "Changing the unrelated trigger1 to false has no effect on the buffer.",
+                buffer.getValue(),
+                bufferedValue);
+
         // Commit using trigger2.
         trigger2.setValue(true);
         assertEquals(
-            "Changing the current trigger2 to true commits the buffered value.", 
-            buffer.getValue(),
-            subject.getValue());
-        
+                "Changing the current trigger2 to true commits the buffered value.",
+                buffer.getValue(),
+                subject.getValue());
+
         buffer.setValue("change2");
         subjectValue = subject.getValue();
         trigger2.setValue(false);
         assertEquals(
-            "Changing the current trigger2 to false flushes the buffered value.", 
-            buffer.getValue(),
-            subject.getValue());
+                "Changing the current trigger2 to false flushes the buffered value.",
+                buffer.getValue(),
+                subject.getValue());
         assertEquals(
-            "Changing the current trigger2 to false flushes the buffered value.", 
-            buffer.getValue(),
-            subjectValue);
+                "Changing the current trigger2 to false flushes the buffered value.",
+                buffer.getValue(),
+                subjectValue);
     }
 
 
     // Tests Proper Update Notifications **************************************
-    
+
     /**
-     * Checks that subject changes fire value changes 
+     * Checks that subject changes fire value changes
      * if no value has been assigned.
      */
     public void testPropagatesSubjectChangesIfNoValueAssigned() {
         BufferedValueModel buffer = createDefaultBufferedValueModel();
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.addValueChangeListener(changeReport);
-        
+
         subject.setValue("change1");
         assertEquals("Value change.", 1, changeReport.eventCount());
 
@@ -763,7 +762,7 @@ public final class BufferedValueModelTest extends TestCase {
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.setValue("new buffer");
         buffer.addValueChangeListener(changeReport);
-        
+
         subject.setValue("change1");
         assertEquals("Value change.", 0, changeReport.eventCount());
 
@@ -786,11 +785,11 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.setValue("value1");
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.addValueChangeListener(changeReport);
-        
+
         assertEquals("No initial change.", 0, changeReport.eventCount());
         commit();
         assertEquals("First commit: no change.", 0, changeReport.eventCount());
-        
+
         buffer.setValue("value2");
         assertEquals("Setting a value: a change.", 1, changeReport.eventCount());
         commit();
@@ -835,7 +834,7 @@ public final class BufferedValueModelTest extends TestCase {
         buffer.addValueChangeListener(changeReport);
         flush();
         assertEquals("First flush changes value.", 1, changeReport.eventCount());
-        
+
         buffer.setValue(subject.getValue());
         assertEquals("Resetting value: no change.", 1, changeReport.eventCount());
         flush();
@@ -850,7 +849,7 @@ public final class BufferedValueModelTest extends TestCase {
         flush();
         assertEquals("Third flush: no change.", 3, changeReport.eventCount());
     }
-    
+
     public void testFlushChecksIdentity() {
         List list1 = new ArrayList();
         List list2 = new LinkedList();
@@ -859,7 +858,7 @@ public final class BufferedValueModelTest extends TestCase {
         subject.setValue(list1);
         buffer.setValue(list2);
         assertSame("Buffered value is list2.",
-                list2, 
+                list2,
                 buffer.getValue());
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.addValueChangeListener(changeReport);
@@ -877,7 +876,7 @@ public final class BufferedValueModelTest extends TestCase {
                 list1,
                 changeReport.lastNewValue());
     }
-    
+
     public void testValueNoficationAfterSubjectChanged() {
         ValueModel initialSubject = new ValueHolder("initial value");
         BufferedValueModel buffer = new BufferedValueModel(initialSubject, new Trigger());
@@ -887,27 +886,27 @@ public final class BufferedValueModelTest extends TestCase {
         Object newValue = "changed";
         initialSubject.setValue(newValue);
         assertEquals(
-            "Value changed on original subject",
-            ++eventCount,
-            changeReport.eventCount());
+                "Value changed on original subject",
+                ++eventCount,
+                changeReport.eventCount());
         ValueModel subjectWithSame = new ValueHolder(newValue);
         buffer.setSubject(subjectWithSame);
         assertEquals(
-            "Subject changed but same value as old",
-            eventCount,
-            changeReport.eventCount());
+                "Subject changed but same value as old",
+                eventCount,
+                changeReport.eventCount());
         ValueModel subject2 =
-            new ValueHolder("changedSubjectWithDifferentValue");
+                new ValueHolder("changedSubjectWithDifferentValue");
         buffer.setSubject(subject2);
         assertEquals(
-            "Value changed by changing the subject with different value",
-            ++eventCount,
-            changeReport.eventCount());
+                "Value changed by changing the subject with different value",
+                ++eventCount,
+                changeReport.eventCount());
     }
 
-    
+
     // Rejecting Access If Subject == null ************************************
- 
+
     public void testRejectGetValueWhenSubjectIsNull() {
         BufferedValueModel buffer = new BufferedValueModel(null, triggerChannel);
         try {
@@ -985,9 +984,9 @@ public final class BufferedValueModelTest extends TestCase {
         }
     }
 
-    
+
     // Misc Tests *************************************************************
- 
+
     /**
      * Tests read actions on a read-only model.
      */
@@ -996,25 +995,25 @@ public final class BufferedValueModelTest extends TestCase {
         bean.readOnlyObjectProperty = "testString";
         PropertyAdapter readOnlyModel = new PropertyAdapter(bean, "readOnlyObjectProperty");
         BufferedValueModel buffer = new BufferedValueModel(readOnlyModel, triggerChannel);
-        
+
         assertSame(
-            "Can read values from a read-only model.", 
-            buffer.getValue(),
-            readOnlyModel.getValue());
-        
+                "Can read values from a read-only model.",
+                buffer.getValue(),
+                readOnlyModel.getValue());
+
         Object newValue1 = "new value";
         buffer.setValue(newValue1);
         assertSame(
-            "Can read values from a read-only model when buffering.", 
-            buffer.getValue(),
-            newValue1);
-        
+                "Can read values from a read-only model when buffering.",
+                buffer.getValue(),
+                newValue1);
+
         flush();
         assertSame(
-            "Can read values from a read-only model after a flush.", 
-            buffer.getValue(),
-            bean.readOnlyObjectProperty);
-        
+                "Can read values from a read-only model after a flush.",
+                buffer.getValue(),
+                bean.readOnlyObjectProperty);
+
         buffer.setValue("new value2");
         try {
             commit();
@@ -1032,14 +1031,14 @@ public final class BufferedValueModelTest extends TestCase {
         bean.writeOnlyObjectProperty = "testString";
         PropertyAdapter writeOnlyModel = new PropertyAdapter(bean, "writeOnlyObjectProperty");
         BufferedValueModel buffer = new BufferedValueModel(writeOnlyModel, triggerChannel);
-        
+
         Object newValue1 = "new value";
         buffer.setValue(newValue1);
         assertSame(
-            "Can buffer a value on a write-only model.", 
-            buffer.getValue(),
-            newValue1);
-        
+                "Can buffer a value on a write-only model.",
+                buffer.getValue(),
+                newValue1);
+
         commit();
         writeOnlyModel.setValue("new value2");
         try {
@@ -1049,39 +1048,39 @@ public final class BufferedValueModelTest extends TestCase {
             // The expected behavior
         }
     }
-    
+
 
     // Test Implementations ***************************************************
-    
+
     private void testSetValueFiresProperEvents(Object oldValue, Object newValue, boolean eventExpected) {
-        BufferedValueModel valueModel = 
-            new BufferedValueModel(new ValueHolder(oldValue), new Trigger());
+        BufferedValueModel valueModel =
+                new BufferedValueModel(new ValueHolder(oldValue), new Trigger());
         testFiresProperEvents(valueModel, oldValue, newValue, eventExpected);
     }
-    
+
     private void testValueChangeSendsProperEvents(Object oldValue, Object newValue, boolean eventExpected) {
         BufferedValueModel defaultModel = createDefaultBufferedValueModel();
         defaultModel.setValue(oldValue);
         testFiresProperEvents(defaultModel, oldValue, newValue, eventExpected);
     }
-    
+
     private void testFiresProperEvents(BufferedValueModel valueModel, Object oldValue, Object newValue, boolean eventExpected) {
         PropertyChangeReport changeReport = new PropertyChangeReport();
         valueModel.addValueChangeListener(changeReport);
         int expectedEventCount = eventExpected ? 1 : 0;
-        
+
         valueModel.setValue(newValue);
         assertEquals(
-                "Expected event count after ( " + oldValue + " -> " + newValue + ").", 
-                expectedEventCount, 
+                "Expected event count after ( " + oldValue + " -> " + newValue + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (eventExpected) {
             assertEquals("Event's old value.", oldValue, changeReport.lastEvent().getOldValue());
             assertEquals("Event's new value.", newValue, changeReport.lastEvent().getNewValue());
         }
     }
-    
-    
+
+
     // Helper Code ************************************************************
 
     private void commit() {
@@ -1102,12 +1101,12 @@ public final class BufferedValueModelTest extends TestCase {
         subject.setValue(RESET_VALUE);
         return new BufferedValueModel(subject, triggerChannel);
     }
-    
-    
+
+
     // Setup / Teardown *******************************************************
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void setUp() throws Exception {
         super.setUp();
@@ -1116,7 +1115,7 @@ public final class BufferedValueModelTest extends TestCase {
     }
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void tearDown() throws Exception {
         super.tearDown();
@@ -1124,5 +1123,5 @@ public final class BufferedValueModelTest extends TestCase {
         triggerChannel = null;
     }
 
-    
+
 }

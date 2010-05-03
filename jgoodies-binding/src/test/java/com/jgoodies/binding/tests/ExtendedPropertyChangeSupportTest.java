@@ -30,35 +30,34 @@
 
 package com.jgoodies.binding.tests;
 
+import com.jgoodies.binding.beans.ExtendedPropertyChangeSupport;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
+import junit.framework.TestCase;
+
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.beans.ExtendedPropertyChangeSupport;
-import com.jgoodies.binding.tests.event.*;
-
 /**
  * A test case for class {@link ExtendedPropertyChangeSupport}.<p>
- * 
+ * <p/>
  * TODO: Test multicast events.
- * 
+ *
  * @author <a href="mailto:neuling@dakosy.de">Mattias Neuling</a>
  * @author Karsten Lentzsch
  * @version $Revision: 1.8 $
  */
 public final class ExtendedPropertyChangeSupportTest extends TestCase {
-    
+
     private Object one;
     private Object two;
     private List emptyList1;
     private List emptyList2;
     private List list1a;
     private List list1b;
-    
+
     /**
-     * @throws Exception   in case of an unexpected problem
+     * @throws Exception in case of an unexpected problem
      */
     protected void setUp() throws Exception {
         super.setUp();
@@ -73,7 +72,7 @@ public final class ExtendedPropertyChangeSupportTest extends TestCase {
     }
 
     /**
-     * @throws Exception   in case of an unexpected problem
+     * @throws Exception in case of an unexpected problem
      */
     protected void tearDown() throws Exception {
         super.tearDown();
@@ -113,40 +112,40 @@ public final class ExtendedPropertyChangeSupportTest extends TestCase {
         testDifference("name1", "name1", emptyList1, emptyList2);
         testDifference("name1", "name1", list1a, list1b);
     }
-    
+
     private void testCommon(
-            String observedPropertyName, 
+            String observedPropertyName,
             String changedPropertyName,
-            Object oldValue, 
+            Object oldValue,
             Object newValue) {
         fireAndCount(true, observedPropertyName, changedPropertyName, oldValue, newValue, false, false);
     }
 
     private void testDifference(
-            String observedPropertyName, 
+            String observedPropertyName,
             String changedPropertyName,
-            Object oldValue, 
+            Object oldValue,
             Object newValue) {
         fireAndCount(false, observedPropertyName, changedPropertyName, oldValue, newValue, true, false);
         fireAndCount(false, observedPropertyName, changedPropertyName, oldValue, newValue, false, true);
     }
-    
+
     private void fireAndCount(
             boolean countsShallBeEqual,
-            String observedPropertyName, 
+            String observedPropertyName,
             String changedPropertyName,
-            Object oldValue, 
+            Object oldValue,
             Object newValue,
             boolean checkIdentityDefault,
             boolean checkIdentity) {
-        PropertyChangeReport epcsNamedCounter     = new PropertyChangeReport();
+        PropertyChangeReport epcsNamedCounter = new PropertyChangeReport();
         PropertyChangeReport epcsMulticastCounter = new PropertyChangeReport();
-        PropertyChangeReport pcsNamedCounter      = new PropertyChangeReport();
-        PropertyChangeReport pcsMulticastCounter  = new PropertyChangeReport();
-        
+        PropertyChangeReport pcsNamedCounter = new PropertyChangeReport();
+        PropertyChangeReport pcsMulticastCounter = new PropertyChangeReport();
+
         ExtendedPropertyChangeSupport epcs = new ExtendedPropertyChangeSupport(this, checkIdentityDefault);
-        PropertyChangeSupport         pcs  = new PropertyChangeSupport(this);
-        
+        PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
         epcs.addPropertyChangeListener(observedPropertyName, epcsNamedCounter);
         epcs.addPropertyChangeListener(epcsMulticastCounter);
         pcs.addPropertyChangeListener(observedPropertyName, pcsNamedCounter);
@@ -157,28 +156,28 @@ public final class ExtendedPropertyChangeSupportTest extends TestCase {
         } else {
             epcs.firePropertyChange(changedPropertyName, oldValue, newValue);
         }
-        pcs.firePropertyChange(changedPropertyName,  oldValue, newValue);
+        pcs.firePropertyChange(changedPropertyName, oldValue, newValue);
 
         boolean namedCountersAreEqual =
-            pcsNamedCounter.eventCount() == epcsNamedCounter.eventCount();
+                pcsNamedCounter.eventCount() == epcsNamedCounter.eventCount();
 
         boolean multicastCountersAreEqual =
-            pcsMulticastCounter.eventCount() == epcsMulticastCounter.eventCount();
-        
+                pcsMulticastCounter.eventCount() == epcsMulticastCounter.eventCount();
+
         if (countsShallBeEqual) {
             assertTrue(
-                "Named counters shall be equal",
-                namedCountersAreEqual);
+                    "Named counters shall be equal",
+                    namedCountersAreEqual);
             assertTrue(
-                "Multicast counters shall be equal",
-                multicastCountersAreEqual);
+                    "Multicast counters shall be equal",
+                    multicastCountersAreEqual);
         } else {
             assertFalse(
-                "Named counters shall differ",
-                namedCountersAreEqual);
+                    "Named counters shall differ",
+                    namedCountersAreEqual);
             assertFalse(
-                "Multicast counters shall differ",
-                multicastCountersAreEqual);
+                    "Multicast counters shall differ",
+                    multicastCountersAreEqual);
         }
     }
 

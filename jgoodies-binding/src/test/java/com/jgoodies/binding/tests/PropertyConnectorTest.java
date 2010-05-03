@@ -30,28 +30,27 @@
 
 package com.jgoodies.binding.tests;
 
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.beans.PropertyConnector;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.value.ToUpperCaseStringHolder;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.value.ToUpperCaseStringHolder;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
 
 /**
  * A test case for class {@link PropertyConnector}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.12 $
  */
 public final class PropertyConnectorTest extends TestCase {
-    
+
     private PropertyConnector createDefaultConnector(TestBean bean1, TestBean bean2) {
         return new PropertyConnector(
-            bean1,
-            "readWriteObjectProperty",
-            bean2,
-            "readWriteObjectProperty");
+                bean1,
+                "readWriteObjectProperty",
+                bean2,
+                "readWriteObjectProperty");
     }
 
     private PropertyConnector createDefaultConnector(TestBean bean1, Object initialValue1, TestBean bean2, Object initialValue2) {
@@ -110,13 +109,13 @@ public final class PropertyConnectorTest extends TestCase {
         }
     }
 
-    
+
     public void testConstructorRejectsReadOnlyBeans() {
         TestBean bean1 = new TestBean();
         TestBean bean2 = new TestBean();
         try {
-            new PropertyConnector(bean1, "readOnlyObjectProperty", 
-                                  bean2, "readOnlyObjectProperty");
+            new PropertyConnector(bean1, "readOnlyObjectProperty",
+                    bean2, "readOnlyObjectProperty");
             fail("Constructor failed to reject read-only bean properties.");
         } catch (IllegalArgumentException ex) {
             // The expected behavior
@@ -137,7 +136,7 @@ public final class PropertyConnectorTest extends TestCase {
                 bean2.getReadWriteObjectProperty());
     }
 
-    
+
     // Synchronization ********************************************************
 
     public void testUpdateProperty1() {
@@ -145,12 +144,12 @@ public final class PropertyConnectorTest extends TestCase {
         TestBean bean2 = new TestBean();
         Object initialValue2 = "newValue2";
         PropertyConnector connector =
-            createDefaultConnector(bean1, "value1", bean2, initialValue2);
+                createDefaultConnector(bean1, "value1", bean2, initialValue2);
         connector.updateProperty1();
         assertEquals(
-            "#updateProperty1 failed to update property1.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getReadWriteObjectProperty());
+                "#updateProperty1 failed to update property1.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getReadWriteObjectProperty());
     }
 
     public void testUpdateProperty2() {
@@ -158,12 +157,12 @@ public final class PropertyConnectorTest extends TestCase {
         TestBean bean2 = new TestBean();
         Object initialValue1 = "newValue1";
         PropertyConnector connector =
-            createDefaultConnector(bean1, initialValue1, bean2, "value2");
+                createDefaultConnector(bean1, initialValue1, bean2, "value2");
         connector.updateProperty2();
         assertEquals(
-            "#updateProperty2 failed to update property2.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getReadWriteObjectProperty());
+                "#updateProperty2 failed to update property2.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getReadWriteObjectProperty());
     }
 
     public void testProperty1ChangeUpdatesProperty2() {
@@ -172,9 +171,9 @@ public final class PropertyConnectorTest extends TestCase {
         createDefaultConnector(bean1, "value1", bean2, "value2");
         bean1.setReadWriteObjectProperty("newValue1");
         assertEquals(
-            "Failed to update property2 after a named change.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getReadWriteObjectProperty());
+                "Failed to update property2 after a named change.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getReadWriteObjectProperty());
     }
 
     public void testProperty2ChangeUpdatesProperty1() {
@@ -183,20 +182,20 @@ public final class PropertyConnectorTest extends TestCase {
         createDefaultConnector(bean1, "value1", bean2, "value2");
         bean2.setReadWriteObjectProperty("newValue1");
         assertEquals(
-            "Failed to update property1 after a named change.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getReadWriteObjectProperty());
+                "Failed to update property1 after a named change.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getReadWriteObjectProperty());
     }
-    
+
     public void testProperty1AnonymousChangeUpdatesProperty2() {
         TestBean bean1 = new TestBean();
         TestBean bean2 = new TestBean();
         createDefaultConnector(bean1, "value1", bean2, "value2");
         bean1.setReadWriteObjectProperties("newValue1", true, 42);
         assertEquals(
-            "Failed to update property2 after an unnamed change.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getReadWriteObjectProperty());
+                "Failed to update property2 after an unnamed change.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getReadWriteObjectProperty());
     }
 
     public void testProperty2AnonymousChangeUpdatesProperty1() {
@@ -205,14 +204,14 @@ public final class PropertyConnectorTest extends TestCase {
         createDefaultConnector(bean1, "value1", bean2, "value2");
         bean2.setReadWriteObjectProperties("newValue1", true, 42);
         assertEquals(
-            "Failed to update property1 after an unnamed change.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getReadWriteObjectProperty());
+                "Failed to update property1 after an unnamed change.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getReadWriteObjectProperty());
     }
-    
-    
+
+
     // Events that lack the new value *****************************************
-    
+
     public void testProperty1ChangeWithNullEventNewValueUpdatesProperty2() {
         TestBean bean1 = new TestBean();
         TestBean bean2 = new TestBean();
@@ -223,9 +222,9 @@ public final class PropertyConnectorTest extends TestCase {
                 "readWriteObjectProperty");
         bean1.setNullNewValueProperty("newValue1");
         assertEquals(
-            "Failed to update property2 after a change with event that has a null new value.",
-            bean1.getNullNewValueProperty(),
-            bean2.getReadWriteObjectProperty());
+                "Failed to update property2 after a change with event that has a null new value.",
+                bean1.getNullNewValueProperty(),
+                bean2.getReadWriteObjectProperty());
     }
 
     public void testProperty2ChangeWithNullEventNewValueUpdatesProperty1() {
@@ -238,14 +237,12 @@ public final class PropertyConnectorTest extends TestCase {
                 "nullNewValueProperty");
         bean2.setNullNewValueProperty("newValue1");
         assertEquals(
-            "Failed to update property1 after a change with event that has a null new value.",
-            bean1.getReadWriteObjectProperty(),
-            bean2.getNullNewValueProperty());
+                "Failed to update property1 after a change with event that has a null new value.",
+                bean1.getReadWriteObjectProperty(),
+                bean2.getNullNewValueProperty());
     }
 
-    
-    
-    
+
     // One-Way Synchronization ************************************************
 
     public void testConnectReadWriteProperty1WithReadOnlyProperty2() {
@@ -259,7 +256,7 @@ public final class PropertyConnectorTest extends TestCase {
                 "readOnlyObjectProperty");
         testConnectReadWriteWithReadOnlyProperty(bean1, bean2);
     }
-    
+
     public void testConnectReadOnlyProperty1WithReadWriteProperty2() {
         TestBean bean1 = new TestBean();
         TestBean bean2 = new TestBean();
@@ -271,8 +268,8 @@ public final class PropertyConnectorTest extends TestCase {
                 "readWriteObjectProperty");
         testConnectReadWriteWithReadOnlyProperty(bean2, bean1);
     }
-    
-    
+
+
     public void testUpdateHonorsTargetModifications() {
         ValueModel bean1 = new ValueHolder("initalValue");
         ValueModel bean2 = new ToUpperCaseStringHolder();
@@ -292,7 +289,7 @@ public final class PropertyConnectorTest extends TestCase {
                 bean1.getValue());
     }
 
-    
+
     public void testConnectReadOnlyWithModifyingTarget() {
         TestBean bean1 = new TestBean();
         ValueModel bean2 = new ToUpperCaseStringHolder();
@@ -311,22 +308,22 @@ public final class PropertyConnectorTest extends TestCase {
                 bean2.getValue());
     }
 
-    
+
     // Helper Code ************************************************************
-    
+
     private void testConnectReadWriteWithReadOnlyProperty(
-            TestBean beanWithReadWriteProperty, 
+            TestBean beanWithReadWriteProperty,
             TestBean beanWithReadOnlyProperty) {
         Object initialValue2 = "initialValue2";
         beanWithReadOnlyProperty.readOnlyObjectProperty = initialValue2;
-        
+
         // Ignore updates of property1.
         beanWithReadWriteProperty.setReadWriteObjectProperty("newValue1");
         assertEquals(
-            "The connector must not update property2.",
-            initialValue2,
-            beanWithReadOnlyProperty.getReadOnlyObjectProperty());
-        
+                "The connector must not update property2.",
+                initialValue2,
+                beanWithReadOnlyProperty.getReadOnlyObjectProperty());
+
         // Update property1 if the read-only property2 changes.
         Object newValue2 = "newValue2";
         beanWithReadOnlyProperty.fireChangeOnReadOnlyObjectProperty(newValue2);
@@ -335,17 +332,17 @@ public final class PropertyConnectorTest extends TestCase {
                 newValue2,
                 beanWithReadOnlyProperty.getReadOnlyObjectProperty());
         assertEquals(
-            "The connector must update property1.",
-            newValue2,
-            beanWithReadWriteProperty.getReadWriteObjectProperty());
+                "The connector must update property1.",
+                newValue2,
+                beanWithReadWriteProperty.getReadWriteObjectProperty());
 
         // Ignore subsequent updates of property1.
         beanWithReadWriteProperty.setReadWriteObjectProperty("newValue1b");
         assertEquals(
-            "The connector must not update property2.",
-            newValue2,
-            beanWithReadOnlyProperty.getReadOnlyObjectProperty());
+                "The connector must not update property2.",
+                newValue2,
+                beanWithReadOnlyProperty.getReadOnlyObjectProperty());
     }
-        
-    
+
+
 }

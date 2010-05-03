@@ -30,34 +30,33 @@
 
 package com.jgoodies.binding.tests;
 
-import java.beans.PropertyVetoException;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.tests.beans.EquityTestBean;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
+import com.jgoodies.binding.test.beans.EquityTestBean;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
 import com.jgoodies.binding.value.BufferedValueModel;
 import com.jgoodies.binding.value.Trigger;
 import com.jgoodies.binding.value.ValueHolder;
+import junit.framework.TestCase;
+
+import java.beans.PropertyVetoException;
 
 /**
  * A test case for class {@link com.jgoodies.binding.PresentationModel}.
- * 
+ *
  * @author Karsten Lentzsch
  * @version $Revision: 1.8 $
  */
 public final class PresentationModelTest extends TestCase {
 
-    
+
     // Null As Property Name **************************************************
-    
+
     public void testRejectNullPropertyName() {
         testRejectNullPropertyName(null);
         testRejectNullPropertyName(new TestBean());
     }
-    
+
     private void testRejectNullPropertyName(Object bean) {
         PresentationModel model = new PresentationModel(bean);
         try {
@@ -130,7 +129,7 @@ public final class PresentationModelTest extends TestCase {
         }
     }
 
-    
+
     // ************************************************************************
 
     /**
@@ -141,7 +140,7 @@ public final class PresentationModelTest extends TestCase {
         PresentationModel model = new PresentationModel(new TestBean());
         Object model1 = model.getModel("readWriteObjectProperty");
         Object model2 = model.getModel("readWriteObjectProperty");
-        
+
         assertSame("The factory method vends the same instance.", model1, model2);
     }
 
@@ -153,36 +152,36 @@ public final class PresentationModelTest extends TestCase {
         PresentationModel model = new PresentationModel(new TestBean());
         Object model1 = model.getBufferedModel("readWriteObjectProperty");
         Object model2 = model.getBufferedModel("readWriteObjectProperty");
-        
+
         assertSame("The factory method vends the same instance.", model1, model2);
     }
-    
-    
+
+
     /**
      * Verifies that the PresentationModel rejects attempts to get an adapting
      * ValueModel by means of <code>#getModel</code> with different
-     * property accessor names. In other words, for each bean property 
-     * API users must use either {@link PresentationModel#getModel(String)} or 
+     * property accessor names. In other words, for each bean property
+     * API users must use either {@link PresentationModel#getModel(String)} or
      * {@link PresentationModel#getModel(String, String, String)}, not both.
      * And all calls to the latter method must use the same getter and setter
      * names for the same property name.<p>
-     * 
+     * <p/>
      * This test invokes both methods for the same property name with different
      * getter and/or setter names and expects that the second call is rejected.
      * The PresentationModel is created without a bean set, to avoid that the
-     * underlying BeanAdapter checks for a valid property. 
+     * underlying BeanAdapter checks for a valid property.
      */
     public void testRejectsGetModelWithDifferentAccessors() {
-        String failureText  = 
-                "The PresentationModel must reject attempts " 
-              + "to get a ValueModel for the same property " 
-              + "with different accessor names.";
+        String failureText =
+                "The PresentationModel must reject attempts "
+                        + "to get a ValueModel for the same property "
+                        + "with different accessor names.";
         String propertyName = "property";
-        String getterName1  = "getter1";
-        String getterName2  = "getter2";
-        String setterName1  = "setter1";
-        String setterName2  = "setter2";
-        
+        String getterName1 = "getter1";
+        String getterName2 = "getter2";
+        String setterName1 = "setter1";
+        String setterName2 = "setter2";
+
         PresentationModel model1 = new PresentationModel(null);
         model1.getModel(propertyName);
         try {
@@ -219,33 +218,33 @@ public final class PresentationModelTest extends TestCase {
             // The expected result.
         }
     }
-    
-    
+
+
     /**
      * Verifies that the PresentationModel rejects attempts to get a buffered
-     * adapting ValueModel by means of <code>#getBufferedModel</code> with 
-     * different accessor names. In other words, for each bean property API 
-     * users must use either {@link PresentationModel#getBufferedModel(String)} 
-     * or {@link PresentationModel#getBufferedModel(String, String, String)}, 
-     * not both. And all calls to the latter method must use the same getter 
+     * adapting ValueModel by means of <code>#getBufferedModel</code> with
+     * different accessor names. In other words, for each bean property API
+     * users must use either {@link PresentationModel#getBufferedModel(String)}
+     * or {@link PresentationModel#getBufferedModel(String, String, String)},
+     * not both. And all calls to the latter method must use the same getter
      * and setter names for the same property name.<p>
-     * 
+     * <p/>
      * This test invokes both methods for the same property name with different
      * getter and/or setter names and expects that the second call is rejected.
      * The PresentationModel is created without a bean set, to avoid that the
-     * underlying BeanAdapter checks for a valid property. 
+     * underlying BeanAdapter checks for a valid property.
      */
     public void testRejectsGetBufferedModelWithDifferentAccessors() {
-        String failureText  = 
-              "The PresentationModel must reject attempts "
-            + "to get a buffered ValueModel for the same property "
-            + "with different accessor names.";
+        String failureText =
+                "The PresentationModel must reject attempts "
+                        + "to get a buffered ValueModel for the same property "
+                        + "with different accessor names.";
         String propertyName = "property";
-        String getterName1  = "getter1";
-        String getterName2  = "getter2";
-        String setterName1  = "setter1";
-        String setterName2  = "setter2";
-        
+        String getterName1 = "getter1";
+        String getterName2 = "getter2";
+        String setterName1 = "setter1";
+        String setterName2 = "setter2";
+
         PresentationModel model1 = new PresentationModel(null);
         model1.getBufferedModel(propertyName);
         try {
@@ -282,8 +281,8 @@ public final class PresentationModelTest extends TestCase {
             // The expected result.
         }
     }
-    
-    
+
+
     public void testSetTriggerChannelUpdatesExistingBufferedValueModels() {
         Object value1 = "value1";
         Object value2 = "value2";
@@ -291,65 +290,65 @@ public final class PresentationModelTest extends TestCase {
         Object value4 = "value4";
         TestBean bean = new TestBean();
         bean.setReadWriteObjectProperty(value1);
-        
+
         Trigger trigger1 = new Trigger();
         Trigger trigger2 = new Trigger();
         PresentationModel model = new PresentationModel(bean, trigger1);
         BufferedValueModel buffer = model.getBufferedModel("readWriteObjectProperty");
         buffer.setValue(value2);
-        
+
         trigger1.triggerCommit();
-        assertEquals("Before the trigger change Trigger1 commits buffered values.", 
-                value2, 
+        assertEquals("Before the trigger change Trigger1 commits buffered values.",
+                value2,
                 bean.getReadWriteObjectProperty());
-        
+
         buffer.setValue(value3);
         trigger2.triggerCommit();
-        assertEquals("Before the trigger change Trigger2 does not affect the buffer.", 
-                value2, 
+        assertEquals("Before the trigger change Trigger2 does not affect the buffer.",
+                value2,
                 bean.getReadWriteObjectProperty());
-        
+
         model.setTriggerChannel(trigger2);
         trigger1.triggerCommit();
-        assertEquals("After the trigger change Trigger1 shall not affect the buffered value anymore.", 
-                value2, 
+        assertEquals("After the trigger change Trigger1 shall not affect the buffered value anymore.",
+                value2,
                 bean.getReadWriteObjectProperty());
-        
+
         buffer.setValue(value4);
         trigger2.triggerCommit();
-        assertEquals("After the trigger change Trigger2 shall commit buffered values.", 
-                value4, 
+        assertEquals("After the trigger change Trigger2 shall commit buffered values.",
+                value4,
                 bean.getReadWriteObjectProperty());
     }
-    
-    
+
+
     // Testing Bean Changes ***************************************************
-    
+
     public void testBeanChangeFiresThreeBeanEvents() {
         Object bean = new TestBean();
         PresentationModel model = new PresentationModel((Object) null);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         model.addPropertyChangeListener(changeReport);
-        
+
         model.setBean(bean);
         assertEquals("Changing the bean fires three events: before, changing, after.",
                 3,
                 changeReport.eventCount());
     }
-    
+
     public void testEqualBeanChangeFiresThreeBeanEvents() {
         Object bean1 = new EquityTestBean("bean");
         Object bean2 = new EquityTestBean("bean");
         assertEquals("The two test beans are equal.", bean1, bean2);
         assertNotSame("The two test beans are not the same.", bean1, bean2);
-        
+
         PresentationModel model1 = new PresentationModel(bean1);
-        PropertyChangeReport beanChannelValueChangeReport = 
-            new PropertyChangeReport();
+        PropertyChangeReport beanChannelValueChangeReport =
+                new PropertyChangeReport();
         model1.getBeanChannel().addValueChangeListener(beanChannelValueChangeReport);
         PropertyChangeReport changeReport1 = new PropertyChangeReport();
         model1.addPropertyChangeListener(changeReport1);
-        
+
         model1.setBean(bean2);
         assertEquals("Changing the bean fires a change event in the bean channel.",
                 1,
@@ -362,14 +361,12 @@ public final class PresentationModelTest extends TestCase {
         model2.setBean(bean1);
         PropertyChangeReport changeReport2 = new PropertyChangeReport();
         model2.addPropertyChangeListener(changeReport2);
-        
+
         model2.setBean(bean2);
         assertEquals("Changing the bean fires three events: before, changing, after.",
                 3,
                 changeReport2.eventCount());
     }
-    
-    
-    
-    
+
+
 }

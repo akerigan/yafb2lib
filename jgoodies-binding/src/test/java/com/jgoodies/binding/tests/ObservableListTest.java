@@ -30,39 +30,37 @@
 
 package com.jgoodies.binding.tests;
 
+import com.jgoodies.binding.list.ArrayListModel;
+import com.jgoodies.binding.list.LinkedListModel;
+import com.jgoodies.binding.list.ObservableList;
+import com.jgoodies.binding.test.event.ListDataReport;
+import junit.framework.TestCase;
+
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
-
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.list.ArrayListModel;
-import com.jgoodies.binding.list.LinkedListModel;
-import com.jgoodies.binding.list.ObservableList;
-import com.jgoodies.binding.tests.event.ListDataReport;
-
 /**
- * A test case for classes {@link ArrayListModel} and {@link LinkedListModel}. 
- * 
+ * A test case for classes {@link ArrayListModel} and {@link LinkedListModel}.
+ *
  * @author Karsten Lentzsch
  * @version $Revision: 1.14 $
  */
 public final class ObservableListTest extends TestCase {
-    
+
     /**
      * Tests the constructor that accepts a collection as initial content.
      */
     public void testListConstructor() {
         new ArrayListModel(createEmptyArrayListModel());
         new LinkedListModel(createEmptyArrayListModel());
-        
+
         new ArrayListModel(createSingleElementArrayListModel());
         new LinkedListModel(createSingleElementLinkedListModel());
-        
+
         new ArrayListModel(createFilledArrayListModel());
         new LinkedListModel(createFilledLinkedListModel());
     }
@@ -73,14 +71,14 @@ public final class ObservableListTest extends TestCase {
     public void testAdd() {
         testAdd(createEmptyArrayListModel());
         testAdd(createEmptyLinkedListModel());
-        
+
         testAdd(createSingleElementArrayListModel());
         testAdd(createSingleElementLinkedListModel());
-        
+
         testAdd(createFilledArrayListModel());
         testAdd(createFilledLinkedListModel());
     }
-    
+
 
     /**
      * Tests a single indexed add operation on different observable lists.
@@ -88,7 +86,7 @@ public final class ObservableListTest extends TestCase {
     public void testAddIndexed() {
         testAddIndexed(createEmptyArrayListModel(), 0);
         testAddIndexed(createEmptyLinkedListModel(), 0);
-        
+
         testAddIndexed(createSingleElementArrayListModel(), 0);
         testAddIndexed(createSingleElementLinkedListModel(), 0);
         testAddIndexed(createSingleElementArrayListModel(), 1);
@@ -103,43 +101,43 @@ public final class ObservableListTest extends TestCase {
             testAddIndexed(createFilledLinkedListModel(), i);
         }
     }
-    
+
 
     /**
      * Tests a multiple add operation on different combinations of observable lists.
      */
     public void testAddAll() {
-        testAddAll(createEmptyArrayListModel(),  createEmptyArrayListModel());
+        testAddAll(createEmptyArrayListModel(), createEmptyArrayListModel());
         testAddAll(createEmptyLinkedListModel(), createEmptyArrayListModel());
-        testAddAll(createEmptyArrayListModel(),  createSingleElementArrayListModel());
+        testAddAll(createEmptyArrayListModel(), createSingleElementArrayListModel());
         testAddAll(createEmptyLinkedListModel(), createSingleElementArrayListModel());
-        testAddAll(createEmptyArrayListModel(),  createFilledArrayListModel());
+        testAddAll(createEmptyArrayListModel(), createFilledArrayListModel());
         testAddAll(createEmptyLinkedListModel(), createFilledArrayListModel());
-        
-        testAddAll(createSingleElementArrayListModel(),  createEmptyArrayListModel());
+
+        testAddAll(createSingleElementArrayListModel(), createEmptyArrayListModel());
         testAddAll(createSingleElementLinkedListModel(), createEmptyArrayListModel());
-        testAddAll(createSingleElementArrayListModel(),  createSingleElementArrayListModel());
+        testAddAll(createSingleElementArrayListModel(), createSingleElementArrayListModel());
         testAddAll(createSingleElementLinkedListModel(), createSingleElementArrayListModel());
-        testAddAll(createSingleElementArrayListModel(),  createFilledArrayListModel());
+        testAddAll(createSingleElementArrayListModel(), createFilledArrayListModel());
         testAddAll(createSingleElementLinkedListModel(), createFilledArrayListModel());
 
-        testAddAll(createFilledArrayListModel(),  createEmptyArrayListModel());
+        testAddAll(createFilledArrayListModel(), createEmptyArrayListModel());
         testAddAll(createFilledLinkedListModel(), createEmptyArrayListModel());
-        testAddAll(createFilledArrayListModel(),  createSingleElementArrayListModel());
+        testAddAll(createFilledArrayListModel(), createSingleElementArrayListModel());
         testAddAll(createFilledLinkedListModel(), createSingleElementArrayListModel());
-        testAddAll(createFilledArrayListModel(),  createFilledArrayListModel());
+        testAddAll(createFilledArrayListModel(), createFilledArrayListModel());
         testAddAll(createFilledLinkedListModel(), createFilledLinkedListModel());
     }
-    
+
 
     /**
-     * Tests indexed multiple add operations on different combinations of 
+     * Tests indexed multiple add operations on different combinations of
      * observable lists.
      */
     public void testAddAllIndexed() {
         testAddAllIndexed(createEmptyArrayListModel(), createFilledArrayListModel(), 0);
         testAddAllIndexed(createEmptyLinkedListModel(), createFilledArrayListModel(), 0);
-        
+
         testAddAllIndexed(createSingleElementArrayListModel(), createFilledArrayListModel(), 0);
         testAddAllIndexed(createSingleElementLinkedListModel(), createFilledArrayListModel(), 0);
         testAddAllIndexed(createSingleElementArrayListModel(), createFilledArrayListModel(), 1);
@@ -151,10 +149,10 @@ public final class ObservableListTest extends TestCase {
         }
         int size2 = createFilledLinkedListModel().size();
         for (int i = 0; i <= size2; i++) {
-            testAddAllIndexed(createFilledLinkedListModel(), createFilledArrayListModel(),  i);
+            testAddAllIndexed(createFilledLinkedListModel(), createFilledArrayListModel(), i);
         }
     }
-    
+
 
     /**
      * Tests the #clear operation on different observable lists.
@@ -162,32 +160,32 @@ public final class ObservableListTest extends TestCase {
     public void testClear() {
         testClear(createEmptyArrayListModel());
         testClear(createEmptyLinkedListModel());
-        
+
         testClear(createSingleElementArrayListModel());
         testClear(createSingleElementLinkedListModel());
-        
+
         testClear(createFilledArrayListModel());
         testClear(createFilledLinkedListModel());
     }
-    
-    
+
+
     /**
      * Tests the #remove(int) operation on different observable lists.
      */
     public void testRemoveIndex() {
-        testRemoveIndex(createEmptyArrayListModel(),  -1);
+        testRemoveIndex(createEmptyArrayListModel(), -1);
         testRemoveIndex(createEmptyLinkedListModel(), -1);
-        testRemoveIndex(createEmptyArrayListModel(),   0);
-        testRemoveIndex(createEmptyLinkedListModel(),  0);
-        testRemoveIndex(createEmptyArrayListModel(),   1);
-        testRemoveIndex(createEmptyLinkedListModel(),  1);
-        
-        testRemoveIndex(createSingleElementArrayListModel(),  -1);
+        testRemoveIndex(createEmptyArrayListModel(), 0);
+        testRemoveIndex(createEmptyLinkedListModel(), 0);
+        testRemoveIndex(createEmptyArrayListModel(), 1);
+        testRemoveIndex(createEmptyLinkedListModel(), 1);
+
+        testRemoveIndex(createSingleElementArrayListModel(), -1);
         testRemoveIndex(createSingleElementLinkedListModel(), -1);
-        testRemoveIndex(createSingleElementArrayListModel(),   0);
-        testRemoveIndex(createSingleElementLinkedListModel(),  0);
-        testRemoveIndex(createSingleElementArrayListModel(),   1);
-        testRemoveIndex(createSingleElementLinkedListModel(),  1);
+        testRemoveIndex(createSingleElementArrayListModel(), 0);
+        testRemoveIndex(createSingleElementLinkedListModel(), 0);
+        testRemoveIndex(createSingleElementArrayListModel(), 1);
+        testRemoveIndex(createSingleElementLinkedListModel(), 1);
 
         int size1 = createFilledArrayListModel().size();
         for (int i = -1; i <= size1; i++) {
@@ -198,25 +196,25 @@ public final class ObservableListTest extends TestCase {
             testRemoveIndex(createFilledLinkedListModel(), i);
         }
     }
-    
+
 
     /**
      * Tests the #remove(Object) operation on different observable lists.
      */
     public void testRemoveObject() {
-        testRemoveObject(createEmptyArrayListModel(),  -1);
+        testRemoveObject(createEmptyArrayListModel(), -1);
         testRemoveObject(createEmptyLinkedListModel(), -1);
-        testRemoveObject(createEmptyArrayListModel(),   0);
-        testRemoveObject(createEmptyLinkedListModel(),  0);
-        testRemoveObject(createEmptyArrayListModel(),   1);
-        testRemoveObject(createEmptyLinkedListModel(),  1);
-        
-        testRemoveObject(createSingleElementArrayListModel(),  -1);
+        testRemoveObject(createEmptyArrayListModel(), 0);
+        testRemoveObject(createEmptyLinkedListModel(), 0);
+        testRemoveObject(createEmptyArrayListModel(), 1);
+        testRemoveObject(createEmptyLinkedListModel(), 1);
+
+        testRemoveObject(createSingleElementArrayListModel(), -1);
         testRemoveObject(createSingleElementLinkedListModel(), -1);
-        testRemoveObject(createSingleElementArrayListModel(),   0);
-        testRemoveObject(createSingleElementLinkedListModel(),  0);
-        testRemoveObject(createSingleElementArrayListModel(),   1);
-        testRemoveObject(createSingleElementLinkedListModel(),  1);
+        testRemoveObject(createSingleElementArrayListModel(), 0);
+        testRemoveObject(createSingleElementLinkedListModel(), 0);
+        testRemoveObject(createSingleElementArrayListModel(), 1);
+        testRemoveObject(createSingleElementLinkedListModel(), 1);
 
         int size1 = createFilledArrayListModel().size();
         for (int i = -1; i <= size1; i++) {
@@ -227,61 +225,61 @@ public final class ObservableListTest extends TestCase {
             testRemoveObject(createFilledLinkedListModel(), i);
         }
     }
-    
+
 
     /**
      * Tests #removeAll on different combinations of observable lists.
      */
     public void testRemoveAll() {
-        testRemoveAll(createEmptyArrayListModel(),  createEmptyArrayListModel());
+        testRemoveAll(createEmptyArrayListModel(), createEmptyArrayListModel());
         testRemoveAll(createEmptyLinkedListModel(), createEmptyArrayListModel());
-        testRemoveAll(createEmptyArrayListModel(),  createSingleElementArrayListModel());
+        testRemoveAll(createEmptyArrayListModel(), createSingleElementArrayListModel());
         testRemoveAll(createEmptyLinkedListModel(), createSingleElementArrayListModel());
-        testRemoveAll(createEmptyArrayListModel(),  createFilledArrayListModel());
+        testRemoveAll(createEmptyArrayListModel(), createFilledArrayListModel());
         testRemoveAll(createEmptyLinkedListModel(), createFilledArrayListModel());
-        
-        testRemoveAll(createSingleElementArrayListModel(),  createEmptyArrayListModel());
+
+        testRemoveAll(createSingleElementArrayListModel(), createEmptyArrayListModel());
         testRemoveAll(createSingleElementLinkedListModel(), createEmptyArrayListModel());
-        testRemoveAll(createSingleElementArrayListModel(),  createSingleElementArrayListModel());
+        testRemoveAll(createSingleElementArrayListModel(), createSingleElementArrayListModel());
         testRemoveAll(createSingleElementLinkedListModel(), createSingleElementArrayListModel());
-        testRemoveAll(createSingleElementArrayListModel(),  createFilledArrayListModel());
+        testRemoveAll(createSingleElementArrayListModel(), createFilledArrayListModel());
         testRemoveAll(createSingleElementLinkedListModel(), createFilledArrayListModel());
 
-        testRemoveAll(createFilledArrayListModel(),  createEmptyArrayListModel());
+        testRemoveAll(createFilledArrayListModel(), createEmptyArrayListModel());
         testRemoveAll(createFilledLinkedListModel(), createEmptyArrayListModel());
-        testRemoveAll(createFilledArrayListModel(),  createSingleElementArrayListModel());
+        testRemoveAll(createFilledArrayListModel(), createSingleElementArrayListModel());
         testRemoveAll(createFilledLinkedListModel(), createSingleElementArrayListModel());
-        testRemoveAll(createFilledArrayListModel(),  createFilledArrayListModel());
+        testRemoveAll(createFilledArrayListModel(), createFilledArrayListModel());
         testRemoveAll(createFilledLinkedListModel(), createFilledLinkedListModel());
     }
-    
+
 
     /**
      * Tests #retainAll on different combinations of observable lists.
      */
     public void testRetainAll() {
-        testRetainAll(createEmptyArrayListModel(),  createEmptyArrayListModel());
+        testRetainAll(createEmptyArrayListModel(), createEmptyArrayListModel());
         testRetainAll(createEmptyLinkedListModel(), createEmptyArrayListModel());
-        testRetainAll(createEmptyArrayListModel(),  createSingleElementArrayListModel());
+        testRetainAll(createEmptyArrayListModel(), createSingleElementArrayListModel());
         testRetainAll(createEmptyLinkedListModel(), createSingleElementArrayListModel());
-        testRetainAll(createEmptyArrayListModel(),  createFilledArrayListModel());
+        testRetainAll(createEmptyArrayListModel(), createFilledArrayListModel());
         testRetainAll(createEmptyLinkedListModel(), createFilledArrayListModel());
-        
-        testRetainAll(createSingleElementArrayListModel(),  createEmptyArrayListModel());
+
+        testRetainAll(createSingleElementArrayListModel(), createEmptyArrayListModel());
         testRetainAll(createSingleElementLinkedListModel(), createEmptyArrayListModel());
-        testRetainAll(createSingleElementArrayListModel(),  createSingleElementArrayListModel());
+        testRetainAll(createSingleElementArrayListModel(), createSingleElementArrayListModel());
         testRetainAll(createSingleElementLinkedListModel(), createSingleElementArrayListModel());
-        testRetainAll(createSingleElementArrayListModel(),  createFilledArrayListModel());
+        testRetainAll(createSingleElementArrayListModel(), createFilledArrayListModel());
         testRetainAll(createSingleElementLinkedListModel(), createFilledArrayListModel());
 
-        testRetainAll(createFilledArrayListModel(),  createEmptyArrayListModel());
+        testRetainAll(createFilledArrayListModel(), createEmptyArrayListModel());
         testRetainAll(createFilledLinkedListModel(), createEmptyArrayListModel());
-        testRetainAll(createFilledArrayListModel(),  createSingleElementArrayListModel());
+        testRetainAll(createFilledArrayListModel(), createSingleElementArrayListModel());
         testRetainAll(createFilledLinkedListModel(), createSingleElementArrayListModel());
-        testRetainAll(createFilledArrayListModel(),  createFilledArrayListModel());
+        testRetainAll(createFilledArrayListModel(), createFilledArrayListModel());
         testRetainAll(createFilledLinkedListModel(), createFilledLinkedListModel());
     }
-    
+
 
     /**
      * Tests the #set operation on different observable lists.
@@ -289,7 +287,7 @@ public final class ObservableListTest extends TestCase {
     public void testSet() {
         testSet(createEmptyArrayListModel(), 0);
         testSet(createEmptyLinkedListModel(), 0);
-        
+
         testSet(createSingleElementArrayListModel(), 0);
         testSet(createSingleElementLinkedListModel(), 0);
         testSet(createSingleElementArrayListModel(), 1);
@@ -304,18 +302,18 @@ public final class ObservableListTest extends TestCase {
             testSet(createFilledLinkedListModel(), i);
         }
     }
-    
-    
+
+
     /**
      * Tests the list iterator's add operation on different observable lists.
      */
     public void testListIteratorAdd() {
-        testListIteratorAdd(createEmptyArrayListModel(),  0, 0);
+        testListIteratorAdd(createEmptyArrayListModel(), 0, 0);
         testListIteratorAdd(createEmptyLinkedListModel(), 0, 0);
-        
-        testListIteratorAdd(createSingleElementArrayListModel(),  0, 0);
-        testListIteratorAdd(createSingleElementArrayListModel(),  0, 1);
-        testListIteratorAdd(createSingleElementArrayListModel(),  1, 1);
+
+        testListIteratorAdd(createSingleElementArrayListModel(), 0, 0);
+        testListIteratorAdd(createSingleElementArrayListModel(), 0, 1);
+        testListIteratorAdd(createSingleElementArrayListModel(), 1, 1);
         testListIteratorAdd(createSingleElementLinkedListModel(), 0, 0);
         testListIteratorAdd(createSingleElementLinkedListModel(), 0, 1);
         testListIteratorAdd(createSingleElementLinkedListModel(), 1, 1);
@@ -333,17 +331,17 @@ public final class ObservableListTest extends TestCase {
             }
         }
     }
-    
+
     /**
      * Tests the list iterator's remove operation on different observable lists.
      */
     public void testListIteratorRemove() {
         testListIteratorRemove(createEmptyArrayListModel(), 0, 0);
         testListIteratorRemove(createEmptyLinkedListModel(), 0, 0);
-        
-        testListIteratorRemove(createSingleElementArrayListModel(),  0, 0);
-        testListIteratorRemove(createSingleElementArrayListModel(),  0, 1);
-        testListIteratorRemove(createSingleElementArrayListModel(),  1, 1);
+
+        testListIteratorRemove(createSingleElementArrayListModel(), 0, 0);
+        testListIteratorRemove(createSingleElementArrayListModel(), 0, 1);
+        testListIteratorRemove(createSingleElementArrayListModel(), 1, 1);
         testListIteratorRemove(createSingleElementLinkedListModel(), 0, 0);
         testListIteratorRemove(createSingleElementLinkedListModel(), 0, 1);
         testListIteratorRemove(createSingleElementLinkedListModel(), 1, 1);
@@ -369,9 +367,9 @@ public final class ObservableListTest extends TestCase {
     public void testIteratorRemove() {
         testIteratorRemove(createEmptyArrayListModel(), 0);
         testIteratorRemove(createEmptyLinkedListModel(), 0);
-        
-        testIteratorRemove(createSingleElementArrayListModel(),  0);
-        testIteratorRemove(createSingleElementArrayListModel(),  1);
+
+        testIteratorRemove(createSingleElementArrayListModel(), 0);
+        testIteratorRemove(createSingleElementArrayListModel(), 1);
         testIteratorRemove(createSingleElementLinkedListModel(), 0);
         testIteratorRemove(createSingleElementLinkedListModel(), 1);
 
@@ -387,21 +385,20 @@ public final class ObservableListTest extends TestCase {
 
 
     // Test the Event Listener List ******************************************
-    
+
     public void testGetListDataListenersWithoutListeners() {
-        ListDataListener[] listeners = 
-            createEmptyArrayListModel().getListDataListeners();
+        ListDataListener[] listeners =
+                createEmptyArrayListModel().getListDataListeners();
         assertEquals("The list of ArrayListModel's ListDataListeners is empty.",
                 0, listeners.length);
         listeners = createEmptyLinkedListModel().getListDataListeners();
         assertEquals("The list of LinkedListModel's ListDataListeners is empty.",
                 0, listeners.length);
     }
-    
-    
+
 
     // Test Implementations **************************************************
-    
+
     private void testAdd(ObservableList list) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
@@ -418,7 +415,7 @@ public final class ObservableListTest extends TestCase {
         assertEquals("Another event has been fired.",
                 2, listDataReport.eventCountAdd());
     }
-    
+
     private void testAddIndexed(ObservableList list, int index) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
@@ -443,16 +440,16 @@ public final class ObservableListTest extends TestCase {
         assertEquals("Proper index1 (second add).",
                 index, listDataReport.lastEvent().getIndex1());
     }
-    
-    
+
+
     private void testAddAll(ObservableList list, List additions) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
 
-        int addCount =  additions.size();
+        int addCount = additions.size();
         int eventCount = additions.isEmpty() ? 0 : 1;
         int addIndex0 = list.size();
-        int addIndex1 = addIndex0 + addCount - 1; 
+        int addIndex1 = addIndex0 + addCount - 1;
         list.addAll(additions);
         assertEquals("Elements have been added.",
                 eventCount, listDataReport.eventCountAdd());
@@ -466,7 +463,7 @@ public final class ObservableListTest extends TestCase {
         }
 
         addIndex0 = list.size();
-        addIndex1 = addIndex0 + addCount - 1; 
+        addIndex1 = addIndex0 + addCount - 1;
         list.addAll(additions);
         assertEquals("More elements have been added.",
                 2 * eventCount, listDataReport.eventCountAdd());
@@ -479,15 +476,15 @@ public final class ObservableListTest extends TestCase {
                     addIndex1, listDataReport.lastEvent().getIndex1());
         }
     }
-    
+
     private void testAddAllIndexed(ObservableList list, List additions, int index) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
 
-        int addCount =  additions.size();
+        int addCount = additions.size();
         int eventCount = additions.isEmpty() ? 0 : 1;
         int addIndex0 = index;
-        int addIndex1 = addIndex0 + addCount - 1; 
+        int addIndex1 = addIndex0 + addCount - 1;
         list.addAll(index, additions);
         assertEquals("Elements have been added.",
                 eventCount, listDataReport.eventCountAdd());
@@ -501,7 +498,7 @@ public final class ObservableListTest extends TestCase {
         }
 
         addIndex0 = index;
-        addIndex1 = addIndex0 + addCount - 1; 
+        addIndex1 = addIndex0 + addCount - 1;
         list.addAll(index, additions);
         assertEquals("More elements have been added.",
                 2 * eventCount, listDataReport.eventCountAdd());
@@ -514,15 +511,15 @@ public final class ObservableListTest extends TestCase {
                     addIndex1, listDataReport.lastEvent().getIndex1());
         }
     }
-    
-    
+
+
     private void testClear(ObservableList list) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
 
         int eventCount = list.isEmpty() ? 0 : 1;
         int index0 = 0;
-        int index1 = list.size() - 1; 
+        int index1 = list.size() - 1;
         list.clear();
         assertEquals("All elements have been removed.",
                 eventCount, listDataReport.eventCountRemove());
@@ -534,13 +531,13 @@ public final class ObservableListTest extends TestCase {
             assertEquals("Proper index1 (first clear).",
                     index1, listDataReport.lastEvent().getIndex1());
         }
-        
+
         list.clear();
         assertEquals("No further elements have been removed.",
                 eventCount, listDataReport.eventCount());
     }
-    
-    
+
+
     private void testRemoveIndex(ObservableList list, int index) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
@@ -583,12 +580,12 @@ public final class ObservableListTest extends TestCase {
                     index, listDataReport.lastEvent().getIndex1());
         }
     }
-    
-    
+
+
     private void testRemoveObject(ObservableList list, int index) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
-        
+
         boolean contained = (index >= 0) && (index < list.size());
         Object object = contained
                 ? list.get(index)
@@ -608,14 +605,14 @@ public final class ObservableListTest extends TestCase {
                     index, listDataReport.lastEvent().getIndex1());
         }
     }
-    
-    
+
+
     private void testRemoveAll(ObservableList list, List removals) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
-        
+
         List indicesToRemove = new LinkedList();
-        List testRemoveList  = new LinkedList(list);
+        List testRemoveList = new LinkedList(list);
         for (Iterator i = removals.iterator(); i.hasNext();) {
             int index = testRemoveList.indexOf(i.next());
             if (index != -1) {
@@ -624,18 +621,18 @@ public final class ObservableListTest extends TestCase {
             }
         }
 
-        int oldSize =  list.size();
+        int oldSize = list.size();
         list.removeAll(removals);
         int newSize = list.size();
         int removedCount = oldSize - newSize;
-        
+
         assertEquals("Removed element count and number of removal indices.",
                 removedCount, indicesToRemove.size());
         assertEquals("Elements have been removed.",
                 removedCount, listDataReport.eventCountRemove());
         assertEquals("One event has been fired.",
                 removedCount, listDataReport.eventCount());
-        
+
         // Check the indices fired by the ObservableList
         Iterator indexIterator = indicesToRemove.iterator();
         for (Iterator i = listDataReport.eventList().iterator(); i.hasNext();) {
@@ -647,23 +644,23 @@ public final class ObservableListTest extends TestCase {
                     index, event.getIndex1());
         }
     }
-    
+
 
     private void testRetainAll(ObservableList list, List retains) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
 
-        int oldSize =  list.size();
+        int oldSize = list.size();
         list.retainAll(retains);
         int newSize = list.size();
         int eventCount = oldSize - newSize;
-        
+
         assertEquals("Elements have been removed.",
                 eventCount, listDataReport.eventCountRemove());
         assertEquals("One event has been fired.",
                 eventCount, listDataReport.eventCount());
     }
-    
+
 
     private void testSet(ObservableList list, int index) {
         ListDataReport listDataReport = new ListDataReport();
@@ -707,8 +704,8 @@ public final class ObservableListTest extends TestCase {
                     index, listDataReport.lastEvent().getIndex1());
         }
     }
-    
-    
+
+
     private void testListIteratorAdd(ObservableList list, int iteratorIndex, int elementIndex) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
@@ -719,7 +716,7 @@ public final class ObservableListTest extends TestCase {
             listIterator.next();
         }
         listIterator.add("Added by ListIterator");
-        
+
         assertEquals("An element has been added.",
                 1, listDataReport.eventCountAdd());
         assertEquals("One event has been fired.",
@@ -729,11 +726,11 @@ public final class ObservableListTest extends TestCase {
         assertEquals("Proper index1.",
                 elementIndex, listDataReport.lastEvent().getIndex1());
     }
-    
-    
+
+
     private void testListIteratorRemove(
-            ObservableList list, 
-            int iteratorIndex, 
+            ObservableList list,
+            int iteratorIndex,
             int elementIndex) {
         ListDataReport listDataReport = new ListDataReport();
         list.addListDataListener(listDataReport);
@@ -755,8 +752,8 @@ public final class ObservableListTest extends TestCase {
                     elementIndex, listDataReport.lastEvent().getIndex1());
         }
     }
-    
-    
+
+
     private void testIteratorRemove(
             ObservableList list,
             int elementIndex) {
@@ -781,27 +778,27 @@ public final class ObservableListTest extends TestCase {
     }
 
     // Creating Observable Lists *********************************************
-    
+
     private ArrayListModel createEmptyArrayListModel() {
         return new ArrayListModel();
     }
-    
+
     private LinkedListModel createEmptyLinkedListModel() {
         return new LinkedListModel();
     }
-    
+
     private ArrayListModel createSingleElementArrayListModel() {
         ArrayListModel list = new ArrayListModel();
         list.add("One");
         return list;
     }
-    
+
     private LinkedListModel createSingleElementLinkedListModel() {
         LinkedListModel list = new LinkedListModel();
         list.add("One");
         return list;
     }
-    
+
     private ArrayListModel createFilledArrayListModel() {
         ArrayListModel list = new ArrayListModel();
         list.add("One");
@@ -812,7 +809,7 @@ public final class ObservableListTest extends TestCase {
         list.add("Six");
         return list;
     }
-    
+
     private LinkedListModel createFilledLinkedListModel() {
         LinkedListModel list = new LinkedListModel();
         list.add("One");
@@ -823,6 +820,6 @@ public final class ObservableListTest extends TestCase {
         list.add("Six");
         return list;
     }
-    
-          
+
+
 }

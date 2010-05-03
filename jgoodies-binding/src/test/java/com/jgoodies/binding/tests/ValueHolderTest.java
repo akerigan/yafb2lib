@@ -30,74 +30,73 @@
 
 package com.jgoodies.binding.tests;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
 
 /**
- * Tests old and new values when the bean, value or subject changes in 
+ * Tests old and new values when the bean, value or subject changes in
  * BeanAdapter, PropertyAdapter, PresentationModel and BufferedValueModel.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.6 $
  */
 public final class ValueHolderTest extends TestCase {
-    
+
 
     // Public Tests ***********************************************************
-    
+
     public void testEquityTestingHolderSendsProperEvents() {
         ValueHolder holder = new ValueHolder();
-        
-        Object obj1  = new Integer(1);
+
+        Object obj1 = new Integer(1);
         Object obj2a = new Integer(2);
         Object obj2b = new Integer(2);
-        testValueChangeSendsProperEvent(holder, null, obj1,   true);
-        testValueChangeSendsProperEvent(holder, obj1, null,   true);
-        testValueChangeSendsProperEvent(holder, obj1, obj1,   false);
-        testValueChangeSendsProperEvent(holder, obj1, obj2a,  true);
+        testValueChangeSendsProperEvent(holder, null, obj1, true);
+        testValueChangeSendsProperEvent(holder, obj1, null, true);
+        testValueChangeSendsProperEvent(holder, obj1, obj1, false);
+        testValueChangeSendsProperEvent(holder, obj1, obj2a, true);
         testValueChangeSendsProperEvent(holder, obj2a, obj2b, false); // equals
-        testValueChangeSendsProperEvent(holder, null, null,   false);
+        testValueChangeSendsProperEvent(holder, null, null, false);
     }
 
-    
+
     public void testIdentityTestingHolderSendsProperEvents() {
         ValueHolder holder = new ValueHolder(null, true);
-        
-        Object obj1  = new Integer(1);
+
+        Object obj1 = new Integer(1);
         Object obj2a = new Integer(2);
         Object obj2b = new Integer(2);
-        testValueChangeSendsProperEvent(holder, null, obj1,   true);
-        testValueChangeSendsProperEvent(holder, obj1, null,   true);
-        testValueChangeSendsProperEvent(holder, obj1, obj1,   false);
-        testValueChangeSendsProperEvent(holder, obj1, obj2a,  true);
+        testValueChangeSendsProperEvent(holder, null, obj1, true);
+        testValueChangeSendsProperEvent(holder, obj1, null, true);
+        testValueChangeSendsProperEvent(holder, obj1, obj1, false);
+        testValueChangeSendsProperEvent(holder, obj1, obj2a, true);
         testValueChangeSendsProperEvent(holder, obj2a, obj2b, true); // !=
-        testValueChangeSendsProperEvent(holder, null, null,   false);
+        testValueChangeSendsProperEvent(holder, null, null, false);
     }
-    
+
 
     // Test Implementations ***************************************************
-    
+
     private void testValueChangeSendsProperEvent(
             ValueModel valueModel, Object oldValue, Object newValue, boolean eventExpected) {
         valueModel.setValue(oldValue);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         valueModel.addValueChangeListener(changeReport);
         int expectedEventCount = eventExpected ? 1 : 0;
-        
+
         valueModel.setValue(newValue);
         assertEquals(
-                "Expected event count after ( " 
-              + oldValue + " -> " + newValue + ").", 
-                expectedEventCount, 
+                "Expected event count after ( "
+                        + oldValue + " -> " + newValue + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (eventExpected) {
             assertEquals("Event's old value.", oldValue, changeReport.lastEvent().getOldValue());
             assertEquals("Event's new value.", newValue, changeReport.lastEvent().getNewValue());
         }
     }
-    
-    
+
+
 }

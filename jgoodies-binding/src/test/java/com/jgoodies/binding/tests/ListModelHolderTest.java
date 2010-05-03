@@ -30,47 +30,44 @@
 
 package com.jgoodies.binding.tests;
 
-import java.util.Arrays;
-
-import javax.swing.DefaultListModel;
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.list.ArrayListModel;
 import com.jgoodies.binding.list.LinkedListModel;
 import com.jgoodies.binding.list.ListModelHolder;
 import com.jgoodies.binding.list.ObservableList;
-import com.jgoodies.binding.tests.event.ListDataReport;
-import com.jgoodies.binding.tests.event.ListSizeConstraintChecker;
-import com.jgoodies.binding.tests.value.ValueHolderWithOldValueNull;
+import com.jgoodies.binding.test.event.ListDataReport;
+import com.jgoodies.binding.test.event.ListSizeConstraintChecker;
+import com.jgoodies.binding.test.value.ValueHolderWithOldValueNull;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
+import javax.swing.*;
+import javax.swing.event.ListDataEvent;
+import java.util.Arrays;
 
 /**
  * A test case for class {@link ListModelHolder}.
- * 
+ *
  * @author Karsten Lentzsch
  * @version $Revision: 1.5 $
  */
 public final class ListModelHolderTest extends TestCase {
-    
-    private static final Object[] AN_ARRAY = { "one", "two", "three" };
-    
+
+    private static final Object[] AN_ARRAY = {"one", "two", "three"};
+
     private DefaultListModel listModel;
 
-    
+
     // Initialization *********************************************************
-    
+
     protected void setUp() throws Exception {
         super.setUp();
         listModel = createListModel(AN_ARRAY);
     }
-    
+
 
     // Testing Constructors ***************************************************
-    
+
     public void testConstructorRejectsNullListModelHolder() {
         try {
             new ListModelHolder((ValueModel) null);
@@ -89,8 +86,8 @@ public final class ListModelHolderTest extends TestCase {
             // The expected behavior.
         }
     }
-    
-    
+
+
     public void testConstructorRejectsInvalidListModelHolderContent() {
         try {
             new ListModelHolder(new ValueHolder("Hello", true));
@@ -99,10 +96,10 @@ public final class ListModelHolderTest extends TestCase {
             // The expected behavior.
         }
     }
-    
-    
+
+
     // ************************************************************************
-    
+
     /**
      * Checks that list data events from an underlying are reported
      * by the SelectionInList.
@@ -122,13 +119,13 @@ public final class ListModelHolderTest extends TestCase {
                 listDataReport2.eventCount(), 1);
         assertEquals("An element has been added.", listDataReport2
                 .eventCountAdd(), 1);
-        
+
         arrayListModel.addAll(Arrays.asList(new String[]{"two", "three", "four"}));
         assertEquals("An element block has been added.",
                 listDataReport2.eventCount(), 2);
         assertEquals("An element block has been added.", listDataReport2
                 .eventCountAdd(), 2);
-        
+
         arrayListModel.remove(0);
         assertEquals("An element has been removed.",
                 listDataReport2.eventCount(), 3);
@@ -136,7 +133,7 @@ public final class ListModelHolderTest extends TestCase {
                 .eventCountAdd(), 2);
         assertEquals("An element has been removed.", listDataReport2
                 .eventCountRemove(), 1);
-        
+
         arrayListModel.set(1, "newTwo");
         assertEquals("An element has been replaced.",
                 listDataReport2.eventCount(), 4);
@@ -146,64 +143,64 @@ public final class ListModelHolderTest extends TestCase {
                 .eventCountRemove(), 1);
         assertEquals("An element has been changed.", listDataReport2
                 .eventCountChange(), 1);
-        
+
         // Compare the event counts of the list models listener
         // with the SelectionInList listener.
-        assertEquals("Add event counts are equal.", 
+        assertEquals("Add event counts are equal.",
                 listDataReport1.eventCountAdd(),
                 listDataReport2.eventCountAdd());
-        assertEquals("Remove event counts are equal.", 
+        assertEquals("Remove event counts are equal.",
                 listDataReport1.eventCountRemove(),
                 listDataReport2.eventCountRemove());
-        assertEquals("Change event counts are equal.", 
+        assertEquals("Change event counts are equal.",
                 listDataReport1.eventCountChange(),
                 listDataReport2.eventCountChange());
     }
-    
-    
+
+
     // Registering, Deregistering and Registering of the ListDataListener *****
-    
+
     /**
      * Checks and verifies that the SelectionInList registers
      * its ListDataListener with the underlying ListModel once only.
-     * In other words: the SelectionInList doesn't register 
+     * In other words: the SelectionInList doesn't register
      * its ListDataListener multiple times.<p>
-     * 
-     * Uses a list holder that checks the identity and 
+     * <p/>
+     * Uses a list holder that checks the identity and
      * reports an old and new value.
      */
     public void testSingleListDataListener() {
         testSingleListDataListener(new ValueHolder(null, true));
     }
-    
-    
+
+
     /**
      * Checks and verifies that the SelectionInList registers
      * its ListDataListener with the underlying ListModel once only.
-     * In other words: the SelectionInList doesn't register 
+     * In other words: the SelectionInList doesn't register
      * its ListDataListener multiple times.<p>
-     * 
+     * <p/>
      * Uses a list holder uses null as old value when reporting value changes.
      */
     public void testSingleListDataListenerNoOldList() {
         testSingleListDataListener(new ValueHolderWithOldValueNull(null));
     }
-    
-    
+
+
     /**
      * Checks and verifies that the SelectionInList registers
      * its ListDataListener with the underlying ListModel once only.
-     * In other words: the SelectionInList doesn't register 
+     * In other words: the SelectionInList doesn't register
      * its ListDataListener multiple times.
      */
     private void testSingleListDataListener(ValueModel listHolder) {
         new ListModelHolder(listHolder);
-        ArrayListModel  listModel1 = new ArrayListModel();
+        ArrayListModel listModel1 = new ArrayListModel();
         LinkedListModel listModel2 = new LinkedListModel();
         listHolder.setValue(listModel1);
         assertEquals("SelectionInList registered its ListDataListener.",
-                     1,
-                     listModel1.getListDataListeners().length);
+                1,
+                listModel1.getListDataListeners().length);
         listHolder.setValue(listModel1);
         assertEquals("SelectionInList reregistered its ListDataListener.",
                 1,
@@ -216,8 +213,8 @@ public final class ListModelHolderTest extends TestCase {
                 1,
                 listModel2.getListDataListeners().length);
     }
-    
-    
+
+
     /**
      * Checks and verifies for a bunch of ListModel instances,
      * whether the ListDataListener has been reregistered properly.
@@ -226,17 +223,17 @@ public final class ListModelHolderTest extends TestCase {
         ObservableList empty1 = new ArrayListModel();
         ObservableList empty2 = new ArrayListModel();
         testReregistersListDataListener(empty1, empty2);
-        
+
         ObservableList empty3 = new LinkedListModel();
         ObservableList empty4 = new LinkedListModel();
         testReregistersListDataListener(empty3, empty4);
-        
+
         ObservableList array1 = new ArrayListModel();
         ObservableList array2 = new ArrayListModel();
         array1.add(Boolean.TRUE);
         array2.add(Boolean.TRUE);
         testReregistersListDataListener(array1, array2);
-        
+
         ObservableList linked1 = new LinkedListModel();
         ObservableList linked2 = new LinkedListModel();
         linked1.add(Boolean.TRUE);
@@ -249,29 +246,29 @@ public final class ListModelHolderTest extends TestCase {
      * Checks and verifies whether the ListDataListener has been
      * reregistered properly. This will fail if the change support
      * fails to fire a change event when the instance changes.<p>
-     * 
+     * <p/>
      * Creates a SelectionInList on list1, then changes it to list2,
      * modifies boths lists, and finally checks whether the SelectionInList
      * has fired the correct events.
      */
     private void testReregistersListDataListener(
-             ObservableList list1,
-             ObservableList list2) {
-        ListDataReport listDataReport1    = new ListDataReport();
-        ListDataReport listDataReport2    = new ListDataReport();
-        ListDataReport listDataReportSel  = new ListDataReport();
-        
+            ObservableList list1,
+            ObservableList list2) {
+        ListDataReport listDataReport1 = new ListDataReport();
+        ListDataReport listDataReport2 = new ListDataReport();
+        ListDataReport listDataReportSel = new ListDataReport();
+
         ListModelHolder lmh = new ListModelHolder(list1);
 
         // Change the list model. 
         // Changes on list1 shall not affect the SelectionInList.
         // Changes in list2 shall be the same as for the SelectionInList.
         lmh.setListModel(list2);
-        
+
         list1.addListDataListener(listDataReport1);
         list2.addListDataListener(listDataReport2);
         lmh.addListDataListener(listDataReportSel);
-        
+
         // Modify both list models.
         list1.add("one1");
         list1.add("two1");
@@ -297,23 +294,23 @@ public final class ListModelHolderTest extends TestCase {
         list2.add("three2");
         list2.remove(1);
         list2.set(0, "newOne2");
-        
+
         assertEquals("Events counted for list model 2",
                 5,
                 listDataReport2.eventCount());
         assertEquals("Events counted for the SelectionInList",
                 5,
                 listDataReportSel.eventCount());
-        
+
         // Compare the event lists.
-        assertEquals("Events for list2 and SelectionInList differ.", 
+        assertEquals("Events for list2 and SelectionInList differ.",
                 listDataReport2,
                 listDataReportSel);
     }
-    
-    
+
+
     // List Change Events *****************************************************
-    
+
     /**
      * Tests the ListDataEvents fired during ListModel changes.
      * The transistions are {} -> {} -> {a, b} -> {b, c} -> {a, b, c} -> {b, c} -> {}.
@@ -325,34 +322,34 @@ public final class ListModelHolderTest extends TestCase {
         ListModel list4 = createListModel(new String[]{"b", "c"});
         ListModel list5 = createListModel(new String[]{"a", "b", "c"});
         ListModel list6 = createListModel(new Object[]{});
-        
+
         ListModelHolder listModelHolder = new ListModelHolder(list1);
         ListDataReport report = new ListDataReport();
         listModelHolder.addListDataListener(report);
-        
+
         listModelHolder.setListModel(list2);
         assertEquals("The transistion {} -> {} fires no ListDataEvent.",
                 0,
                 report.eventCount());
-        
+
         report.clearEventList();
         listModelHolder.setListModel(list3);
         assertEquals("The transistion {} -> {a, b} fires 1 add event.",
-                1, 
+                1,
                 report.eventCount());
         assertEvent("The transistion {} -> {a, b} fires an add event with interval[0, 1].",
                 ListDataEvent.INTERVAL_ADDED, 0, 1,
                 report.lastEvent());
-        
+
         report.clearEventList();
         listModelHolder.setListModel(list4);
         assertEquals("The transistion {a, b} -> {b, c} fires 1 add event.",
-                1, 
+                1,
                 report.eventCount());
         assertEvent("The transistion {a, b} -> {b, c} fires an add event with interval[0, 1].",
                 ListDataEvent.CONTENTS_CHANGED, 0, 1,
                 report.lastEvent());
-        
+
         report.clearEventList();
         listModelHolder.setListModel(list5);
         assertEquals("The transistion {b, c} -> {a, b, c} fires two events.",
@@ -386,8 +383,8 @@ public final class ListModelHolderTest extends TestCase {
                 ListDataEvent.INTERVAL_REMOVED, 0, 1,
                 report.lastEvent());
     }
-    
-    
+
+
     /**
      * Tests that ListDataEvents fired during list changes
      * provide size information that are consitent with the
@@ -401,11 +398,11 @@ public final class ListModelHolderTest extends TestCase {
         ListModel list4 = createListModel(new String[]{"b", "c"});
         ListModel list5 = createListModel(new String[]{"a", "b", "c"});
         ListModel list6 = createListModel(new Object[]{});
-        
+
         ListModelHolder listModelHolder = new ListModelHolder(list1);
         listModelHolder.addListDataListener(
                 new ListSizeConstraintChecker(listModelHolder.getSize()));
-        
+
         listModelHolder.setListModel(list2);
         listModelHolder.setListModel(list3);
         listModelHolder.setListModel(list4);
@@ -413,8 +410,8 @@ public final class ListModelHolderTest extends TestCase {
         listModelHolder.setListModel(list4);
         listModelHolder.setListModel(list6);
     }
-    
-    
+
+
     private void assertEvent(String description, int eventType, int index0, int index1, ListDataEvent event) {
         assertEquals("Type: " + description,
                 eventType,
@@ -426,11 +423,10 @@ public final class ListModelHolderTest extends TestCase {
                 index1,
                 event.getIndex1());
     }
-    
-    
-    
+
+
     // Helper Code ************************************************************
-    
+
     private DefaultListModel createListModel(Object[] array) {
         DefaultListModel model = new DefaultListModel();
         for (int i = 0; i < array.length; i++) {
@@ -438,7 +434,7 @@ public final class ListModelHolderTest extends TestCase {
         }
         return model;
     }
- 
+
 
 }
 

@@ -30,27 +30,26 @@
 
 package com.jgoodies.binding.tests;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
 import com.jgoodies.binding.value.AbstractConverter;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
 
 /**
  * A test case for class {@link AbstractConverter}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.2 $
  */
 public final class AbstractConverterTest extends TestCase {
-    
+
     private ValueHolder subject;
-    private ValueModel  converter;
-    
-    
+    private ValueModel converter;
+
+
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void setUp() throws Exception {
         super.setUp();
@@ -59,7 +58,7 @@ public final class AbstractConverterTest extends TestCase {
     }
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void tearDown() throws Exception {
         super.tearDown();
@@ -69,41 +68,41 @@ public final class AbstractConverterTest extends TestCase {
 
 
     // Tests ******************************************************************
-    
+
     public void testGetValueConversion() {
         Integer value = new Integer(1);
         Object expectedConversion = "1";
-        
+
         subject.setValue(value);
         assertEquals("The int " + value + " is converted to " + expectedConversion,
                 expectedConversion,
                 converter.getValue());
     }
-    
-    
+
+
     public void testSetValueConversion() {
         Object convertedValue = "1";
         Integer expectedValue = new Integer(1);
-        
+
         converter.setValue(convertedValue);
         assertEquals("The converter value " + convertedValue + " is converted to " + expectedValue,
                 expectedValue,
                 subject.getValue());
     }
-    
-    
+
+
     public void testPropertyChangeEventConversion() {
         Integer oldSubjectValue = null;
         Integer newSubjectValue = new Integer(1);
         Object expectedOldValue = null;
         Object expectedNewValue = "1";
-        
+
         subject.setValue(oldSubjectValue);
         PropertyChangeReport subjectReport = new PropertyChangeReport();
         PropertyChangeReport converterReport = new PropertyChangeReport();
         subject.addValueChangeListener(subjectReport);
         converter.addValueChangeListener(converterReport);
-        
+
         subject.setValue(newSubjectValue);
         assertEquals("The old subject event value is " + oldSubjectValue,
                 oldSubjectValue,
@@ -111,42 +110,42 @@ public final class AbstractConverterTest extends TestCase {
         assertEquals("The old converter event value is " + expectedOldValue,
                 expectedOldValue,
                 converterReport.lastOldValue());
-        
+
         assertEquals("The new subject event value is " + newSubjectValue,
-               newSubjectValue,
+                newSubjectValue,
                 subjectReport.lastNewValue());
         assertEquals("The new converter event value is " + expectedNewValue,
                 expectedNewValue,
                 converterReport.lastNewValue());
     }
-    
-    
+
+
     // Test Converter *********************************************************
-    
+
     /**
      * An example converter that converts Integers to their String
      * representations. Cannot convert <code>null</code>.
      */
     private static final class TestConverter extends AbstractConverter {
-        
+
         private TestConverter(ValueModel valueModel) {
             super(valueModel);
         }
-        
+
         /**
          * Converts the given value to its string representation.
-         *  
-         * @param subjectValue  the subject's value
+         *
+         * @param subjectValue the subject's value
          * @return the string representation of the given value
          */
         public Object convertFromSubject(Object subjectValue) {
             return subjectValue.toString();
         }
-        
+
         public void setValue(Object newValue) {
             subject.setValue(new Integer(Integer.parseInt((String) newValue)));
         }
     }
-    
+
 }
 

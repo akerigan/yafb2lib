@@ -30,30 +30,28 @@
 
 package com.jgoodies.binding.tests;
 
-import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.BindingUtils;
 import com.jgoodies.binding.adapter.RadioButtonAdapter;
 import com.jgoodies.binding.beans.PropertyAdapter;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.event.ChangeReport;
-import com.jgoodies.binding.tests.event.ItemChangeReport;
-import com.jgoodies.binding.tests.value.RejectingValueModel;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.event.ChangeReport;
+import com.jgoodies.binding.test.event.ItemChangeReport;
+import com.jgoodies.binding.test.value.RejectingValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
+import javax.swing.*;
 
 
 /**
  * A test case for class {@link RadioButtonAdapter}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.11 $
  */
 public final class RadioButtonAdapterTest extends TestCase {
-    
+
     // Paramater Tests ******************************************************
 
     public void testConstructorRejectsNullSubject() {
@@ -64,8 +62,8 @@ public final class RadioButtonAdapterTest extends TestCase {
             // The expected behavior
         }
     }
-    
-    
+
+
     public void testRejectsButtonGroup() {
         ButtonModel model = new RadioButtonAdapter(new ValueHolder(), "wow");
         ButtonGroup group = new ButtonGroup();
@@ -76,105 +74,105 @@ public final class RadioButtonAdapterTest extends TestCase {
             // The expected behavior
         }
     }
-    
-    
+
+
     // Basic Adapter Features *************************************************
-    
+
     public void testAdaptsReadWriteBooleanProperty() {
         TestBean bean = new TestBean();
         bean.setReadWriteBooleanProperty(true);
         ValueModel subject = new PropertyAdapter(bean, "readWriteBooleanProperty", true);
         RadioButtonAdapter adapter1 = new RadioButtonAdapter(subject, Boolean.TRUE);
         RadioButtonAdapter adapter2 = new RadioButtonAdapter(subject, Boolean.FALSE);
-        
+
         // Reading
-        assertTrue ("Adapter1 is selected.",   adapter1.isSelected());
+        assertTrue("Adapter1 is selected.", adapter1.isSelected());
         assertFalse("Adapter2 is deselected.", adapter2.isSelected());
-        
+
         bean.setReadWriteBooleanProperty(false);
         assertFalse("Adapter1 is deselected.", adapter1.isSelected());
-        assertTrue ("Adapter2 is selected.",   adapter2.isSelected());
+        assertTrue("Adapter2 is selected.", adapter2.isSelected());
 
         bean.setReadWriteBooleanProperty(true);
-        assertTrue ("Adapter1 is selected again.",   adapter1.isSelected());
+        assertTrue("Adapter1 is selected again.", adapter1.isSelected());
         assertFalse("Adapter2 is deselected again.", adapter2.isSelected());
-        
+
         // Writing
         adapter2.setSelected(true);
         assertFalse("Adapted property is false.", bean.isReadWriteBooleanProperty());
-        
+
         adapter1.setSelected(true);
         assertTrue("Adapted property is true.", bean.isReadWriteBooleanProperty());
     }
 
-    
+
     public void testReadWriteOperations() {
-        testReadWriteOperations(null,  "one", "two");
-        testReadWriteOperations(null,  null,  "two");
-        testReadWriteOperations(null,  "one", null);
+        testReadWriteOperations(null, "one", "two");
+        testReadWriteOperations(null, null, "two");
+        testReadWriteOperations(null, "one", null);
         testReadWriteOperations("one", "one", "two");
-        testReadWriteOperations("one", null,  "two");
+        testReadWriteOperations("one", null, "two");
         testReadWriteOperations("one", "one", null);
         testReadWriteOperations("two", "one", "two");
-        testReadWriteOperations("two", null,  "two");
+        testReadWriteOperations("two", null, "two");
         testReadWriteOperations("two", "one", null);
     }
-        
-    
+
+
     private void testReadWriteOperations(
-            Object initialValue, 
-            Object value1, 
+            Object initialValue,
+            Object value1,
             Object value2) {
         ValueModel subject = new ValueHolder(initialValue);
         RadioButtonAdapter adapter1 = new RadioButtonAdapter(subject, value1);
         RadioButtonAdapter adapter2 = new RadioButtonAdapter(subject, value2);
-        
+
         // Reading
         assertEquals("Adapter1 selection reflects the initial subject value.",
-                BindingUtils.equals(initialValue, value1), 
+                BindingUtils.equals(initialValue, value1),
                 adapter1.isSelected());
         assertEquals("Adapter2 selection reflects the initial subject value.",
-                BindingUtils.equals(initialValue, value2), 
+                BindingUtils.equals(initialValue, value2),
                 adapter2.isSelected());
-        
+
         subject.setValue(value1);
-        assertTrue ("Adapter1 is selected.",   adapter1.isSelected());
+        assertTrue("Adapter1 is selected.", adapter1.isSelected());
         assertFalse("Adapter2 is deselected.", adapter2.isSelected());
 
         subject.setValue(value2);
         assertFalse("Adapter1 is deselected again.", adapter1.isSelected());
-        assertTrue ("Adapter2 is selected again.",   adapter2.isSelected());
+        assertTrue("Adapter2 is selected again.", adapter2.isSelected());
 
         // Writing
         adapter1.setSelected(true);
-        assertEquals("The subject value is value1.", 
-                value1, 
+        assertEquals("The subject value is value1.",
+                value1,
                 subject.getValue());
 
         adapter1.setSelected(true);
-        assertEquals("The subject value is still value1.", 
-                value1, 
+        assertEquals("The subject value is still value1.",
+                value1,
                 subject.getValue());
-        
+
         adapter2.setSelected(false);
-        assertEquals("Deselecting an adapter doesn't modify the subject value.", 
-                value1, 
+        assertEquals("Deselecting an adapter doesn't modify the subject value.",
+                value1,
                 subject.getValue());
 
         adapter2.setSelected(true);
-        assertEquals("The subject value is value2.", 
-                value2, 
+        assertEquals("The subject value is value2.",
+                value2,
                 subject.getValue());
-        
+
         adapter2.setSelected(true);
-        assertEquals("The subject value is still value2.", 
-                value2, 
+        assertEquals("The subject value is still value2.",
+                value2,
                 subject.getValue());
     }
 
-    
+
     // Change and Item Events *************************************************
-    
+
     public void testFiresChangeAndItemEvents() {
         Object value1 = "value1";
         Object value2 = "value2";
@@ -188,61 +186,61 @@ public final class RadioButtonAdapterTest extends TestCase {
         ItemChangeReport itemChangeReport = new ItemChangeReport();
         adapter1.addChangeListener(changeReport);
         adapter1.addItemListener(itemChangeReport);
-        
+
         bean.setReadWriteObjectProperty(value2);
-        assertEquals("Deselecting the property fires a ChangeEvent.", 
-                1, 
+        assertEquals("Deselecting the property fires a ChangeEvent.",
+                1,
                 changeReport.eventCount());
-        assertEquals("Deselecting the property fires an ItemChangeEvent.", 
-                1, 
+        assertEquals("Deselecting the property fires an ItemChangeEvent.",
+                1,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates deselected.", 
+        assertTrue("The last ItemChangeEvent indicates deselected.",
                 itemChangeReport.isLastStateChangeDeselected());
-        
+
         bean.setReadWriteObjectProperty(value1);
-        assertEquals("Selecting the property fires another ChangeEvent.", 
-                2, 
+        assertEquals("Selecting the property fires another ChangeEvent.",
+                2,
                 changeReport.eventCount());
-        assertEquals("Selecting the property fires another ItemChangeEvent.", 
-                2, 
+        assertEquals("Selecting the property fires another ItemChangeEvent.",
+                2,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates selected.", 
+        assertTrue("The last ItemChangeEvent indicates selected.",
                 itemChangeReport.isLastStateChangeSelected());
 
         adapter1.setSelected(false);
-        assertEquals("Deselecting the adapter fires no ChangeEvent.", 
-                2, 
+        assertEquals("Deselecting the adapter fires no ChangeEvent.",
+                2,
                 changeReport.eventCount());
-        assertEquals("Deselecting the adapter fires no ItemChangeEvent.", 
-                2, 
+        assertEquals("Deselecting the adapter fires no ItemChangeEvent.",
+                2,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates selected.", 
+        assertTrue("The last ItemChangeEvent indicates selected.",
                 itemChangeReport.isLastStateChangeSelected());
-        
+
         adapter2.setSelected(true);
-        assertEquals("Selecting a grouped adapter fires a single ChangeEvent.", 
-                3, 
+        assertEquals("Selecting a grouped adapter fires a single ChangeEvent.",
+                3,
                 changeReport.eventCount());
-        assertEquals("Selecting a grouped adapter fires a single ItemChangeEvent.", 
-                3, 
+        assertEquals("Selecting a grouped adapter fires a single ItemChangeEvent.",
+                3,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates deselected.", 
+        assertTrue("The last ItemChangeEvent indicates deselected.",
                 itemChangeReport.isLastStateChangeDeselected());
-        
+
         adapter1.setSelected(true);
-        assertEquals("Selecting the adapter fires another ChangeEvent.", 
-                4, 
+        assertEquals("Selecting the adapter fires another ChangeEvent.",
+                4,
                 changeReport.eventCount());
-        assertEquals("Selecting the adapter fires another ItemChangeEvent.", 
-                4, 
+        assertEquals("Selecting the adapter fires another ItemChangeEvent.",
+                4,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates selected.", 
+        assertTrue("The last ItemChangeEvent indicates selected.",
                 itemChangeReport.isLastStateChangeSelected());
     }
-    
+
 
     // Read-Only Model ********************************************************
-    
+
     public void testAdaptsReadOnlyObjectProperty() {
         Object value1 = "value1";
         Object value2 = "value2";
@@ -250,29 +248,29 @@ public final class RadioButtonAdapterTest extends TestCase {
         bean.fireChangeOnReadOnlyObjectProperty(value1);
         ValueModel subject = new PropertyAdapter(bean, "readOnlyObjectProperty", true);
         RadioButtonAdapter adapter = new RadioButtonAdapter(subject, value1);
-        
+
         assertTrue("Adapter is selected.", adapter.isSelected());
-        
+
         bean.fireChangeOnReadOnlyObjectProperty(value2);
         assertFalse("Adapter is deselected.", adapter.isSelected());
 
         bean.fireChangeOnReadOnlyObjectProperty(value1);
         assertTrue("Adapter is selected again.", adapter.isSelected());
     }
-    
-    
+
+
     // Re-Synchronizes if the Subject Change is Rejected **********************
-    
+
     public void testResynchronizesAfterRejectedSubjectChange() {
         ValueModel selectionHolder = new ValueHolder(Boolean.FALSE);
         ValueModel rejectingSelectionHolder = new RejectingValueModel(selectionHolder);
-        RadioButtonAdapter adapter = 
-            new RadioButtonAdapter(rejectingSelectionHolder, Boolean.TRUE);
-        
+        RadioButtonAdapter adapter =
+                new RadioButtonAdapter(rejectingSelectionHolder, Boolean.TRUE);
+
         assertFalse("Adapter is deselected.", adapter.isSelected());
         adapter.setSelected(true);
         assertFalse("Adapter is still deselected.", adapter.isSelected());
-    }    
+    }
 
-    
+
 }

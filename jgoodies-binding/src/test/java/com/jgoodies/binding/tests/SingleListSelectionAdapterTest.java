@@ -30,21 +30,19 @@
 
 package com.jgoodies.binding.tests;
 
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.binding.tests.event.ListSelectionReport;
+import com.jgoodies.binding.test.event.ListSelectionReport;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
 
 /**
  * A test case for class
  * {@link com.jgoodies.binding.adapter.SingleListSelectionAdapter}.
- * 
+ *
  * @author Karsten Lentzsch
  * @author Jeanette Winzenburg
  * @version $Revision: 1.9 $
@@ -54,21 +52,21 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     /**
      * Holds a sequence of indices used to test index changes.
      */
-    private static final int[] INDICES = 
-        {0, -1, -1, 3, 2, -1, 1, 2, 3, 4, 0, -1};
+    private static final int[] INDICES =
+            {0, -1, -1, 3, 2, -1, 1, 2, 3, 4, 0, -1};
 
     /**
      * Checks that changes to the underlying ValueModel update the adapter.
      */
     public void testAdapterReflectsModelChanges() {
         ValueModel model = new ValueHolder();
-        SingleListSelectionAdapter adapter = 
-            new SingleListSelectionAdapter(model);
+        SingleListSelectionAdapter adapter =
+                new SingleListSelectionAdapter(model);
         for (int i = 0; i < INDICES.length; i++) {
             int index = INDICES[i];
             model.setValue(new Integer(index));
-            assertEquals("New adapter index", 
-                    index, 
+            assertEquals("New adapter index",
+                    index,
                     adapter.getMinSelectionIndex());
         }
     }
@@ -78,13 +76,13 @@ public final class SingleListSelectionAdapterTest extends TestCase {
      */
     public void testModelReflectsAdapterChanges() {
         ValueModel model = new ValueHolder();
-        SingleListSelectionAdapter adapter = 
-            new SingleListSelectionAdapter(model);
+        SingleListSelectionAdapter adapter =
+                new SingleListSelectionAdapter(model);
         for (int i = 0; i < INDICES.length; i++) {
             int index = INDICES[i];
             adapter.setLeadSelectionIndex(index);
-            assertEquals("New model index", 
-                    new Integer(index), 
+            assertEquals("New model index",
+                    new Integer(index),
                     model.getValue());
         }
     }
@@ -92,10 +90,10 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     /**
      * Checks that index changes of the underlying ValueModel are observed and
      * reported by the adapter.<p>
-     * 
+     *
      * Wrong test: changeReport.getNew/OldValue() !=
      * listReport.getFirst/LastIndex() if switching between selected/unselected
-     *  
+     *
      */
 //  public void testAdapterFiresModelEvents() {
 //
@@ -134,8 +132,7 @@ public final class SingleListSelectionAdapterTest extends TestCase {
 //                .eventCount());
 //    }
 
-    
-    
+
     /**
      * Checks for correct SelectionEvent on empty --> selected. (an index of -1
      * is invalid because it does not represent a position in the list that
@@ -143,46 +140,46 @@ public final class SingleListSelectionAdapterTest extends TestCase {
      */
     public void testSelectEvent() {
         ValueModel model = new ValueHolder(-1);
-        SingleListSelectionAdapter adapter = 
-            new SingleListSelectionAdapter(model);
+        SingleListSelectionAdapter adapter =
+                new SingleListSelectionAdapter(model);
         ListSelectionReport report = new ListSelectionReport();
         adapter.addListSelectionListener(report);
         adapter.setSelectionInterval(2, 2);
         ListSelectionEvent e = report.lastEvent();
-        assertEquals("first must be index of changed selection ", 
-                2, 
+        assertEquals("first must be index of changed selection ",
+                2,
                 e.getFirstIndex());
     }
-    
+
     /**
      * Checks for correct SelectionEvent on selected --> empty.
      */
     public void testDeSelectEvent() {
         ValueModel model = new ValueHolder(2);
-        SingleListSelectionAdapter adapter = 
-            new SingleListSelectionAdapter(model);
+        SingleListSelectionAdapter adapter =
+                new SingleListSelectionAdapter(model);
         ListSelectionReport report = new ListSelectionReport();
         adapter.addListSelectionListener(report);
         adapter.clearSelection();
         ListSelectionEvent e = report.lastEvent();
-        assertEquals("first must be index of changed selection ", 
-                2, 
+        assertEquals("first must be index of changed selection ",
+                2,
                 e.getFirstIndex());
     }
 
     public void testChangeSelectEvent() {
         ValueModel model = new ValueHolder(2);
-        SingleListSelectionAdapter adapter = 
-            new SingleListSelectionAdapter(model);
+        SingleListSelectionAdapter adapter =
+                new SingleListSelectionAdapter(model);
         ListSelectionReport report = new ListSelectionReport();
         adapter.addListSelectionListener(report);
         adapter.setSelectionInterval(3, 3);
         ListSelectionEvent e = report.lastEvent();
-        assertEquals("first must be lower index of changed selection ", 
-                2, 
+        assertEquals("first must be lower index of changed selection ",
+                2,
                 e.getFirstIndex());
-        assertEquals("last must be upperd index of changed selection ", 
-                3, 
+        assertEquals("last must be upperd index of changed selection ",
+                3,
                 e.getLastIndex());
 
     }
@@ -190,7 +187,7 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testIsSelectedIndex() {
         ListSelectionModel model = getSelectionAdapter(-1);
         assertTrue("selection must return empty", model.isSelectionEmpty());
-        assertFalse("isSelectedIndex(-1) must return false", 
+        assertFalse("isSelectedIndex(-1) must return false",
                 model.isSelectedIndex(-1));
     }
 
@@ -214,24 +211,25 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testInsertIndexIntervalBefore() {
         ListSelectionModel adapter = getSelectionAdapter(2);
         adapter.insertIndexInterval(0, 1, false);
-        assertEquals("selectionindex must be increased by 1", 
-                3, 
+        assertEquals("selectionindex must be increased by 1",
+                3,
                 adapter.getMinSelectionIndex());
 
     }
+
     public void testInsertIndexIntervalAfter() {
         ListSelectionModel adapter = getSelectionAdapter(2);
         adapter.insertIndexInterval(3, 1, false);
-        assertEquals("selectionindex must be unchanged", 
-                2, 
+        assertEquals("selectionindex must be unchanged",
+                2,
                 adapter.getMinSelectionIndex());
     }
 
     public void testRemoveIndexIntervalAfter() {
         ListSelectionModel adapter = getSelectionAdapter(2);
         adapter.removeIndexInterval(3, 3);
-        assertEquals("selectionindex must be unchanged", 
-                2, 
+        assertEquals("selectionindex must be unchanged",
+                2,
                 adapter.getMinSelectionIndex());
 
     }
@@ -239,8 +237,8 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testRemoveIndexIntervalBefore() {
         ListSelectionModel adapter = getSelectionAdapter(2);
         adapter.removeIndexInterval(0, 0);
-        assertEquals("selectionindex must be decreased by 1", 
-                1, 
+        assertEquals("selectionindex must be decreased by 1",
+                1,
                 adapter.getMinSelectionIndex());
 
     }
@@ -255,15 +253,15 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testLead() {
         ListSelectionModel model = getSelectionAdapter(-1);
         model.setSelectionInterval(0, 2);
-        assertEquals("second parameter must be lead", 
-                2, 
+        assertEquals("second parameter must be lead",
+                2,
                 model.getLeadSelectionIndex());
     }
 
     private ListSelectionModel getSelectionAdapter(int index) {
         ValueModel model = new ValueHolder(index);
-        SingleListSelectionAdapter adapter = 
-            new SingleListSelectionAdapter(model);
+        SingleListSelectionAdapter adapter =
+                new SingleListSelectionAdapter(model);
         return adapter;
     }
 
@@ -272,31 +270,32 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testReferenceInsertIndexIntervalBefore() {
         ListSelectionModel model = createReferenceSelection(2);
         model.insertIndexInterval(0, 1, false);
-        assertEquals("selectionindex must be increased by 1", 
-                3, 
+        assertEquals("selectionindex must be increased by 1",
+                3,
                 model.getMinSelectionIndex());
     }
+
     public void testReferenceInsertIndexIntervalAfter() {
         ListSelectionModel model = createReferenceSelection(2);
         model.insertIndexInterval(3, 1, false);
-        assertEquals("selectionindex must be unchanged", 
-                2, 
+        assertEquals("selectionindex must be unchanged",
+                2,
                 model.getMinSelectionIndex());
     }
 
     public void testReferenceRemoveIndexIntervalBefore() {
         ListSelectionModel model = createReferenceSelection(2);
         model.removeIndexInterval(0, 0);
-        assertEquals("selectionindex must be decreased by 1", 
-                1, 
+        assertEquals("selectionindex must be decreased by 1",
+                1,
                 model.getMinSelectionIndex());
     }
 
     public void testReferenceRemoveIndexIntervalAfter() {
         ListSelectionModel model = createReferenceSelection(2);
         model.removeIndexInterval(3, 3);
-        assertEquals("selectionindex must be unchanged", 
-                2, 
+        assertEquals("selectionindex must be unchanged",
+                2,
                 model.getMinSelectionIndex());
 
     }
@@ -311,7 +310,7 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testReferenceIsSelectedIndex() {
         ListSelectionModel model = createReferenceSelection(-1);
         assertTrue("selection must be empty", model.isSelectionEmpty());
-        assertFalse("isSelectedIndex(-1) must return false", 
+        assertFalse("isSelectedIndex(-1) must return false",
                 model.isSelectedIndex(-1));
     }
 
@@ -333,18 +332,18 @@ public final class SingleListSelectionAdapterTest extends TestCase {
     public void testReferenceLead() {
         ListSelectionModel model = createReferenceSelection(-1);
         model.setSelectionInterval(0, 2);
-        assertEquals("second parameter must be lead", 
-                2, 
+        assertEquals("second parameter must be lead",
+                2,
                 model.getLeadSelectionIndex());
     }
-    
-    
+
+
     private ListSelectionModel createReferenceSelection(int i) {
         ListSelectionModel model = new DefaultListSelectionModel();
         model.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         model.setSelectionInterval(i, i);
         return model;
     }
-    
-    
+
+
 }

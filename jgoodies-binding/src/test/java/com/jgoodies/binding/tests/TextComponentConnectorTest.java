@@ -30,27 +30,24 @@
 
 package com.jgoodies.binding.tests;
 
-import java.lang.reflect.InvocationTargetException;
-
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.adapter.TextComponentConnector;
-import com.jgoodies.binding.tests.value.ToUpperCaseStringHolder;
+import com.jgoodies.binding.test.value.ToUpperCaseStringHolder;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
+import javax.swing.*;
+import java.lang.reflect.InvocationTargetException;
 
 /**
  * A test case for class {@link TextComponentConnector}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.2 $
  */
 public final class TextComponentConnectorTest extends TestCase {
-    
+
     // Constructor Tests ******************************************************
 
     public void testConstructorRejectsNullParameters() {
@@ -71,9 +68,9 @@ public final class TextComponentConnectorTest extends TestCase {
     }
 
     public void testConstructorLeavesSubjectAndTextFieldUnchanged() {
-        String subjectText  = "subjectText";
+        String subjectText = "subjectText";
         String fieldText = "fieldText";
-        ValueModel subject  = new ValueHolder(subjectText);
+        ValueModel subject = new ValueHolder(subjectText);
         JTextField textField = new JTextField(fieldText);
         new TextComponentConnector(subject, textField);
         assertEquals("The constructor must not change the subject value.",
@@ -84,11 +81,11 @@ public final class TextComponentConnectorTest extends TestCase {
                 textField.getText());
     }
 
-    
+
     public void testBindingsUpdatesTextFieldText() {
-        String subjectText  = "subjectText";
+        String subjectText = "subjectText";
         String fieldText = "fieldText";
-        ValueModel subject  = new ValueHolder(subjectText);
+        ValueModel subject = new ValueHolder(subjectText);
         JTextField textField = new JTextField(fieldText);
         Bindings.bind(textField, subject);
         assertEquals("The #bind method must not change the subject value.",
@@ -99,41 +96,41 @@ public final class TextComponentConnectorTest extends TestCase {
                 textField.getText());
     }
 
-    
+
     // Synchronization ********************************************************
-    
+
     public void testSubjectChangeUpdatesTextComponent() {
-        String subjectText  = "subjectText";
+        String subjectText = "subjectText";
         String fieldText = "fieldText";
-        ValueModel subject  = new ValueHolder(subjectText);
+        ValueModel subject = new ValueHolder(subjectText);
         JTextField textField = new JTextField(fieldText);
         Bindings.bind(textField, subject);
         subject.setValue("newSubjectText");
         assertEquals(
-            "Failed to update the text component.",
-            subject.getValue(),
-            textField.getText());
+                "Failed to update the text component.",
+                subject.getValue(),
+                textField.getText());
     }
-    
-        
+
+
     public void testTextComponentChangeUpdatesSubject() {
-        String subjectText  = "subjectText";
+        String subjectText = "subjectText";
         String fieldText = "fieldText";
-        ValueModel subject  = new ValueHolder(subjectText);
+        ValueModel subject = new ValueHolder(subjectText);
         JTextField textField = new JTextField(fieldText);
         Bindings.bind(textField, subject);
         textField.setText("newFieldText");
         assertEquals(
-            "Failed to update the text component.",
-            textField.getText(),
-            subject.getValue());
+                "Failed to update the text component.",
+                textField.getText(),
+                subject.getValue());
     }
-    
+
 
     public void testTextComponentChangeHonorsSubjectModifications() {
-        String subjectText  = "subjectText";
+        String subjectText = "subjectText";
         String fieldText = "fieldText";
-        final ValueModel subject  = new ToUpperCaseStringHolder();
+        final ValueModel subject = new ToUpperCaseStringHolder();
         subject.setValue(subjectText);
         final JTextField textField = new JTextField(fieldText);
         Bindings.bind(textField, subject);
@@ -142,9 +139,9 @@ public final class TextComponentConnectorTest extends TestCase {
             SwingUtilities.invokeAndWait(new Runnable() {
                 public void run() {
                     assertEquals(
-                        "Failed to honor the subject modifications.",
-                        subject.getValue(),
-                        textField.getText());
+                            "Failed to honor the subject modifications.",
+                            subject.getValue(),
+                            textField.getText());
                 }
             });
         } catch (InterruptedException e) {

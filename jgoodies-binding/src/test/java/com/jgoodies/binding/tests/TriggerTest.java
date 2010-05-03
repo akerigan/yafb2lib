@@ -30,21 +30,19 @@
 
 package com.jgoodies.binding.tests;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.tests.event.*;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
 import com.jgoodies.binding.value.Trigger;
+import junit.framework.TestCase;
 
 /**
  * A test case for class {@link Trigger}.
- * 
- * 
+ *
  * @author Karsten Lentzsch
  * @version $Revision: 1.8 $
  */
 public final class TriggerTest extends TestCase {
 
-    
+
     /**
      * Verifies that the trigger accepts Boolean values and null.
      */
@@ -57,7 +55,7 @@ public final class TriggerTest extends TestCase {
         trigger.setValue(Boolean.FALSE);
     }
 
-    
+
     /**
      * Checks that Trigger.setValue rejects non-Boolean values with an
      * IllegalArgumentException.
@@ -78,7 +76,7 @@ public final class TriggerTest extends TestCase {
         }
     }
 
-    
+
     /**
      * Checks that <code>#triggerCommit</code> fires a change event with new
      * value = Boolean.TRUE.
@@ -91,55 +89,55 @@ public final class TriggerTest extends TestCase {
         trigger.addValueChangeListener(changeReport);
         trigger.triggerCommit();
         assertEquals(
-            "Commit from null fires a single event.",
-            changeReport.eventCount(),
-            1);
+                "Commit from null fires a single event.",
+                changeReport.eventCount(),
+                1);
         assertEquals(
-            "Event new value equals Boolean.TRUE.",
-            changeReport.lastEvent().getNewValue(),
-            Boolean.TRUE);
+                "Event new value equals Boolean.TRUE.",
+                changeReport.lastEvent().getNewValue(),
+                Boolean.TRUE);
         assertEquals(
-            "Trigger value equals Boolean.TRUE.",
-            trigger.getValue(),
-            Boolean.TRUE);
+                "Trigger value equals Boolean.TRUE.",
+                trigger.getValue(),
+                Boolean.TRUE);
 
         trigger.setValue(true);
         assertEquals("Nothing changed.", changeReport.eventCount(), 1);
         trigger.triggerCommit();
         assertEquals(
-            "Commit from TRUE fires two events.",
-            changeReport.eventCount(),
-            3);
+                "Commit from TRUE fires two events.",
+                changeReport.eventCount(),
+                3);
         assertEquals(
-            "Event new value equals Boolean.TRUE.",
-            changeReport.lastEvent().getNewValue(),
-            Boolean.TRUE);
+                "Event new value equals Boolean.TRUE.",
+                changeReport.lastEvent().getNewValue(),
+                Boolean.TRUE);
         assertEquals(
-            "Trigger value equals Boolean.TRUE.",
-            trigger.getValue(),
-            Boolean.TRUE);
+                "Trigger value equals Boolean.TRUE.",
+                trigger.getValue(),
+                Boolean.TRUE);
 
         trigger.setValue(false);
         assertEquals(
-            "Changed from true to false.",
-            changeReport.eventCount(),
-            4);
+                "Changed from true to false.",
+                changeReport.eventCount(),
+                4);
         trigger.triggerCommit();
         assertEquals(
-            "Commit from FALSE fires a single events.",
-            changeReport.eventCount(),
-            5);
+                "Commit from FALSE fires a single events.",
+                changeReport.eventCount(),
+                5);
         assertEquals(
-            "Event new value equals Boolean.TRUE.",
-            changeReport.lastEvent().getNewValue(),
-            Boolean.TRUE);
+                "Event new value equals Boolean.TRUE.",
+                changeReport.lastEvent().getNewValue(),
+                Boolean.TRUE);
         assertEquals(
-            "Trigger value equals Boolean.TRUE.",
-            trigger.getValue(),
-            Boolean.TRUE);
+                "Trigger value equals Boolean.TRUE.",
+                trigger.getValue(),
+                Boolean.TRUE);
     }
 
-    
+
     /**
      * Checks that <code>#triggerFlush</code> fires a change event with new
      * value = Boolean.FALSE.
@@ -152,52 +150,52 @@ public final class TriggerTest extends TestCase {
         trigger.addValueChangeListener(changeReport);
         trigger.triggerFlush();
         assertEquals(
-            "Flush from null fires a single event.",
-            changeReport.eventCount(),
-            1);
+                "Flush from null fires a single event.",
+                changeReport.eventCount(),
+                1);
         assertEquals(
-            "Event new value equals Boolean.FALSE.",
-            changeReport.lastEvent().getNewValue(),
-            Boolean.FALSE);
+                "Event new value equals Boolean.FALSE.",
+                changeReport.lastEvent().getNewValue(),
+                Boolean.FALSE);
         assertEquals(
-            "Trigger value equals Boolean.FALSE.",
-            trigger.getValue(),
-            Boolean.FALSE);
+                "Trigger value equals Boolean.FALSE.",
+                trigger.getValue(),
+                Boolean.FALSE);
 
         trigger.setValue(true);
         assertEquals(
-            "Changed from false to true.",
-            changeReport.eventCount(),
-            2);
+                "Changed from false to true.",
+                changeReport.eventCount(),
+                2);
         trigger.triggerFlush();
         assertEquals(
-            "Flush from TRUE fires a single event.",
-            changeReport.eventCount(),
-            3);
+                "Flush from TRUE fires a single event.",
+                changeReport.eventCount(),
+                3);
         assertEquals(
-            "Event new value equals Boolean.FALSE.",
-            changeReport.lastEvent().getNewValue(),
-            Boolean.FALSE);
+                "Event new value equals Boolean.FALSE.",
+                changeReport.lastEvent().getNewValue(),
+                Boolean.FALSE);
         assertEquals(
-            "Trigger value equals Boolean.FALSE.",
-            trigger.getValue(),
-            Boolean.FALSE);
+                "Trigger value equals Boolean.FALSE.",
+                trigger.getValue(),
+                Boolean.FALSE);
 
         trigger.setValue(false);
         assertEquals("Nothing changed.", changeReport.eventCount(), 3);
         trigger.triggerFlush();
         assertEquals(
-            "Flush from FALSE fires two events.",
-            changeReport.eventCount(),
-            5);
+                "Flush from FALSE fires two events.",
+                changeReport.eventCount(),
+                5);
         assertEquals(
-            "Event new value equals Boolean.FALSE.",
-            changeReport.lastEvent().getNewValue(),
-            Boolean.FALSE);
+                "Event new value equals Boolean.FALSE.",
+                changeReport.lastEvent().getNewValue(),
+                Boolean.FALSE);
         assertEquals(
-            "Trigger value equals Boolean.FALSE.",
-            trigger.getValue(),
-            Boolean.FALSE);
+                "Trigger value equals Boolean.FALSE.",
+                trigger.getValue(),
+                Boolean.FALSE);
     }
 
 }

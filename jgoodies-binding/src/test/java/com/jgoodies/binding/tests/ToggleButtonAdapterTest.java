@@ -30,27 +30,26 @@
 
 package com.jgoodies.binding.tests;
 
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.BindingUtils;
 import com.jgoodies.binding.adapter.ToggleButtonAdapter;
 import com.jgoodies.binding.beans.PropertyAdapter;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.event.ChangeReport;
-import com.jgoodies.binding.tests.event.ItemChangeReport;
-import com.jgoodies.binding.tests.value.RejectingValueModel;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.event.ChangeReport;
+import com.jgoodies.binding.test.event.ItemChangeReport;
+import com.jgoodies.binding.test.value.RejectingValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
 
 /**
  * A test case for class {@link ToggleButtonAdapter}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.8 $
  */
 public final class ToggleButtonAdapterTest extends TestCase {
-    
-    
+
+
     // Constructor Tests ******************************************************
 
     public void testConstructorRejectsNullSubject() {
@@ -92,16 +91,16 @@ public final class ToggleButtonAdapterTest extends TestCase {
 
 
     // Basic Adapter Features *************************************************
-    
+
     public void testAdaptsReadWriteBooleanProperty() {
         TestBean bean = new TestBean();
         bean.setReadWriteBooleanProperty(true);
         ValueModel subject = new PropertyAdapter(bean, "readWriteBooleanProperty", true);
         ToggleButtonAdapter adapter = new ToggleButtonAdapter(subject);
-        
+
         // Reading
         assertTrue("Adapter is selected.", adapter.isSelected());
-        
+
         bean.setReadWriteBooleanProperty(false);
         assertFalse("Adapter is deselected.", adapter.isSelected());
 
@@ -111,71 +110,71 @@ public final class ToggleButtonAdapterTest extends TestCase {
         // Writing
         adapter.setSelected(false);
         assertFalse("Adapted property is false.", bean.isReadWriteBooleanProperty());
-        
+
         adapter.setSelected(true);
         assertTrue("Adapted property is true.", bean.isReadWriteBooleanProperty());
     }
 
-    
+
     public void testReadWriteOperations() {
-        testReadWriteOperations(null,  "one", "two");
-        testReadWriteOperations(null,  null,  "two");
-        testReadWriteOperations(null,  "one", null);
+        testReadWriteOperations(null, "one", "two");
+        testReadWriteOperations(null, null, "two");
+        testReadWriteOperations(null, "one", null);
         testReadWriteOperations("one", "one", "two");
-        testReadWriteOperations("one", null,  "two");
+        testReadWriteOperations("one", null, "two");
         testReadWriteOperations("one", "one", null);
         testReadWriteOperations("two", "one", "two");
-        testReadWriteOperations("two", null,  "two");
+        testReadWriteOperations("two", null, "two");
         testReadWriteOperations("two", "one", null);
     }
-        
-    
+
+
     private void testReadWriteOperations(
-            Object initialValue, 
-            Object selectedValue, 
+            Object initialValue,
+            Object selectedValue,
             Object deselectedValue) {
         ValueModel subject = new ValueHolder(initialValue);
         ToggleButtonAdapter adapter = new ToggleButtonAdapter(
                 subject, selectedValue, deselectedValue);
-        
+
         // Reading
         assertEquals("Adapter selection reflects the initial subject value.",
-                BindingUtils.equals(initialValue, selectedValue), 
+                BindingUtils.equals(initialValue, selectedValue),
                 adapter.isSelected());
-        
+
         subject.setValue(selectedValue);
         assertTrue("Adapter is selected again.", adapter.isSelected());
-        
+
         subject.setValue(deselectedValue);
         assertFalse("Adapter is deselected.", adapter.isSelected());
 
         // Writing
         adapter.setSelected(true);
-        assertEquals("The subject value is the selected value.", 
+        assertEquals("The subject value is the selected value.",
                 selectedValue,
                 subject.getValue());
 
         adapter.setSelected(true);
-        assertEquals("The subject value is still the selected value.", 
+        assertEquals("The subject value is still the selected value.",
                 selectedValue,
                 subject.getValue());
 
         adapter.setSelected(false);
-        assertEquals("The subject value is the deselected value.", 
+        assertEquals("The subject value is the deselected value.",
                 deselectedValue,
                 subject.getValue());
 
         adapter.setSelected(false);
-        assertEquals("The subject value is still the deselected value.", 
+        assertEquals("The subject value is still the deselected value.",
                 deselectedValue,
                 subject.getValue());
     }
-    
-    
+
+
     // Change and Item Events *************************************************
-    
+
     public void testFiresChangeAndItemEvents() {
-        Object selectedValue   = "selected";
+        Object selectedValue = "selected";
         Object deselectedValue = "deselected";
         TestBean bean = new TestBean();
         bean.setReadWriteObjectProperty(selectedValue);
@@ -186,62 +185,61 @@ public final class ToggleButtonAdapterTest extends TestCase {
         ItemChangeReport itemChangeReport = new ItemChangeReport();
         adapter.addChangeListener(changeReport);
         adapter.addItemListener(itemChangeReport);
-        
+
         bean.setReadWriteObjectProperty(deselectedValue);
-        assertEquals("Deselecting the property fires a ChangeEvent.", 
-                1, 
+        assertEquals("Deselecting the property fires a ChangeEvent.",
+                1,
                 changeReport.eventCount());
-        assertEquals("Deselecting the property fires an ItemChangeEvent.", 
-                1, 
+        assertEquals("Deselecting the property fires an ItemChangeEvent.",
+                1,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates deselected.", 
+        assertTrue("The last ItemChangeEvent indicates deselected.",
                 itemChangeReport.isLastStateChangeDeselected());
-        
+
         bean.setReadWriteObjectProperty(selectedValue);
-        assertEquals("Selecting the property fires another ChangeEvent.", 
-                2, 
+        assertEquals("Selecting the property fires another ChangeEvent.",
+                2,
                 changeReport.eventCount());
-        assertEquals("Selecting the property fires another ItemChangeEvent.", 
-                2, 
+        assertEquals("Selecting the property fires another ItemChangeEvent.",
+                2,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates selected.", 
+        assertTrue("The last ItemChangeEvent indicates selected.",
                 itemChangeReport.isLastStateChangeSelected());
 
         adapter.setSelected(false);
-        assertEquals("Deselecting the adapter fires a single ChangeEvent.", 
-                3, 
+        assertEquals("Deselecting the adapter fires a single ChangeEvent.",
+                3,
                 changeReport.eventCount());
-        assertEquals("Deselecting the adapter fires a single ItemChangeEvent.", 
-                3, 
+        assertEquals("Deselecting the adapter fires a single ItemChangeEvent.",
+                3,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates deselected.", 
+        assertTrue("The last ItemChangeEvent indicates deselected.",
                 itemChangeReport.isLastStateChangeDeselected());
-        
+
         adapter.setSelected(true);
-        assertEquals("Selecting the adapter fires another ChangeEvent.", 
-                4, 
+        assertEquals("Selecting the adapter fires another ChangeEvent.",
+                4,
                 changeReport.eventCount());
-        assertEquals("Selecting the adapter fires another ItemChangeEvent.", 
-                4, 
+        assertEquals("Selecting the adapter fires another ItemChangeEvent.",
+                4,
                 itemChangeReport.eventCount());
-        assertTrue("The last ItemChangeEvent indicates selected.", 
+        assertTrue("The last ItemChangeEvent indicates selected.",
                 itemChangeReport.isLastStateChangeSelected());
     }
-    
 
-    
+
     // Read-Only Model ********************************************************
-    
+
     public void testAdaptsReadOnlyObjectProperty() {
-        Object selectedValue   = "selected";
+        Object selectedValue = "selected";
         Object deselectedValue = "deselected";
         TestBean bean = new TestBean();
         bean.fireChangeOnReadOnlyObjectProperty(selectedValue);
         ValueModel subject = new PropertyAdapter(bean, "readOnlyObjectProperty", true);
         ToggleButtonAdapter adapter = new ToggleButtonAdapter(subject, selectedValue, deselectedValue);
-        
+
         assertTrue("Adapter is selected.", adapter.isSelected());
-        
+
         bean.fireChangeOnReadOnlyObjectProperty(deselectedValue);
         assertFalse("Adapter is deselected.", adapter.isSelected());
 
@@ -249,19 +247,19 @@ public final class ToggleButtonAdapterTest extends TestCase {
         assertTrue("Adapter is selected again.", adapter.isSelected());
     }
 
-    
+
     // Re-Synchronizes if the Subject Change is Rejected **********************
-    
+
     public void testResynchronizesAfterRejectedSubjectChange() {
-        ValueModel selectionHolder      = new ValueHolder(Boolean.TRUE);
+        ValueModel selectionHolder = new ValueHolder(Boolean.TRUE);
         ValueModel rejectingValueHolder = new RejectingValueModel(selectionHolder);
-        ToggleButtonAdapter adapter = 
-            new ToggleButtonAdapter(rejectingValueHolder);
-        
+        ToggleButtonAdapter adapter =
+                new ToggleButtonAdapter(rejectingValueHolder);
+
         assertTrue("Adapter is selected.", adapter.isSelected());
         adapter.setSelected(false);
         assertTrue("Adapter is still selected.", adapter.isSelected());
-    }    
+    }
 
-    
+
 }

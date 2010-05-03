@@ -30,34 +30,33 @@
 
 package com.jgoodies.binding.tests;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyVetoException;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.beans.*;
-import com.jgoodies.binding.tests.beans.*;
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
-import com.jgoodies.binding.tests.value.ValueHolderWithNewValueNull;
-import com.jgoodies.binding.tests.value.ValueHolderWithOldAndNewValueNull;
-import com.jgoodies.binding.tests.value.ValueHolderWithOldValueNull;
+import com.jgoodies.binding.test.beans.*;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
+import com.jgoodies.binding.test.value.ValueHolderWithNewValueNull;
+import com.jgoodies.binding.test.value.ValueHolderWithOldAndNewValueNull;
+import com.jgoodies.binding.test.value.ValueHolderWithOldValueNull;
 import com.jgoodies.binding.value.AbstractValueModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyVetoException;
 
 /**
  * A test case for class {@link PropertyAdapter}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.21 $
  */
 public final class PropertyAdapterTest extends TestCase {
-    
+
     private TestBean model1;
     private TestBean model2;
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void setUp() throws Exception {
         super.setUp();
@@ -66,7 +65,7 @@ public final class PropertyAdapterTest extends TestCase {
     }
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void tearDown() throws Exception {
         super.tearDown();
@@ -78,7 +77,7 @@ public final class PropertyAdapterTest extends TestCase {
     // Constructor Tests ******************************************************
 
     /**
-     * Verifies that we can adapt observable and non-observable objects 
+     * Verifies that we can adapt observable and non-observable objects
      * if we do not observe changes.
      */
     public void testConstructorsAcceptAllBeansWhenNotObserving() {
@@ -106,8 +105,8 @@ public final class PropertyAdapterTest extends TestCase {
                 new PropertyAdapter(new ValueHolder(bean, true), "property", true);
             } catch (PropertyUnboundException ex) {
                 fail("Constructor failed to accept to observe an observable." +
-                     "\nbean class=" + bean.getClass()
-                   + "\nexception=" + ex);
+                        "\nbean class=" + bean.getClass()
+                        + "\nexception=" + ex);
             }
         }
     }
@@ -151,14 +150,14 @@ public final class PropertyAdapterTest extends TestCase {
         for (int i = 0; i < beans.length; i++) {
             Object bean = beans[i];
             try {
-                boolean supportsBoundProperties = 
-                    BeanUtils.supportsBoundProperties(bean.getClass());
+                boolean supportsBoundProperties =
+                        BeanUtils.supportsBoundProperties(bean.getClass());
                 new PropertyAdapter(bean, "property", supportsBoundProperties);
                 new PropertyAdapter(new ValueHolder(bean, true), "property", supportsBoundProperties);
             } catch (PropertyUnboundException ex) {
                 fail("Constructor failed to accept to observe an observable." +
-                     "\nbean class=" + bean.getClass() +
-                     "\nexception=" + ex);
+                        "\nbean class=" + bean.getClass() +
+                        "\nexception=" + ex);
             }
         }
     }
@@ -169,7 +168,7 @@ public final class PropertyAdapterTest extends TestCase {
         } catch (NullPointerException ex) {
             ex.printStackTrace();
             fail("Constructor failed to accept a null bean."
-                + "\nexception=" + ex);
+                    + "\nexception=" + ex);
         }
     }
 
@@ -193,26 +192,26 @@ public final class PropertyAdapterTest extends TestCase {
 
 
     // Testing Property Access ************************************************
-    
-    /** 
+
+    /**
      */
     public void testReadWriteProperties() {
         TestBean bean = new TestBean();
         bean.setReadWriteObjectProperty("initialValue");
         bean.setReadWriteBooleanProperty(false);
         bean.setReadWriteIntProperty(42);
-        ValueModel objectAdapter  = new PropertyAdapter(bean, "readWriteObjectProperty");
+        ValueModel objectAdapter = new PropertyAdapter(bean, "readWriteObjectProperty");
         ValueModel booleanAdapter = new PropertyAdapter(bean, "readWriteBooleanProperty");
-        ValueModel intAdapter     = new PropertyAdapter(bean, "readWriteIntProperty");
+        ValueModel intAdapter = new PropertyAdapter(bean, "readWriteIntProperty");
         ValueModel integerAdapter = new PropertyAdapter(bean, "readWriteIntegerProperty");
 
         // Adapter values equal the bean property values.
-        assertEquals(objectAdapter.getValue(),  bean.getReadWriteObjectProperty());
+        assertEquals(objectAdapter.getValue(), bean.getReadWriteObjectProperty());
         assertEquals(booleanAdapter.getValue(), Boolean.valueOf(bean.isReadWriteBooleanProperty()));
-        assertEquals(intAdapter.getValue(),     new Integer(bean.getReadWriteIntProperty()));
+        assertEquals(intAdapter.getValue(), new Integer(bean.getReadWriteIntProperty()));
         assertEquals(integerAdapter.getValue(), bean.getReadWriteIntegerProperty());
 
-        Object objectValue   = "testString";
+        Object objectValue = "testString";
         Boolean booleanValue = Boolean.TRUE;
         Integer integerValue = new Integer(43);
 
@@ -220,7 +219,7 @@ public final class PropertyAdapterTest extends TestCase {
         booleanAdapter.setValue(booleanValue);
         intAdapter.setValue(integerValue);
         integerAdapter.setValue(integerValue);
-        assertEquals(objectValue,  bean.getReadWriteObjectProperty());
+        assertEquals(objectValue, bean.getReadWriteObjectProperty());
         assertEquals(booleanValue, Boolean.valueOf(bean.isReadWriteBooleanProperty()));
         assertEquals(integerValue, new Integer(bean.getReadWriteIntProperty()));
         assertEquals(integerValue, bean.getReadWriteIntegerProperty());
@@ -231,40 +230,40 @@ public final class PropertyAdapterTest extends TestCase {
         bean.writeRWObjectProperty("initialValue");
         bean.writeRWBooleanProperty(false);
         bean.writeRWIntProperty(42);
-        ValueModel objectAdapter  = new PropertyAdapter(bean, "readWriteObjectProperty",  "readRWObjectProperty",  "writeRWObjectProperty");
+        ValueModel objectAdapter = new PropertyAdapter(bean, "readWriteObjectProperty", "readRWObjectProperty", "writeRWObjectProperty");
         ValueModel booleanAdapter = new PropertyAdapter(bean, "readWriteBooleanProperty", "readRWBooleanProperty", "writeRWBooleanProperty");
-        ValueModel intAdapter     = new PropertyAdapter(bean, "readWriteIntProperty",     "readRWIntProperty",     "writeRWIntProperty");
+        ValueModel intAdapter = new PropertyAdapter(bean, "readWriteIntProperty", "readRWIntProperty", "writeRWIntProperty");
 
         // Adapter values equal the bean property values.
-        assertEquals(objectAdapter.getValue(),  bean.readRWObjectProperty());
+        assertEquals(objectAdapter.getValue(), bean.readRWObjectProperty());
         assertEquals(booleanAdapter.getValue(), Boolean.valueOf(bean.readRWBooleanProperty()));
-        assertEquals(intAdapter.getValue(),     new Integer(bean.readRWIntProperty()));
+        assertEquals(intAdapter.getValue(), new Integer(bean.readRWIntProperty()));
 
-        Object objectValue   = "testString";
+        Object objectValue = "testString";
         Boolean booleanValue = Boolean.TRUE;
         Integer integerValue = new Integer(43);
 
         objectAdapter.setValue(objectValue);
         booleanAdapter.setValue(booleanValue);
         intAdapter.setValue(integerValue);
-        assertEquals(objectValue,  bean.readRWObjectProperty());
+        assertEquals(objectValue, bean.readRWObjectProperty());
         assertEquals(booleanValue, Boolean.valueOf(bean.readRWBooleanProperty()));
         assertEquals(integerValue, new Integer(bean.readRWIntProperty()));
     }
 
     public void testReadOnlyProperties() {
         TestBean bean = new TestBean();
-        bean.readOnlyObjectProperty  = "testString";
+        bean.readOnlyObjectProperty = "testString";
         bean.readOnlyBooleanProperty = true;
-        bean.readOnlyIntProperty     = 42;
-        ValueModel objectAdapter  = new PropertyAdapter(bean, "readOnlyObjectProperty");
+        bean.readOnlyIntProperty = 42;
+        ValueModel objectAdapter = new PropertyAdapter(bean, "readOnlyObjectProperty");
         ValueModel booleanAdapter = new PropertyAdapter(bean, "readOnlyBooleanProperty");
-        ValueModel intAdapter     = new PropertyAdapter(bean, "readOnlyIntProperty");
+        ValueModel intAdapter = new PropertyAdapter(bean, "readOnlyIntProperty");
 
         // Adapter values equal the bean property values.
-        assertEquals(objectAdapter.getValue(),  bean.getReadOnlyObjectProperty());
+        assertEquals(objectAdapter.getValue(), bean.getReadOnlyObjectProperty());
         assertEquals(booleanAdapter.getValue(), Boolean.valueOf(bean.isReadOnlyBooleanProperty()));
-        assertEquals(intAdapter.getValue(),     new Integer(bean.getReadOnlyIntProperty()));
+        assertEquals(intAdapter.getValue(), new Integer(bean.getReadOnlyIntProperty()));
         try {
             objectAdapter.setValue("some");
             fail("Adapter must reject writing of read-only properties.");
@@ -278,17 +277,17 @@ public final class PropertyAdapterTest extends TestCase {
 
     public void testReadOnlyCustomProperties() {
         CustomAccessBean bean = new CustomAccessBean();
-        bean.readOnlyObjectProperty  = "testString";
+        bean.readOnlyObjectProperty = "testString";
         bean.readOnlyBooleanProperty = true;
-        bean.readOnlyIntProperty     = 42;
-        ValueModel objectAdapter  = new PropertyAdapter(bean, "readOnlyObjectProperty",  "readROObjectProperty",  null);
+        bean.readOnlyIntProperty = 42;
+        ValueModel objectAdapter = new PropertyAdapter(bean, "readOnlyObjectProperty", "readROObjectProperty", null);
         ValueModel booleanAdapter = new PropertyAdapter(bean, "readOnlyBooleanProperty", "readROBooleanProperty", null);
-        ValueModel intAdapter     = new PropertyAdapter(bean, "readOnlyIntProperty",     "readROIntProperty",     null);
+        ValueModel intAdapter = new PropertyAdapter(bean, "readOnlyIntProperty", "readROIntProperty", null);
 
         // Adapter values equal the bean property values.
-        assertEquals(objectAdapter.getValue(),  bean.readROObjectProperty());
+        assertEquals(objectAdapter.getValue(), bean.readROObjectProperty());
         assertEquals(booleanAdapter.getValue(), Boolean.valueOf(bean.readROBooleanProperty()));
-        assertEquals(intAdapter.getValue(),     new Integer(bean.readROIntProperty()));
+        assertEquals(intAdapter.getValue(), new Integer(bean.readROIntProperty()));
         try {
             objectAdapter.setValue("some");
             fail("Adapter must reject writing of read-only properties.");
@@ -298,21 +297,21 @@ public final class PropertyAdapterTest extends TestCase {
             fail("Unexpected exception=" + e);
         }
     }
-    
-    /** 
+
+    /**
      */
     public void testWriteOnlyProperties() {
         TestBean bean = new TestBean();
-        ValueModel objectAdapter  = new PropertyAdapter(bean, "writeOnlyObjectProperty");
+        ValueModel objectAdapter = new PropertyAdapter(bean, "writeOnlyObjectProperty");
         ValueModel booleanAdapter = new PropertyAdapter(bean, "writeOnlyBooleanProperty");
-        ValueModel intAdapter     = new PropertyAdapter(bean, "writeOnlyIntProperty");
-        Object objectValue   = "testString";
+        ValueModel intAdapter = new PropertyAdapter(bean, "writeOnlyIntProperty");
+        Object objectValue = "testString";
         Boolean booleanValue = Boolean.TRUE;
         Integer integerValue = new Integer(42);
         objectAdapter.setValue(objectValue);
         booleanAdapter.setValue(booleanValue);
         intAdapter.setValue(integerValue);
-        assertEquals(objectValue,  bean.writeOnlyObjectProperty);
+        assertEquals(objectValue, bean.writeOnlyObjectProperty);
         assertEquals(booleanValue, Boolean.valueOf(bean.writeOnlyBooleanProperty));
         assertEquals(integerValue, new Integer(bean.writeOnlyIntProperty));
         try {
@@ -324,20 +323,20 @@ public final class PropertyAdapterTest extends TestCase {
             fail("Unexpected exception=" + e);
         }
     }
-    
+
     public void testWriteOnlyCustomProperties() {
         CustomAccessBean bean = new CustomAccessBean();
-        ValueModel objectAdapter  = new PropertyAdapter(bean, "writeOnlyObjectProperty",  null, "writeWOObjectProperty");
+        ValueModel objectAdapter = new PropertyAdapter(bean, "writeOnlyObjectProperty", null, "writeWOObjectProperty");
         ValueModel booleanAdapter = new PropertyAdapter(bean, "writeOnlyBooleanProperty", null, "writeWOBooleanProperty");
-        ValueModel intAdapter     = new PropertyAdapter(bean, "writeOnlyIntProperty",     null, "writeWOIntProperty");
+        ValueModel intAdapter = new PropertyAdapter(bean, "writeOnlyIntProperty", null, "writeWOIntProperty");
 
-        Object objectValue   = "testString";
+        Object objectValue = "testString";
         Boolean booleanValue = Boolean.TRUE;
         Integer integerValue = new Integer(42);
         objectAdapter.setValue(objectValue);
         booleanAdapter.setValue(booleanValue);
         intAdapter.setValue(integerValue);
-        assertEquals(objectValue,  bean.writeOnlyObjectProperty);
+        assertEquals(objectValue, bean.writeOnlyObjectProperty);
         assertEquals(booleanValue, Boolean.valueOf(bean.writeOnlyBooleanProperty));
         assertEquals(integerValue, new Integer(bean.writeOnlyIntProperty));
         try {
@@ -356,52 +355,52 @@ public final class PropertyAdapterTest extends TestCase {
      */
     public void testWriteConstrainedPropertyWithoutVeto() {
         TestBean bean = new TestBean();
-        PropertyAdapter adapter  = new PropertyAdapter(bean, "constrainedProperty");
+        PropertyAdapter adapter = new PropertyAdapter(bean, "constrainedProperty");
         try {
             bean.setConstrainedProperty("value1");
         } catch (PropertyVetoException e1) {
             fail("Unexpected veto for value1.");
         }
-        assertEquals("Bean has the initial value1.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("Bean has the initial value1.",
+                bean.getConstrainedProperty(),
                 "value1");
-        
+
         adapter.setValue("value2a");
-        assertEquals("Bean now has the value2a.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("Bean now has the value2a.",
+                bean.getConstrainedProperty(),
                 "value2a");
         try {
             adapter.setVetoableValue("value2b");
         } catch (PropertyVetoException e) {
             fail("Unexpected veto for value2b.");
         }
-        assertEquals("Bean now has the value2b.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("Bean now has the value2b.",
+                bean.getConstrainedProperty(),
                 "value2b");
     }
-    
-    
+
+
     /**
      * Checks the write access to a constrained property with veto.
      */
     public void testWriteConstrainedPropertyWithVeto() {
         TestBean bean = new TestBean();
-        PropertyAdapter adapter  = new PropertyAdapter(bean, "constrainedProperty");
+        PropertyAdapter adapter = new PropertyAdapter(bean, "constrainedProperty");
         try {
             bean.setConstrainedProperty("value1");
         } catch (PropertyVetoException e1) {
             fail("Unexpected veto for  value1.");
         }
-        assertEquals("Bean has the initial value1.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("Bean has the initial value1.",
+                bean.getConstrainedProperty(),
                 "value1");
-        
+
         // Writing with a veto
         bean.addVetoableChangeListener(new VetoableChangeRejector());
 
         adapter.setValue("value2a");
-        assertEquals("Bean still has the value1.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("Bean still has the value1.",
+                bean.getConstrainedProperty(),
                 "value1");
         try {
             adapter.setVetoableValue("value2b");
@@ -415,12 +414,12 @@ public final class PropertyAdapterTest extends TestCase {
                     pce.getNewValue(),
                     "value2b");
         }
-        assertEquals("After setting value2b, the bean still has the value1.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("After setting value2b, the bean still has the value1.",
+                bean.getConstrainedProperty(),
                 "value1");
     }
-    
-    
+
+
     /**
      * Verifies that the reader and writer can be located in different
      * levels of a class hierarchy.
@@ -435,7 +434,7 @@ public final class PropertyAdapterTest extends TestCase {
         bean.setProperty(value2);
         assertEquals(value2, adapter.getValue());
     }
-    
+
     /**
      * Tests access to properties that are described by a BeanInfo class.
      */
@@ -448,11 +447,11 @@ public final class PropertyAdapterTest extends TestCase {
         assertEquals(value1, bean.getReadWriteObjectProperty());
         bean.setReadWriteObjectProperty(value2);
         assertEquals(value2, adapter.getValue());
-        
+
         try {
             new PropertyAdapter(bean, "readWriteIntProperty");
-            fail("Adapter must not find properties that " + 
-                 "have been excluded by a custom BeanInfo.");
+            fail("Adapter must not find properties that " +
+                    "have been excluded by a custom BeanInfo.");
         } catch (PropertyNotFoundException e) {
             // The expected behavior
         }
@@ -486,8 +485,8 @@ public final class PropertyAdapterTest extends TestCase {
             fail("Unexpected exception=" + e);
         }
     }
-    
-    
+
+
     public void testIllegalPropertyAccess() {
         TestBean bean = new TestBean();
         try {
@@ -518,7 +517,7 @@ public final class PropertyAdapterTest extends TestCase {
 
 
     // Testing Update Notifications *******************************************
-    
+
     public void testSetPropertySendsUpdates() {
         AbstractValueModel adapter = new PropertyAdapter(model1, "readWriteObjectProperty", true);
         PropertyChangeReport changeReport = new PropertyChangeReport();
@@ -565,15 +564,15 @@ public final class PropertyAdapterTest extends TestCase {
     public void testBeanChangeIgnoresOldBeanNull() {
         testBeanChangeIgnoresMissingOldOrNullValues(new ValueHolderWithOldValueNull(null));
     }
-    
+
     public void testBeanChangeIgnoresNewBeanNull() {
         testBeanChangeIgnoresMissingOldOrNullValues(new ValueHolderWithNewValueNull(null));
     }
-    
+
     public void testBeanChangeIgnoresOldAndNewBeanNull() {
         testBeanChangeIgnoresMissingOldOrNullValues(new ValueHolderWithOldAndNewValueNull(null));
     }
-    
+
     private void testBeanChangeIgnoresMissingOldOrNullValues(ValueModel beanChannel) {
         TestBean bean1 = new TestBean();
         TestBean bean2 = new TestBean();
@@ -591,7 +590,7 @@ public final class PropertyAdapterTest extends TestCase {
                 1,
                 changeReport.eventCount());
     }
-    
+
     public void testMulticastAndNamedPropertyChangeEvents() {
         AbstractValueModel adapter = new PropertyAdapter(model1, "readWriteObjectProperty", true);
         PropertyChangeReport changeReport = new PropertyChangeReport();
@@ -611,7 +610,7 @@ public final class PropertyAdapterTest extends TestCase {
 
         Object theNewObjectValue = "The new value";
         model1.setReadWriteObjectProperties(theNewObjectValue, false, 3);
-        
+
         Object eventsNewValue = changeReport.lastEvent().getNewValue();
         assertEquals("Multicast fires proper new value .", theNewObjectValue, eventsNewValue);
     }
@@ -629,37 +628,37 @@ public final class PropertyAdapterTest extends TestCase {
         Object value2_1 = "value2.1";
         Object value2_2 = "value2.2";
         Object value2_3 = "value2.3";
-        
+
         model1.setReadWriteObjectProperty(value1_1);
         model2.setReadWriteObjectProperty(value2_1);
         PropertyAdapter adapter = new PropertyAdapter(model1, "readWriteObjectProperty", true);
         adapter.setBean(model2);
-        
-        assertSame(
-            "Bean has not been changed.",
-            adapter.getBean(),
-            model2);
 
         assertSame(
-            "Bean change does not answer the new beans's value.",
-            adapter.getValue(),
-            value2_1);
-            
+                "Bean has not been changed.",
+                adapter.getBean(),
+                model2);
+
+        assertSame(
+                "Bean change does not answer the new beans's value.",
+                adapter.getValue(),
+                value2_1);
+
         adapter.setValue(value2_2);
         assertSame(
-            "Bean change does not set the new bean's property.",
-            model2.getReadWriteObjectProperty(),
-            value2_2);
-            
+                "Bean change does not set the new bean's property.",
+                model2.getReadWriteObjectProperty(),
+                value2_2);
+
         model1.setReadWriteObjectProperty(value1_2);
         assertSame("Adapter listens to old bean after bean change.",
-            adapter.getValue(),
-            value2_2);
+                adapter.getValue(),
+                value2_2);
 
         model2.setReadWriteObjectProperty(value2_3);
         assertSame("Adapter does not listen to new bean after bean change.",
-            adapter.getValue(),
-            value2_3);
+                adapter.getValue(),
+                value2_3);
     }
 
     /**
@@ -678,7 +677,7 @@ public final class PropertyAdapterTest extends TestCase {
      */
     public void testSetBeanChangesReadWriteState() {
         ReadWriteBean readWriteBean = new ReadWriteBean();
-        ReadOnlyBean  readOnlyBean  = new ReadOnlyBean();
+        ReadOnlyBean readOnlyBean = new ReadOnlyBean();
         WriteOnlyBean writeOnlyBean = new WriteOnlyBean();
 
         // From/to readWriteBean to all other read/write states        
@@ -702,7 +701,7 @@ public final class PropertyAdapterTest extends TestCase {
         adapter.setBean(null);
         adapter.setBean(readOnlyBean);
     }
-    
+
     /**
      * Checks that bean changes are reported.
      */
@@ -710,7 +709,7 @@ public final class PropertyAdapterTest extends TestCase {
         PropertyAdapter adapter = new PropertyAdapter(model1, "readWriteObjectProperty");
         PropertyChangeReport changeReport = new PropertyChangeReport();
         adapter.addPropertyChangeListener("bean", changeReport);
-        
+
         adapter.setBean(model2);
         assertEquals("Bean changed.", 1, changeReport.eventCount());
         adapter.setBean(model2);
@@ -727,10 +726,10 @@ public final class PropertyAdapterTest extends TestCase {
         PropertyAdapter adapter = new PropertyAdapter(null, "readWriteObjectProperty", true);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         adapter.addPropertyChangeListener(changeReport);
-        
+
         adapter.setBean(model1);
         assertEquals("Changing the bean fires three events: before, changing, after."
-              + "It also fires a change event.",
+                + "It also fires a change event.",
                 4,
                 changeReport.eventCount());
     }
@@ -741,11 +740,11 @@ public final class PropertyAdapterTest extends TestCase {
         Object bean2 = new EquityTestBean("bean");
         assertEquals("The two test beans are equal.", bean1, bean2);
         assertNotSame("The two test beans are not the same.", bean1, bean2);
-        
+
         PropertyAdapter adapter1 = new PropertyAdapter(bean1, "readWriteObjectProperty", true);
         PropertyChangeReport changeReport1 = new PropertyChangeReport();
         adapter1.addPropertyChangeListener(changeReport1);
-        
+
         adapter1.setBean(bean2);
         assertEquals("Changing the bean fires three events: before, changing, after.",
                 3,
@@ -755,18 +754,17 @@ public final class PropertyAdapterTest extends TestCase {
         adapter2.setBean(bean1);
         PropertyChangeReport changeReport2 = new PropertyChangeReport();
         adapter2.addPropertyChangeListener(changeReport2);
-        
+
         adapter2.setBean(bean2);
         assertEquals("Changing the bean fires three events: before, changing, after.",
                 3,
                 changeReport2.eventCount());
     }
-    
-    
-    
+
+
     public void testChangedState() {
         PropertyAdapter adapter = new PropertyAdapter(model1, "readWriteObjectProperty", true);
-        
+
         assertEquals("The initial changed state is false.", false, adapter.isChanged());
         model1.setReadWriteObjectProperty("aBrandNewValue");
         assertEquals("Changing the bean turns the changed state to true.", true, adapter.isChanged());
@@ -782,7 +780,7 @@ public final class PropertyAdapterTest extends TestCase {
         PropertyAdapter adapter = new PropertyAdapter(model1, "readWriteObjectProperty", true);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         adapter.addPropertyChangeListener("changed", changeReport);
-        
+
         model1.setReadWriteObjectProperty("aBrandNewValue");
         adapter.resetChanged();
         model1.setReadWriteObjectProperty("anotherValue");
@@ -790,16 +788,16 @@ public final class PropertyAdapterTest extends TestCase {
         assertEquals("The changed state changed four times.", 4, changeReport.eventCount());
     }
 
-    
+
     // Misc *******************************************************************
-    
+
     /**
      * Checks that the cached PropertyDescriptor is available when needed.
      */
     public void testPropertyDescriptorCache() {
         ValueModel beanChannel = new ValueHolder(null, true);
         PropertyAdapter adapter = new PropertyAdapter(beanChannel, "readWriteObjectProperty", true);
-        
+
         beanChannel.setValue(new TestBean());
         adapter.setValue("Test");
     }

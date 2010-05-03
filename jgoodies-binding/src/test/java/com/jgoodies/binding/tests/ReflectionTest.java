@@ -30,29 +30,28 @@
 
 package com.jgoodies.binding.tests;
 
+import com.jgoodies.binding.beans.BeanAdapter;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.value.ConverterFactory;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.beans.BeanAdapter;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.value.ConverterFactory;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-
 /**
  * Checks reflection access to a bunch of ValueModel implementations.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.5 $
  */
 public final class ReflectionTest extends TestCase {
-    
+
 
     /**
-     * Checks reflection access to ValueModels returned by the BeanAdapter. 
+     * Checks reflection access to ValueModels returned by the BeanAdapter.
      */
     public void testAccessToBeanAdapterModels() {
         BeanAdapter adapter = new BeanAdapter(new TestBean());
@@ -60,34 +59,34 @@ public final class ReflectionTest extends TestCase {
         checkAccess(valueModel, null, "BeanAdapter's ValueModel");
     }
 
-    
+
     // Checking Access to ConverterFactory Converters *************************
-    
+
     /**
-     * Checks reflection access to the converting ValueModel 
-     * returned by <code>ConverterFactory.createBooleanNegator</code>. 
+     * Checks reflection access to the converting ValueModel
+     * returned by <code>ConverterFactory.createBooleanNegator</code>.
      */
     public void testAccessToBooleanNegator() {
         ValueModel booleanNegator = ConverterFactory.createBooleanNegator(
                 new ValueHolder(true));
         checkAccess(booleanNegator, null, "ConverterFactory#createBooleanNegator");
     }
-    
-    
+
+
     /**
-     * Checks reflection access to the converting ValueModel 
-     * returned by <code>ConverterFactory.createBooleanToStringConverter</code>. 
+     * Checks reflection access to the converting ValueModel
+     * returned by <code>ConverterFactory.createBooleanToStringConverter</code>.
      */
     public void testAccessToBooleanToStringConverter() {
         ValueModel stringConverter = ConverterFactory.createBooleanToStringConverter(
                 new ValueHolder(true), "true", "false");
         checkAccess(stringConverter, "true", "ConverterFactory#createBooleanToStringConverter");
     }
-    
-    
+
+
     /**
-     * Checks reflection access to the converting ValueModel 
-     * returned by <code>ConverterFactory.createDoubleToIntegerConverter</code>. 
+     * Checks reflection access to the converting ValueModel
+     * returned by <code>ConverterFactory.createDoubleToIntegerConverter</code>.
      */
     public void testAccessToDoubleToIntegerConverter() {
         ValueModel doubleConverter = ConverterFactory.createDoubleToIntegerConverter(
@@ -95,10 +94,10 @@ public final class ReflectionTest extends TestCase {
         checkAccess(doubleConverter, new Integer(2), "ConverterFactory#createDoubleToIntegerConverter");
     }
 
-    
+
     /**
-     * Checks reflection access to the converting ValueModel 
-     * returned by <code>ConverterFactory.createFloatToIntegerConverter</code>. 
+     * Checks reflection access to the converting ValueModel
+     * returned by <code>ConverterFactory.createFloatToIntegerConverter</code>.
      */
     public void testAccessToFloatToIntegerConverter() {
         ValueModel floatConverter = ConverterFactory.createFloatToIntegerConverter(
@@ -106,10 +105,10 @@ public final class ReflectionTest extends TestCase {
         checkAccess(floatConverter, new Integer(2), "ConverterFactory#createFloatToIntegerConverter");
     }
 
-    
+
     /**
-     * Checks reflection access to the converting ValueModel 
-     * returned by <code>ConverterFactory.createLongToIntegerConverter</code>. 
+     * Checks reflection access to the converting ValueModel
+     * returned by <code>ConverterFactory.createLongToIntegerConverter</code>.
      */
     public void testAccessToLongToIntegerConverter() {
         ValueModel longConverter = ConverterFactory.createLongToIntegerConverter(
@@ -117,10 +116,10 @@ public final class ReflectionTest extends TestCase {
         checkAccess(longConverter, new Integer(2), "ConverterFactory#createLongToIntegerConverter");
     }
 
-    
+
     /**
-     * Checks reflection access to the converting ValueModel 
-     * returned by <code>ConverterFactory.createStringConverter</code>. 
+     * Checks reflection access to the converting ValueModel
+     * returned by <code>ConverterFactory.createStringConverter</code>.
      */
     public void testAccessToStringConverter() {
         ValueModel stringConverter = ConverterFactory.createStringConverter(
@@ -129,30 +128,30 @@ public final class ReflectionTest extends TestCase {
         checkAccess(stringConverter, "512", "ConverterFactory#createStringConverter");
     }
 
-    
+
     // Helper Code ************************************************************
-    
+
     /**
      * Checks read-write-access to the given ValueModel using reflection.
-     * 
-     * @param valueModel   the ValueModel that implements the setter
-     * @param newValue     the test value for the setter
-     * @param description  used in failure message to describe the model
+     *
+     * @param valueModel  the ValueModel that implements the setter
+     * @param newValue    the test value for the setter
+     * @param description used in failure message to describe the model
      */
     private static void checkAccess(
-            ValueModel valueModel, 
+            ValueModel valueModel,
             Object newValue,
             String description) {
-        checkReadAccess (valueModel,           description + "#getValue()");
+        checkReadAccess(valueModel, description + "#getValue()");
         checkWriteAccess(valueModel, newValue, description + "#setValue(Object)");
     }
-    
-    
+
+
     /**
      * Checks read-access to the given ValueModel using reflection.
-     * 
-     * @param valueModel   the ValueModel that implements the getter
-     * @param description  used in failure message to describe the model
+     *
+     * @param valueModel  the ValueModel that implements the getter
+     * @param description used in failure message to describe the model
      */
     private static void checkReadAccess(ValueModel valueModel, String description) {
         try {
@@ -171,13 +170,13 @@ public final class ReflectionTest extends TestCase {
 
     /**
      * Checks write-access to the given ValueModel using reflection.
-     * 
-     * @param valueModel   the ValueModel that implements the setter
-     * @param newValue     the value to be set
-     * @param description  used in failure message to describe the model
+     *
+     * @param valueModel  the ValueModel that implements the setter
+     * @param newValue    the value to be set
+     * @param description used in failure message to describe the model
      */
     private static void checkWriteAccess(
-            ValueModel valueModel, 
+            ValueModel valueModel,
             Object newValue,
             String description) {
         try {
@@ -194,6 +193,5 @@ public final class ReflectionTest extends TestCase {
         }
     }
 
-    
 
 }

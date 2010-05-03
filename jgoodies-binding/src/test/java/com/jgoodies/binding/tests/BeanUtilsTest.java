@@ -30,23 +30,24 @@
 
 package com.jgoodies.binding.tests;
 
-import java.beans.*;
-
+import com.jgoodies.binding.beans.BeanUtils;
+import com.jgoodies.binding.test.beans.BeanClasses;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.beans.VetoableChangeRejector;
 import junit.framework.TestCase;
 
-import com.jgoodies.binding.beans.BeanUtils;
-import com.jgoodies.binding.tests.beans.BeanClasses;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.beans.VetoableChangeRejector;
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.beans.PropertyVetoException;
 
 /**
  * A test case for class {@link BeanUtils}.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.11 $
  */
 public final class BeanUtilsTest extends TestCase {
-    
+
 
     /**
      * Checks that #supportsBoundProperties detects observable classes.
@@ -56,8 +57,8 @@ public final class BeanUtilsTest extends TestCase {
         for (int i = 0; i < observableClasses.length; i++) {
             Class beanClass = observableClasses[i];
             assertTrue(
-                "Could not detect that the class supports bound properties.",
-                 BeanUtils.supportsBoundProperties(beanClass));
+                    "Could not detect that the class supports bound properties.",
+                    BeanUtils.supportsBoundProperties(beanClass));
         }
     }
 
@@ -69,12 +70,12 @@ public final class BeanUtilsTest extends TestCase {
         for (int i = 0; i < unobservableClasses.length; i++) {
             Class beanClass = unobservableClasses[i];
             assertFalse(
-                "Failed to reject a class that supports no bound properties.",
-                BeanUtils.supportsBoundProperties(beanClass));
+                    "Failed to reject a class that supports no bound properties.",
+                    BeanUtils.supportsBoundProperties(beanClass));
         }
     }
-    
-    
+
+
     public void testWriteConstrainedProperty() {
         TestBean bean = new TestBean();
         try {
@@ -82,8 +83,8 @@ public final class BeanUtilsTest extends TestCase {
         } catch (PropertyVetoException e1) {
             fail("Couldn't set the valid value1.");
         }
-        assertEquals("Bean has the initial value1.", 
-                bean.getConstrainedProperty(), 
+        assertEquals("Bean has the initial value1.",
+                bean.getConstrainedProperty(),
                 "value1");
         PropertyDescriptor descriptor = null;
         try {
@@ -93,8 +94,8 @@ public final class BeanUtilsTest extends TestCase {
             } catch (PropertyVetoException e) {
                 fail("No PropertyVetoException shall be thrown if there's no VetoableChangeListener.");
             }
-            assertEquals("Bean now has the value2.", 
-                    bean.getConstrainedProperty(), 
+            assertEquals("Bean now has the value2.",
+                    bean.getConstrainedProperty(),
                     "value2");
             bean.addVetoableChangeListener(new VetoableChangeRejector());
             try {
@@ -103,8 +104,8 @@ public final class BeanUtilsTest extends TestCase {
             } catch (PropertyVetoException e) {
                 // The expected behavior.
             }
-            assertEquals("Bean still has the value2.", 
-                    bean.getConstrainedProperty(), 
+            assertEquals("Bean still has the value2.",
+                    bean.getConstrainedProperty(),
                     "value2");
         } catch (IntrospectionException e) {
             fail("Couldn't look up the descriptor for the constrained property.");

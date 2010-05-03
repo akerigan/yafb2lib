@@ -30,39 +30,38 @@
 
 package com.jgoodies.binding.tests;
 
+import com.jgoodies.binding.beans.BeanAdapter;
+import com.jgoodies.binding.beans.PropertyAdapter;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
+import com.jgoodies.binding.value.AbstractValueModel;
+import com.jgoodies.binding.value.BufferedValueModel;
+import com.jgoodies.binding.value.Trigger;
+import com.jgoodies.binding.value.ValueModel;
+import junit.framework.TestCase;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import junit.framework.TestCase;
-
-import com.jgoodies.binding.beans.BeanAdapter;
-import com.jgoodies.binding.beans.PropertyAdapter;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
-import com.jgoodies.binding.value.AbstractValueModel;
-import com.jgoodies.binding.value.BufferedValueModel;
-import com.jgoodies.binding.value.Trigger;
-import com.jgoodies.binding.value.ValueModel;
-
 /**
- * Tests old and new values when the bean, value or subject changes in 
+ * Tests old and new values when the bean, value or subject changes in
  * BeanAdapter, PropertyAdapter, PresentationModel and BufferedValueModel.
- * 
- * @author  Karsten Lentzsch
+ *
+ * @author Karsten Lentzsch
  * @version $Revision: 1.7 $
  */
 public final class ValueChangeTest extends TestCase {
-    
+
     private TestBean model1;
     private TestBean model2;
-    
-    
+
+
     // Setup ******************************************************************
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void setUp() throws Exception {
         super.setUp();
@@ -71,7 +70,7 @@ public final class ValueChangeTest extends TestCase {
     }
 
     /**
-     * @throws Exception  in case of an unexcpected problem 
+     * @throws Exception in case of an unexcpected problem
      */
     protected void tearDown() throws Exception {
         super.tearDown();
@@ -81,7 +80,7 @@ public final class ValueChangeTest extends TestCase {
 
 
     // Public Tests ***********************************************************
-    
+
     public void testBeanAdapterBeanChange() {
         Object[][] pairs = createOldAndNewValuePairs();
         for (int i = 0; i < pairs.length; i++) {
@@ -109,7 +108,7 @@ public final class ValueChangeTest extends TestCase {
         }
     }
 
-    
+
     public void testPropertyAdapterValueChange() {
         Object[][] pairs = createOldAndNewValuePairs();
         for (int i = 0; i < pairs.length; i++) {
@@ -118,7 +117,7 @@ public final class ValueChangeTest extends TestCase {
             testPropertyAdapterValueChange(value1, value2);
         }
     }
-    
+
 
     public void testBufferedValueModelSubjectChange() {
         Object[][] pairs = createOldAndNewValuePairs();
@@ -128,7 +127,7 @@ public final class ValueChangeTest extends TestCase {
             testBufferedValueModelSubjectChange(value1, value2);
         }
     }
-    
+
 
     public void testBufferedValueModelValueChange() {
         Object[][] pairs = createOldAndNewValuePairs();
@@ -138,15 +137,15 @@ public final class ValueChangeTest extends TestCase {
             testBufferedValueModelSubjectValueChange(value1, value2);
         }
     }
-    
+
 
     // Test Implementations ***************************************************
-    
+
     private void testBeanAdapterBeanChange(
             Object value1, Object value2) {
         model1.setReadWriteObjectProperty(value1);
         model2.setReadWriteObjectProperty(value2);
-        
+
         BeanAdapter adapter = new BeanAdapter(null, true);
         AbstractValueModel valueModel = adapter.getValueModel("readWriteObjectProperty");
 
@@ -155,16 +154,16 @@ public final class ValueChangeTest extends TestCase {
         Object eventsOldValue;
         Object eventsNewValue;
         int expectedEventCount = 0;
-        
+
         adapter.setBean(model1);
         boolean firesEventFromNullToModel1 = requiresPropertyChangeEvent(null, value1);
         if (firesEventFromNullToModel1) {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after null -> model1 (" 
-                + null + " -> " + value1 + ").", 
-                expectedEventCount, 
+                "Expected event count after null -> model1 ("
+                        + null + " -> " + value1 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromNullToModel1) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -179,16 +178,16 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after model1 -> model2 (" 
-                + value1 + " -> " + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after model1 -> model2 ("
+                        + value1 + " -> " + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromModel1ToModel2) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
             eventsNewValue = changeReport.lastEvent().getNewValue();
             assertEquals("model1 -> model2 change fires proper old value.", value1, eventsOldValue);
             assertEquals("model1 -> model2 change fires proper new value.", value2, eventsNewValue);
-        } 
+        }
 
         adapter.setBean(null);
         boolean firesEventFromModel2ToNull = requiresPropertyChangeEvent(value2, null);
@@ -196,9 +195,9 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after model2 -> null (" 
-                + value2 + " -> " + null + ").", 
-                expectedEventCount, 
+                "Expected event count after model2 -> null ("
+                        + value2 + " -> " + null + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromModel2ToNull) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -207,7 +206,7 @@ public final class ValueChangeTest extends TestCase {
             assertEquals("model2 -> null change fires proper new value.", null, eventsNewValue);
         }
     }
-    
+
     private void testBeanAdapterValueChange(
             Object value1, Object value2) {
         BeanAdapter adapter = new BeanAdapter(model1, true);
@@ -216,30 +215,30 @@ public final class ValueChangeTest extends TestCase {
                 value2,
                 adapter.getValueModel("readWriteObjectProperty"));
     }
-    
-    
+
+
     private void testPropertyAdapterBeanChange(
-            Object value1, 
+            Object value1,
             Object value2) {
         model1.setReadWriteObjectProperty(value1);
         model2.setReadWriteObjectProperty(value2);
-        
+
         PropertyAdapter adapter = new PropertyAdapter(null, "readWriteObjectProperty", true);
         PropertyChangeReport changeReport = new PropertyChangeReport();
         adapter.addPropertyChangeListener("value", changeReport);
         Object eventsOldValue;
         Object eventsNewValue;
         int expectedEventCount = 0;
-        
+
         adapter.setBean(model1);
         boolean firesEventFromNullToModel1 = requiresPropertyChangeEvent(null, value1);
         if (firesEventFromNullToModel1) {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after null -> model1 (" 
-                + null + " -> " + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after null -> model1 ("
+                        + null + " -> " + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromNullToModel1) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -254,16 +253,16 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after model1 -> model2 (" 
-                + value1 + " -> " + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after model1 -> model2 ("
+                        + value1 + " -> " + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromModel1ToModel2) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
             eventsNewValue = changeReport.lastEvent().getNewValue();
             assertEquals("model1 -> model2 change fires proper old value.", value1, eventsOldValue);
             assertEquals("model1 -> model2 change fires proper new value.", value2, eventsNewValue);
-        } 
+        }
 
         adapter.setBean(null);
         boolean firesEventFromModel2ToNull = requiresPropertyChangeEvent(value2, null);
@@ -271,9 +270,9 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after model2 -> null (" 
-                + value2 + " -> " + null + ").", 
-                expectedEventCount, 
+                "Expected event count after model2 -> null ("
+                        + value2 + " -> " + null + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromModel2ToNull) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -283,41 +282,41 @@ public final class ValueChangeTest extends TestCase {
         }
     }
 
-    
+
     private void testPropertyAdapterValueChange(
             Object value1, Object value2) {
         testValueChange(
-                value1, 
-                value2, 
+                value1,
+                value2,
                 new PropertyAdapter(model1, "readWriteObjectProperty", true));
     }
-    
+
 
     private void testBufferedValueModelSubjectChange(
-            Object value1, 
+            Object value1,
             Object value2) {
         model1.setReadWriteObjectProperty(value1);
         model2.setReadWriteObjectProperty(value2);
-        
+
         PropertyAdapter adapter1 = new PropertyAdapter(model1, "readWriteObjectProperty", true);
         PropertyAdapter adapter2 = new PropertyAdapter(model2, "readWriteObjectProperty", true);
-        
+
         BufferedValueModel buffer = new BufferedValueModel(null, new Trigger());
         PropertyChangeReport changeReport = new PropertyChangeReport();
         buffer.addValueChangeListener(changeReport);
         Object eventsOldValue;
         Object eventsNewValue;
         int expectedEventCount = 0;
-        
+
         buffer.setSubject(adapter1);
         boolean firesEventFromNullToModel1 = requiresPropertyChangeEvent(null, value1);
         if (firesEventFromNullToModel1) {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after null -> adapter1 (" 
-                + null + " -> " + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after null -> adapter1 ("
+                        + null + " -> " + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromNullToModel1) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -332,16 +331,16 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after adapter1 -> adapter2 (" 
-                + value1 + " -> " + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after adapter1 -> adapter2 ("
+                        + value1 + " -> " + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromModel1ToModel2) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
             eventsNewValue = changeReport.lastEvent().getNewValue();
             assertEquals("adapter1 -> adapter2 change fires proper old value.", value1, eventsOldValue);
             assertEquals("adapter1 -> adapter2 change fires proper new value.", value2, eventsNewValue);
-        } 
+        }
 
         buffer.setSubject(null);
         boolean firesEventFromModel2ToNull = requiresPropertyChangeEvent(value2, null);
@@ -349,9 +348,9 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after adapter2 -> null (" 
-                + value2 + " -> " + null + ").", 
-                expectedEventCount, 
+                "Expected event count after adapter2 -> null ("
+                        + value2 + " -> " + null + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromModel2ToNull) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -361,17 +360,17 @@ public final class ValueChangeTest extends TestCase {
         }
     }
 
-    
+
     private void testBufferedValueModelSubjectValueChange(
             Object value1, Object value2) {
         ValueModel valueModel = new PropertyAdapter(model1, "readWriteObjectProperty", true);
         ValueModel triggerChannel = new Trigger();
         testValueChange(
-                value1, 
-                value2, 
+                value1,
+                value2,
                 new BufferedValueModel(valueModel, triggerChannel));
     }
-    
+
     private void testValueChange(
             Object value1, Object value2, ValueModel valueModel) {
         model1.setReadWriteObjectProperty(null);
@@ -380,16 +379,16 @@ public final class ValueChangeTest extends TestCase {
         Object eventsOldValue;
         Object eventsNewValue;
         int expectedEventCount = 0;
-        
+
         model1.setReadWriteObjectProperty(value1, true);
         boolean firesEventFromNullToValue1 = requiresPropertyChangeEventWithNull(null, value1);
         if (firesEventFromNullToValue1) {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after ( null -> " 
-                + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after ( null -> "
+                        + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromNullToValue1) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -404,16 +403,16 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after (" 
-                + value1 + " -> " + value2 + ").", 
-                expectedEventCount, 
+                "Expected event count after ("
+                        + value1 + " -> " + value2 + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromValue1ToValue2) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
             eventsNewValue = changeReport.lastEvent().getNewValue();
             assertEquals("model1 -> model2 change fires proper old value.", value1, eventsOldValue);
             assertEquals("model1 -> model2 change fires proper new value.", value2, eventsNewValue);
-        } 
+        }
 
         model1.setReadWriteObjectProperty(null, true);
         boolean firesEventFromValue2ToNull = requiresPropertyChangeEventWithNull(value2, null);
@@ -421,9 +420,9 @@ public final class ValueChangeTest extends TestCase {
             expectedEventCount++;
         }
         assertEquals(
-                "Expected event count after (" 
-                + value2 + " -> " + null + ").", 
-                expectedEventCount, 
+                "Expected event count after ("
+                        + value2 + " -> " + null + ").",
+                expectedEventCount,
                 changeReport.eventCount());
         if (firesEventFromValue2ToNull) {
             eventsOldValue = changeReport.lastEvent().getOldValue();
@@ -432,33 +431,35 @@ public final class ValueChangeTest extends TestCase {
             assertEquals("model2 -> null change fires proper new value.", null, eventsNewValue);
         }
     }
-    
-    
+
+
     // Helper Code ************************************************************
 
     private Object[][] createOldAndNewValuePairs() {
         String sameValue = "same value";
         List list1a = Collections.EMPTY_LIST;
         List list1b = new LinkedList();
-        List list2a = new ArrayList(); list2a.add("one");
+        List list2a = new ArrayList();
+        list2a.add("one");
         List list2b = new ArrayList(list2a);
-        List list3  = new ArrayList(list2a); list3.add("two");
-        return new Object[][] {
-                {null,          null},
-                {null,          "value"},
-                {"value",       null},
-                {sameValue,     sameValue},
+        List list3 = new ArrayList(list2a);
+        list3.add("two");
+        return new Object[][]{
+                {null, null},
+                {null, "value"},
+                {"value", null},
+                {sameValue, sameValue},
                 {"equal value", new String("equal value")},
-                {"value1",      "value2"},
-                {new Float(1),  new Float(1)},
-                {new Float(1),  new Float(2)},
-                {Boolean.TRUE,  new Boolean(true)},
-                {list1a,        list1a},
-                {list1a,        list1b},
-                {list1a,        list2a},
-                {list2a,        list2a},
-                {list2a,        list2b},
-                {list2a,        list3},
+                {"value1", "value2"},
+                {new Float(1), new Float(1)},
+                {new Float(1), new Float(2)},
+                {Boolean.TRUE, new Boolean(true)},
+                {list1a, list1a},
+                {list1a, list1b},
+                {list1a, list2a},
+                {list2a, list2a},
+                {list2a, list2b},
+                {list2a, list3},
         };
     }
 

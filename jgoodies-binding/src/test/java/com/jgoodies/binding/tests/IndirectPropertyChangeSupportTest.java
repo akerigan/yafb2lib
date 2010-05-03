@@ -30,95 +30,94 @@
 
 package com.jgoodies.binding.tests;
 
-import java.beans.PropertyChangeListener;
-
-import junit.framework.TestCase;
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.beans.BeanAdapter;
 import com.jgoodies.binding.beans.IndirectPropertyChangeSupport;
-import com.jgoodies.binding.tests.beans.EquityTestBean;
-import com.jgoodies.binding.tests.beans.TestBean;
-import com.jgoodies.binding.tests.event.PropertyChangeReport;
+import com.jgoodies.binding.test.beans.EquityTestBean;
+import com.jgoodies.binding.test.beans.TestBean;
+import com.jgoodies.binding.test.event.PropertyChangeReport;
 import com.jgoodies.binding.value.Trigger;
+import junit.framework.TestCase;
+
+import java.beans.PropertyChangeListener;
 
 /**
- * A test case for class {@link IndirectPropertyChangeSupport} 
+ * A test case for class {@link IndirectPropertyChangeSupport}
  * that checks whether listeners are added, removed and re-registered properly.
  * Also tests the classes BeanAdapter and PresentationModel that use
  * the IndirectPropertyChangeSupport directly or indirectly.
- * 
+ *
  * @author Karsten Lentzsch
  * @version $Revision: 1.10 $
  */
 public final class IndirectPropertyChangeSupportTest extends TestCase {
-    
-    
+
+
     // Re-Registering Listeners on Different Bean Types ***********************
-    
+
     public void testReregisterListenerOnDifferentBeans() {
         testReregisterListener(
-                new EquityTestBean("key1"), 
-                new EquityTestBean("key2"), 
+                new EquityTestBean("key1"),
+                new EquityTestBean("key2"),
                 new IndirectPropertyChangeSupport());
 
         TestBean bean1 = new EquityTestBean("key1");
         testReregisterListener(
-                bean1, 
-                new EquityTestBean("key2"), 
+                bean1,
+                new EquityTestBean("key2"),
                 new IndirectPropertyChangeSupport(bean1));
     }
-    
-    
+
+
     public void testReregisterListenerOnEqualBeans() {
         testReregisterListener(
-                new EquityTestBean("key1"), 
-                new EquityTestBean("key1"), 
+                new EquityTestBean("key1"),
+                new EquityTestBean("key1"),
                 new IndirectPropertyChangeSupport());
 
         TestBean bean1 = new EquityTestBean("key1");
         testReregisterListener(
-                bean1, 
-                new EquityTestBean("key1"), 
+                bean1,
+                new EquityTestBean("key1"),
                 new IndirectPropertyChangeSupport(bean1));
     }
-    
-    
+
+
     public void testBeanAdapterReregisterListenerOnEqualBeans() {
         TestBean bean1 = new EquityTestBean("key1");
         testReregisterListener(
-                bean1, 
-                new EquityTestBean("key1"), 
+                bean1,
+                new EquityTestBean("key1"),
                 new BeanAdapter(bean1));
 
         bean1 = new EquityTestBean("key1");
         testReregisterListener(
-                bean1, 
-                new EquityTestBean("key1"), 
+                bean1,
+                new EquityTestBean("key1"),
                 new BeanAdapter(bean1, false));
     }
-    
-    
+
+
     public void testPresentationModelReregisterListenerOnEqualBeans() {
         TestBean bean1 = new EquityTestBean("key1");
         testReregisterListener(
-                bean1, 
-                new EquityTestBean("key1"), 
+                bean1,
+                new EquityTestBean("key1"),
                 new PresentationModel(bean1));
 
         bean1 = new EquityTestBean("key1");
         testReregisterListener(
-                bean1, 
-                new EquityTestBean("key1"), 
+                bean1,
+                new EquityTestBean("key1"),
                 new PresentationModel(bean1, new Trigger()));
     }
-    
-    
+
+
     // Reusable Basic Test ****************************************************
-    
+
     private void testReregisterListener(
-            TestBean bean1, 
-            TestBean bean2, 
+            TestBean bean1,
+            TestBean bean2,
             Object beanHolder) {
         String propertyName = "readWriteObjectProperty";
         setBean(beanHolder, bean1);
@@ -131,51 +130,51 @@ public final class IndirectPropertyChangeSupportTest extends TestCase {
         addIndirectListener(beanHolder, propertyName, report2a);
         addIndirectListener(beanHolder, propertyName, report2b);
         bean1.setReadWriteObjectProperty("bean1value1");
-        assertEquals("Changing the observed bean1 fires a change.", 
-                1, 
+        assertEquals("Changing the observed bean1 fires a change.",
+                1,
                 report1a.eventCount());
-        assertEquals("All unnamed listeners receive the same number of events.", 
-                report1a.eventCount(), 
+        assertEquals("All unnamed listeners receive the same number of events.",
+                report1a.eventCount(),
                 report1b.eventCount());
-        assertEquals("Changing the observed bean1 fires a named change.", 
-                1, 
+        assertEquals("Changing the observed bean1 fires a named change.",
+                1,
                 report2a.eventCount());
-        assertEquals("All named listeners receive the same number of events.", 
-                report2a.eventCount(), 
+        assertEquals("All named listeners receive the same number of events.",
+                report2a.eventCount(),
                 report2b.eventCount());
-        
+
         bean2.setReadWriteObjectProperty("bean2value1");
-        assertEquals("Changing the unobserved bean2 fires no change.", 
-                1, 
+        assertEquals("Changing the unobserved bean2 fires no change.",
+                1,
                 report1a.eventCount());
-        assertEquals("Changing the unobserved bean2 fires no named change.", 
-                1, 
+        assertEquals("Changing the unobserved bean2 fires no named change.",
+                1,
                 report1a.eventCount());
-        
+
         // Change the bean
         setBean(beanHolder, bean2);
         bean1.setReadWriteObjectProperty("bean1value2");
-        assertEquals("Changing the unobserved bean1 fires no change.", 
-                1, 
+        assertEquals("Changing the unobserved bean1 fires no change.",
+                1,
                 report1a.eventCount());
-        assertEquals("Changing the unobserved bean1 fires no named change.", 
-                1, 
+        assertEquals("Changing the unobserved bean1 fires no named change.",
+                1,
                 report2a.eventCount());
-        
+
         bean2.setReadWriteObjectProperty("bean2value2");
-        assertEquals("Changing the observed bean2 fires a change.", 
-                2, 
+        assertEquals("Changing the observed bean2 fires a change.",
+                2,
                 report1a.eventCount());
-        assertEquals("2) All unnamed listeners receive the same number of events.", 
-                report1a.eventCount(), 
+        assertEquals("2) All unnamed listeners receive the same number of events.",
+                report1a.eventCount(),
                 report1b.eventCount());
-        assertEquals("Changing the observed bean2 fires a change.", 
-                2, 
+        assertEquals("Changing the observed bean2 fires a change.",
+                2,
                 report2a.eventCount());
-        assertEquals("2) All named listeners receive the same number of events.", 
-                report2a.eventCount(), 
+        assertEquals("2) All named listeners receive the same number of events.",
+                report2a.eventCount(),
                 report2b.eventCount());
-        
+
         removeIndirectListener(beanHolder, report1a);
         removeIndirectListener(beanHolder, report1b);
         removeIndirectListener(beanHolder, propertyName, report2a);
@@ -184,87 +183,87 @@ public final class IndirectPropertyChangeSupportTest extends TestCase {
         // Change the bean back to bean1
         setBean(beanHolder, bean1);
         bean1.setReadWriteObjectProperty("bean1value3");
-        assertEquals("Deregistered listeners receive no more events.", 
-                2, 
+        assertEquals("Deregistered listeners receive no more events.",
+                2,
                 report1a.eventCount());
-        assertEquals("All deregistered listeners receive no more events.", 
-                report1a.eventCount(), 
+        assertEquals("All deregistered listeners receive no more events.",
+                report1a.eventCount(),
                 report1b.eventCount());
-        assertEquals("Deregistered named listeners receive no more events.", 
-                2, 
+        assertEquals("Deregistered named listeners receive no more events.",
+                2,
                 report2a.eventCount());
-        assertEquals("All deregistered named listeners receive no more events.", 
-                report2a.eventCount(), 
+        assertEquals("All deregistered named listeners receive no more events.",
+                report2a.eventCount(),
                 report2b.eventCount());
-        
+
     }
-    
-    
+
+
     // Helper Code ***********************************************************
-    
+
     private void setBean(Object beanHolder, Object newBean) {
-        if (beanHolder instanceof IndirectPropertyChangeSupport) 
+        if (beanHolder instanceof IndirectPropertyChangeSupport)
             ((IndirectPropertyChangeSupport) beanHolder).setBean(newBean);
-        else if (beanHolder instanceof BeanAdapter) 
+        else if (beanHolder instanceof BeanAdapter)
             ((BeanAdapter) beanHolder).setBean(newBean);
-        else if (beanHolder instanceof PresentationModel) 
+        else if (beanHolder instanceof PresentationModel)
             ((PresentationModel) beanHolder).setBean(newBean);
-        else 
+        else
             throw new IllegalArgumentException("Unknown bean holder type. " +
                     "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
     }
 
-    
+
     private void addIndirectListener(Object beanHolder, PropertyChangeListener listener) {
-        if (beanHolder instanceof IndirectPropertyChangeSupport) 
+        if (beanHolder instanceof IndirectPropertyChangeSupport)
             ((IndirectPropertyChangeSupport) beanHolder).addPropertyChangeListener(listener);
-        else if (beanHolder instanceof BeanAdapter) 
+        else if (beanHolder instanceof BeanAdapter)
             ((BeanAdapter) beanHolder).addBeanPropertyChangeListener(listener);
-        else if (beanHolder instanceof PresentationModel) 
+        else if (beanHolder instanceof PresentationModel)
             ((PresentationModel) beanHolder).addBeanPropertyChangeListener(listener);
-        else 
-            throw new IllegalArgumentException("Unknown bean holder type. " +
-                    "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
-    }
-    
-    
-    private void addIndirectListener(Object beanHolder, String propertyName, PropertyChangeListener listener) {
-        if (beanHolder instanceof IndirectPropertyChangeSupport) 
-            ((IndirectPropertyChangeSupport) beanHolder).addPropertyChangeListener(propertyName, listener);
-        else if (beanHolder instanceof BeanAdapter) 
-            ((BeanAdapter) beanHolder).addBeanPropertyChangeListener(propertyName, listener);
-        else if (beanHolder instanceof PresentationModel) 
-            ((PresentationModel) beanHolder).addBeanPropertyChangeListener(propertyName, listener);
-        else 
-            throw new IllegalArgumentException("Unknown bean holder type. " +
-                    "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
-    }
-    
-    
-    private void removeIndirectListener(Object beanHolder, PropertyChangeListener listener) {
-        if (beanHolder instanceof IndirectPropertyChangeSupport) 
-            ((IndirectPropertyChangeSupport) beanHolder).removePropertyChangeListener(listener);
-        else if (beanHolder instanceof BeanAdapter) 
-            ((BeanAdapter) beanHolder).removeBeanPropertyChangeListener(listener);
-        else if (beanHolder instanceof PresentationModel) 
-            ((PresentationModel) beanHolder).removeBeanPropertyChangeListener(listener);
-        else 
-            throw new IllegalArgumentException("Unknown bean holder type. " +
-                    "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
-    }
-    
-    
-    private void removeIndirectListener(Object beanHolder, String propertyName, PropertyChangeListener listener) {
-        if (beanHolder instanceof IndirectPropertyChangeSupport) 
-            ((IndirectPropertyChangeSupport) beanHolder).removePropertyChangeListener(propertyName, listener);
-        else if (beanHolder instanceof BeanAdapter) 
-            ((BeanAdapter) beanHolder).removeBeanPropertyChangeListener(propertyName, listener);
-        else if (beanHolder instanceof PresentationModel) 
-            ((PresentationModel) beanHolder).removeBeanPropertyChangeListener(propertyName, listener);
-        else 
+        else
             throw new IllegalArgumentException("Unknown bean holder type. " +
                     "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
     }
 
-    
+
+    private void addIndirectListener(Object beanHolder, String propertyName, PropertyChangeListener listener) {
+        if (beanHolder instanceof IndirectPropertyChangeSupport)
+            ((IndirectPropertyChangeSupport) beanHolder).addPropertyChangeListener(propertyName, listener);
+        else if (beanHolder instanceof BeanAdapter)
+            ((BeanAdapter) beanHolder).addBeanPropertyChangeListener(propertyName, listener);
+        else if (beanHolder instanceof PresentationModel)
+            ((PresentationModel) beanHolder).addBeanPropertyChangeListener(propertyName, listener);
+        else
+            throw new IllegalArgumentException("Unknown bean holder type. " +
+                    "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
+    }
+
+
+    private void removeIndirectListener(Object beanHolder, PropertyChangeListener listener) {
+        if (beanHolder instanceof IndirectPropertyChangeSupport)
+            ((IndirectPropertyChangeSupport) beanHolder).removePropertyChangeListener(listener);
+        else if (beanHolder instanceof BeanAdapter)
+            ((BeanAdapter) beanHolder).removeBeanPropertyChangeListener(listener);
+        else if (beanHolder instanceof PresentationModel)
+            ((PresentationModel) beanHolder).removeBeanPropertyChangeListener(listener);
+        else
+            throw new IllegalArgumentException("Unknown bean holder type. " +
+                    "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
+    }
+
+
+    private void removeIndirectListener(Object beanHolder, String propertyName, PropertyChangeListener listener) {
+        if (beanHolder instanceof IndirectPropertyChangeSupport)
+            ((IndirectPropertyChangeSupport) beanHolder).removePropertyChangeListener(propertyName, listener);
+        else if (beanHolder instanceof BeanAdapter)
+            ((BeanAdapter) beanHolder).removeBeanPropertyChangeListener(propertyName, listener);
+        else if (beanHolder instanceof PresentationModel)
+            ((PresentationModel) beanHolder).removeBeanPropertyChangeListener(propertyName, listener);
+        else
+            throw new IllegalArgumentException("Unknown bean holder type. " +
+                    "Must be one of: IndirectPropertyChangeSupport, BeanAdapter, PresentationModel");
+    }
+
+
 }
