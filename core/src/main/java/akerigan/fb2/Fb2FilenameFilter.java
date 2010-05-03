@@ -12,6 +12,7 @@ import java.io.FilenameFilter;
 public class Fb2FilenameFilter implements FilenameFilter {
 
     public boolean accept(File dir, String name) {
-        return name.endsWith(".zip") || name.endsWith("fb2");
+        String lowerName = name.toLowerCase();
+        return lowerName.endsWith(".zip") || lowerName.endsWith("fb2");
     }
 }

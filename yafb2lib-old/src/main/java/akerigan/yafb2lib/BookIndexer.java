@@ -25,7 +25,6 @@ public class BookIndexer {
     public static void main(String[] args) {
 
         try {
-
             ApplicationContext ctx = new ClassPathXmlApplicationContext("/applicationContext.xml");
             BookService service = (BookService) ctx.getBean("jdbcBookService");
 

@@ -1,5 +1,8 @@
-package akerigan.db;
+package akerigan.fb2.test;
 
+import akerigan.db.StringMapper;
+import akerigan.db.TestEntry;
+import akerigan.db.TestEntryMapper;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
@@ -41,5 +44,9 @@ public class H2DbTest {
         List<TestEntry> entries = template.query("select id, name from test", TestEntryMapper.getInstance());
 
         System.out.println("entries = " + entries);
+
+        Set<String> indexes = new TreeSet<String>(template.query("select index_name from information_schema.indexes", StringMapper.getInstance()));
+        System.out.println("indexes = " + indexes);
+
     }
 }

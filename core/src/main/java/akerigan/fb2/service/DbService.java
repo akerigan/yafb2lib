@@ -2,6 +2,8 @@ package akerigan.fb2.service;
 
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
+import java.util.Map;
+
 /**
  * Date: 26.04.2010
  * Time: 22:23:56
@@ -17,5 +19,7 @@ public abstract class DbService {
     }
 
     public abstract void init();
+
+    public abstract Map<String, Integer> getContainers();
 
 }
