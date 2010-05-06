@@ -1,8 +1,10 @@
 package akerigan.fb2.service;
 
+import akerigan.fb2.domain.BookInfo;
+import akerigan.fb2.domain.BooksContainer;
 import org.springframework.jdbc.core.simple.SimpleJdbcTemplate;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Date: 26.04.2010
@@ -20,6 +22,12 @@ public abstract class DbService {
 
     public abstract void init();
 
-    public abstract Map<String, Integer> getContainers();
+    public abstract BooksContainer getBooksContainer(String containerName);
+
+    public abstract List<BookInfo> getBooksInfo(int container);
+
+    public abstract void storeBookInfo(BookInfo bookInfo);
+
+    public abstract void storeBooksContainer(BooksContainer booksContainer);
 
 }

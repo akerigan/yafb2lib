@@ -1,6 +1,9 @@
 package akerigan.fb2;
 
+import akerigan.fb2.domain.BookInfo;
+import akerigan.fb2.domain.BooksContainer;
 import akerigan.fb2.service.DbService;
+import akerigan.utils.Fb2Utils;
 import akerigan.utils.file.FileLister;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -8,10 +11,10 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Date: 03.05.2010
@@ -42,7 +45,6 @@ public class LibraryIndexer {
                 for (File baseDir : baseDirs) {
                     baseDirsString.add(baseDir.toString() + "/");
                 }
-                Map<String, Integer> containers = service.getContainers();
                 for (File file : lister.findFiles(new Fb2FilenameFilter())) {
                     log.info("book container: " + file);
                     String fullFileName = file.toString();
@@ -57,13 +59,24 @@ public class LibraryIndexer {
                     }
                     log.info("container name: " + containerName);
                     if (containerName != null) {
-                        long containerSize = file.length();
-                        if (!containers.containsKey(containerName) || containers.get(containerName) != containerSize) {
+                        try {
                             if (lowerContainerName.endsWith(".zip")) {
-
+                                BooksContainer container = service.getBooksContainer(containerName);
+                                if (container == null) {
+                                    container = new BooksContainer();
+                                    container.setName(containerName);
+                                    container.setSize(file.length());
+                                }
+                                if (container.getId() == 0 || container.getSize() != file.length()) {
+                                    container.setBooksInfo(Fb2Utils.getBooksInfo(file, "IBM-866", true));
+                                    service.storeBooksContainer(container);
+                                }
                             } else if (lowerContainerName.endsWith(".fb2")) {
-
+                                BookInfo bookInfo = Fb2Utils.getBookInfo(new FileInputStream(file), true);
+                                service.storeBookInfo(bookInfo);
                             }
+                        } catch (Exception e) {
+                            log.error("Cant add book(s): " + file.toString(), e);
                         }
                     }
                 }

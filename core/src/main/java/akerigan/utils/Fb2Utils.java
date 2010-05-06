@@ -1,5 +1,6 @@
 package akerigan.utils;
 
+import akerigan.fb2.domain.BookInfo;
 import de.schlichtherle.util.zip.ZipEntry;
 import de.schlichtherle.util.zip.ZipFile;
 
@@ -30,29 +31,32 @@ public class Fb2Utils {
 
     private static XMLInputFactory factory = XMLInputFactory.newInstance();
 
-    public static List<Map<String, String>> getDescriptions(File zippedFb2File, String encoding) throws IOException, XMLStreamException, NoSuchAlgorithmException {
-        return getDescriptions(zippedFb2File, encoding, false);
+    public static List<BookInfo> getBooksInfo(File zippedFb2File, String encoding) throws IOException, XMLStreamException, NoSuchAlgorithmException {
+        return getBooksInfo(zippedFb2File, encoding, false);
     }
 
-    public static List<Map<String, String>> getDescriptions(File zippedFb2File, String encoding, boolean addDigest) throws IOException, XMLStreamException, NoSuchAlgorithmException {
-        List<Map<String, String>> result = new LinkedList<Map<String, String>>();
+    public static List<BookInfo> getBooksInfo(File zippedFb2File, String encoding, boolean addDigest) throws IOException, XMLStreamException, NoSuchAlgorithmException {
+        List<BookInfo> result = new LinkedList<BookInfo>();
         ZipFile zipFile = new ZipFile(zippedFb2File, encoding);
         Enumeration<ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             if (entry.getName().toLowerCase().endsWith(".fb2")) {
-                Map<String, String> description = getDescription(zipFile.getInputStream(entry), addDigest);
-                if (description != null) {
-                    result.add(description);
+                BookInfo bookInfo = getBookInfo(zipFile.getInputStream(entry), addDigest);
+                if (bookInfo != null) {
+                    bookInfo.setName(entry.getName());
+                    bookInfo.setSize(entry.getSize());
                 }
             }
         }
         return result;
     }
 
-    public static Map<String, String> getDescription(InputStream fb2InputStream, boolean addDigest) throws XMLStreamException, NoSuchAlgorithmException, IOException {
+    public static BookInfo getBookInfo(InputStream fb2InputStream, boolean addDigest) throws XMLStreamException, NoSuchAlgorithmException, IOException {
         if (fb2InputStream != null) {
+            BookInfo bookInfo = new BookInfo();
             Map<String, String> description = new LinkedHashMap<String, String>();
+            bookInfo.setDescription(description);
             XMLEventReader reader;
             if (addDigest) {
                 MessageDigest sha1Hash = MessageDigest.getInstance("SHA1");
@@ -63,12 +67,12 @@ public class Fb2Utils {
                 while (ch != -1) {
                     ch = digestInputStream.read();
                 }
-                description.put("SHA1", StringUtils.hexencode(digestInputStream.getMessageDigest().digest()));
+                bookInfo.setSha1(StringUtils.hexencode(digestInputStream.getMessageDigest().digest()));
             } else {
                 reader = factory.createXMLEventReader(fb2InputStream);
                 fillDescription("", reader, description);
             }
-            return description;
+            return bookInfo;
         } else {
             return null;
         }
