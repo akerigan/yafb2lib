@@ -30,6 +30,7 @@ public class BookInfoMapper implements RowMapper<BookInfo> {
         result.setSha1(rs.getString("sha1"));
         result.setName(rs.getString("name"));
         result.setSize(rs.getLong("size"));
+        result.setSaved(rs.getBoolean("saved"));
         return result;
     }
 }

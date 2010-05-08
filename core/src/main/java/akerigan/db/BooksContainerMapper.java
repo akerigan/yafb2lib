@@ -28,6 +28,7 @@ public class BooksContainerMapper implements RowMapper<BooksContainer> {
         container.setId(rs.getInt("id"));
         container.setName(rs.getString("name"));
         container.setSize(rs.getLong("size"));
+        container.setSaved(rs.getBoolean("saved"));
         return container;
     }
 }

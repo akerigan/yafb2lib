@@ -13,6 +13,7 @@ public class BooksContainer {
     private int id;
     private String name;
     private long size;
+    private boolean saved;
 
     private List<BookInfo> booksInfo;
 
@@ -48,6 +49,14 @@ public class BooksContainer {
         this.booksInfo = booksInfo;
     }
 
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
@@ -61,6 +70,9 @@ public class BooksContainer {
         sb.append("<size>");
         sb.append(size);
         sb.append("</size>\n");
+        sb.append("<saved>");
+        sb.append(saved);
+        sb.append("</saved>\n");
         if (booksInfo != null) {
             sb.append("<booksInfo>");
             for (Object obj : booksInfo) {

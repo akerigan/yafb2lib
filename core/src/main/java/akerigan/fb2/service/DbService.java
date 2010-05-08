@@ -26,6 +26,8 @@ public abstract class DbService {
 
     public abstract List<BookInfo> getBooksInfo(int container);
 
+    public abstract BookInfo getBookInfo(int container, String name);
+
     public abstract void storeBookInfo(BookInfo bookInfo);
 
     public abstract void storeBooksContainer(BooksContainer booksContainer);

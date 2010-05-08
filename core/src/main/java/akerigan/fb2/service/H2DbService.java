@@ -10,6 +10,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.DataAccessException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -28,14 +29,14 @@ public class H2DbService extends DbService {
         Set<String> tables = new TreeSet<String>(
                 template.query("select table_name from information_schema.tables", StringMapper.getInstance()));
         if (!tables.contains("CONTAINER")) {
-            template.update("create table container(id identity primary key, name varchar(256), size bigint)");
+            template.update("create table container(id identity primary key, name varchar(256), size bigint, saved bool)");
         }
         if (!tables.contains("BOOK")) {
             template.update("create table book(id identity primary key, container int, sha1 char(40)," +
-                    " name varchar(256), size bigint)");
+                    " name varchar(256), size bigint, saved bool)");
         }
         if (!tables.contains("DESCRIPTION")) {
-            template.update("create table description(book int, name varchar(256), value varchar(4096))");
+            template.update("create table description(id identity primary key, book int, name varchar(256), value varchar(4096))");
         }
 
         Set<String> indexes = new TreeSet<String>(
@@ -50,6 +51,12 @@ public class H2DbService extends DbService {
         }
         if (!indexes.contains("CONTAINER_BOOKS_IDX")) {
             template.update("create unique index container_books_idx ON book(container)");
+        }
+        if (!indexes.contains("BOOK_NAME_IDX")) {
+            template.update("create unique index book_name_idx ON book(container,name)");
+        }
+        if (!indexes.contains("BOOK_DESCRIPTION_IDX")) {
+            template.update("create index book_description_idx ON description(book)");
         }
 /*
         if (!indexes.contains("DESCRIPTION_BOOK_ID_IDX")) {
@@ -85,7 +92,35 @@ public class H2DbService extends DbService {
 
     @Override
     public void storeBookInfo(BookInfo bookInfo) {
-        log.info(bookInfo);
+        if (bookInfo.getId() == 0) {
+            template.update("insert into book (container, sha1, name, size) values (?,?,?,?)",
+                    bookInfo.getContainer(), bookInfo.getSha1(), bookInfo.getName(), bookInfo.getSize());
+        } else {
+
+        }
+        BookInfo dbBookInfo = getBookInfo(bookInfo.getContainer(), bookInfo.getName());
+        if (dbBookInfo != null) {
+            int id = dbBookInfo.getId();
+            bookInfo.setId(id);
+            if (bookInfo.getDescription() != null) {
+                for (Map.Entry<String, String> entry : bookInfo.getDescription().entrySet()) {
+                    template.update("insert into description (book, name, value) values (?,?,?)",
+                            id, entry.getKey(), entry.getValue());
+                }
+            }
+            template.update("update book set saved=true where id=?", id);
+            log.info("book stored: " + bookInfo.getName());
+        }
+    }
+
+    public BookInfo getBookInfo(int container, String name) {
+        try {
+            return template.queryForObject("select * from book where container=? and name=?",
+                    BookInfoMapper.getInstance(), container, name);
+        } catch (DataAccessException e) {
+            log.error("Book not found: " + container + "," + name + ", Exception: " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
@@ -95,16 +130,28 @@ public class H2DbService extends DbService {
             template.update("insert into container (name, size) values (?,?)", container.getName(), container.getSize());
             container.setId(getBooksContainerId(container.getName()));
         } else {
+            template.update("update container set size=? where id=?", container.getId());
             dbBooksInfo = getBooksInfo(container.getId());
         }
         if (container.getBooksInfo() != null) {
-            if (dbBooksInfo == null) {
-                for (BookInfo bookInfo : container.getBooksInfo()) {
-                    bookInfo.setContainer(container.getId());
-                    storeBookInfo(bookInfo);
+            if (dbBooksInfo != null) {
+                for (BookInfo bookInfo : dbBooksInfo) {
+                    deleteBookInfo(bookInfo.getId());
                 }
             }
+            for (BookInfo bookInfo : container.getBooksInfo()) {
+                bookInfo.setContainer(container.getId());
+                storeBookInfo(bookInfo);
+            }
         }
+        template.update("update container set saved=true where id=?", container.getId());
+        log.info("container stored: " + container.getName());
+    }
+
+    public void deleteBookInfo(int book) {
+        template.update("delete from description where book=?", book);
+        template.update("delete from book where id=?", book);
+        log.info("book deleted: " + book);
     }
 
 }

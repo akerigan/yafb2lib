@@ -15,6 +15,7 @@ public class BookInfo {
     private String sha1;
     private String name;
     private long size;
+    private boolean saved;
     private Map<String, String> description;
 
     public int getId() {
@@ -57,6 +58,14 @@ public class BookInfo {
         this.size = size;
     }
 
+    public boolean isSaved() {
+        return saved;
+    }
+
+    public void setSaved(boolean saved) {
+        this.saved = saved;
+    }
+
     public Map<String, String> getDescription() {
         return description;
     }
@@ -84,6 +93,9 @@ public class BookInfo {
         sb.append("<size>");
         sb.append(size);
         sb.append("</size>\n");
+        sb.append("<saved>");
+        sb.append(saved);
+        sb.append("</saved>\n");
         if (description != null) {
             sb.append("<description>");
             for (Object key : description.keySet()) {

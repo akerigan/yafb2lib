@@ -46,9 +46,11 @@ public class Fb2Utils {
                 if (bookInfo != null) {
                     bookInfo.setName(entry.getName());
                     bookInfo.setSize(entry.getSize());
+                    result.add(bookInfo);
                 }
             }
         }
+        zipFile.close();
         return result;
     }
 

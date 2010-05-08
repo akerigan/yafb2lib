@@ -67,13 +67,28 @@ public class LibraryIndexer {
                                     container.setName(containerName);
                                     container.setSize(file.length());
                                 }
-                                if (container.getId() == 0 || container.getSize() != file.length()) {
+                                if (container.getId() == 0 || container.getSize() != file.length()
+                                        || !container.isSaved()) {
+                                    container.setSize(file.length());
                                     container.setBooksInfo(Fb2Utils.getBooksInfo(file, "IBM-866", true));
                                     service.storeBooksContainer(container);
+                                } else {
+                                    log.info("container skipped: " + containerName);
                                 }
                             } else if (lowerContainerName.endsWith(".fb2")) {
-                                BookInfo bookInfo = Fb2Utils.getBookInfo(new FileInputStream(file), true);
-                                service.storeBookInfo(bookInfo);
+                                BookInfo dbBookInfo = service.getBookInfo(0, containerName);
+                                if (dbBookInfo == null || dbBookInfo.getSize() != file.length()
+                                        || !dbBookInfo.isSaved()) {
+                                    BookInfo bookInfo = Fb2Utils.getBookInfo(new FileInputStream(file), true);
+                                    if (dbBookInfo != null) {
+                                        bookInfo.setId(dbBookInfo.getId());
+                                    }
+                                    bookInfo.setName(containerName);
+                                    bookInfo.setSize(file.length());
+                                    service.storeBookInfo(bookInfo);
+                                } else {
+                                    log.info("book skipped: " + containerName);
+                                }
                             }
                         } catch (Exception e) {
                             log.error("Cant add book(s): " + file.toString(), e);
