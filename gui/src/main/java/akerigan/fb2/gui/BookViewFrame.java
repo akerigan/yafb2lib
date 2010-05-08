@@ -40,34 +40,33 @@ public class BookViewFrame extends JFrame {
             log.error("", e);
         }
         BookViewFrame frame = new BookViewFrame();
-        frame.setTitle(BOOK_INFO + "Select file");
-        frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        JComponent panel = new BookViewFrame().buildPanel(frame);
-        frame.getContentPane().add(panel);
-        frame.pack();
-
-        Dimension paneSize = frame.getSize();
-        Dimension screenSize = frame.getToolkit().getScreenSize();
-        frame.setLocation(
-                (screenSize.width - paneSize.width) / 2,
-                (int) ((screenSize.height - paneSize.height) * 0.45));
-
         frame.setVisible(true);
     }
 
-    private void initComponents(BookViewFrame frame) {
+    public BookViewFrame() {
+        super(BOOK_INFO + "Select file");
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().add(buildPanel());
+        pack();
+        Dimension paneSize = getSize();
+        Dimension screenSize = getToolkit().getScreenSize();
+        setLocation((screenSize.width - paneSize.width) / 2,
+                (int) ((screenSize.height - paneSize.height) * 0.45));
+    }
+
+    private void initComponents() {
         bookPathLabel = new JLabel("Not selected");
         bookSelectButton = new JButton("...");
 
         bookInfoTableModel = new BookInfoTableModel();
-        bookSelectButton.addActionListener(new BookSelectActionListener(frame));
+        bookSelectButton.addActionListener(new BookSelectActionListener(this));
         bookInfoTable = new JTable(bookInfoTableModel);
     }
 
-    public JComponent buildPanel(BookViewFrame frame) {
+    public JComponent buildPanel() {
         // Separating the component initialization and configuration
         // from the layout code makes both parts easier to read.
-        initComponents(frame);
+        initComponents();
 
         // Create a FormLayout instance on the given column and row specs.
         // For almost all forms you specify the columns; sometimes rows are
