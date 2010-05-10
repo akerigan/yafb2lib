@@ -14,17 +14,25 @@
     <name>fb2 core functionality</name>
 
     <dependencies>
-        
+
         <dependency>
             <groupId>de.schlichtherle.io</groupId>
             <artifactId>truezip</artifactId>
             <version>6.6</version>
         </dependency>
 
+        <!--
+                <dependency>
+                    <groupId>com.h2database</groupId>
+                    <artifactId>h2</artifactId>
+                    <version>1.2.134</version>
+                </dependency>
+        -->
+
         <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <version>1.2.134</version>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>8.4-701.jdbc4</version>
         </dependency>
 
         <dependency>
@@ -38,7 +46,7 @@
             <artifactId>commons-dbcp</artifactId>
             <version>1.2.2</version>
         </dependency>
-        
+
     </dependencies>
 
 </project>

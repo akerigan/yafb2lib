@@ -8,7 +8,7 @@ import java.util.Map;
  *
  * @author Vlad Vinichenko (akerigan@gmail.com)
  */
-public class BookInfo {
+public class Book {
 
     private int id;
     private int container;
@@ -77,7 +77,7 @@ public class BookInfo {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("<BookInfo>\n");
+        sb.append("<Book>\n");
         sb.append("<id>");
         sb.append(id);
         sb.append("</id>\n");
@@ -109,7 +109,7 @@ public class BookInfo {
         } else {
             sb.append("<description/>\n");
         }
-        sb.append("</BookInfo>\n");
+        sb.append("</Book>\n");
 
         return sb.toString();
     }

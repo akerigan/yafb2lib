@@ -1,6 +1,6 @@
 package akerigan.db;
 
-import akerigan.fb2.domain.BookInfo;
+import akerigan.fb2.domain.Book;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
@@ -12,19 +12,19 @@ import java.sql.SQLException;
  *
  * @author Vlad Vinichenko (akerigan@gmail.com)
  */
-public class BookInfoMapper implements RowMapper<BookInfo> {
+public class BookMapper implements RowMapper<Book> {
 
-    private static BookInfoMapper instance = new BookInfoMapper();
+    private static BookMapper instance = new BookMapper();
 
-    private BookInfoMapper() {
+    private BookMapper() {
     }
 
-    public static BookInfoMapper getInstance() {
+    public static BookMapper getInstance() {
         return instance;
     }
 
-    public BookInfo mapRow(ResultSet rs, int rowNum) throws SQLException {
-        BookInfo result = new BookInfo();
+    public Book mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Book result = new Book();
         result.setId(rs.getInt("id"));
         result.setContainer(rs.getInt("container"));
         result.setSha1(rs.getString("sha1"));

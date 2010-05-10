@@ -1,6 +1,6 @@
 package akerigan.fb2.gui;
 
-import akerigan.fb2.domain.BookInfo;
+import akerigan.fb2.domain.Book;
 import akerigan.utils.Fb2Utils;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -23,7 +23,7 @@ import java.util.Map;
  */
 public class BookViewFrame extends JFrame {
 
-    public static final String BOOK_INFO = "BookInfo info :: ";
+    public static final String BOOK_INFO = "Book info :: ";
 
     private JLabel bookPathLabel;
     private JButton bookSelectButton;
@@ -87,11 +87,11 @@ public class BookViewFrame extends JFrame {
         // frequently used components, e.g. separators and labels.
 
         // Add a titled separator to cell (1, 1) that spans 7 columns.
-        builder.addSeparator("BookInfo path", cc.xyw(1, 1, 3));
+        builder.addSeparator("Book path", cc.xyw(1, 1, 3));
         builder.add(bookSelectButton, cc.xy(1, 3));
         builder.add(bookPathLabel, cc.xy(3, 3));
 
-        builder.addSeparator("BookInfo info", cc.xyw(1, 5, 3));
+        builder.addSeparator("Book info", cc.xyw(1, 5, 3));
         builder.add(new JScrollPane(bookInfoTable), cc.xyw(1, 7, 3));
 
         // The builder holds the layout container that we now return.
@@ -121,8 +121,8 @@ public class BookViewFrame extends JFrame {
                 //This is where a real application would open the file.
                 log.info("Opening: " + file.getName() + ".");
                 try {
-                    for (BookInfo booksInfo : Fb2Utils.getBooksInfo(file, "IBM-866", true)) {
-                        for (Map.Entry<String, String> entry : booksInfo.getDescription().entrySet()) {
+                    for (Book books : Fb2Utils.getBooksInfo(file, "IBM-866", true)) {
+                        for (Map.Entry<String, String> entry : books.getDescription().entrySet()) {
                             bookInfoTableModel.addEntry(entry.getKey(), entry.getValue());
                         }
                         bookInfoTableModel.addEntry("----------", "----------");

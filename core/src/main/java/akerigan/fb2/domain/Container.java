@@ -8,14 +8,14 @@ import java.util.List;
  *
  * @author Vlad Vinichenko (akerigan@gmail.com)
  */
-public class BooksContainer {
+public class Container {
 
     private int id;
     private String name;
     private long size;
     private boolean saved;
 
-    private List<BookInfo> booksInfo;
+    private List<Book> books;
 
     public int getId() {
         return id;
@@ -41,12 +41,12 @@ public class BooksContainer {
         this.size = size;
     }
 
-    public List<BookInfo> getBooksInfo() {
-        return booksInfo;
+    public List<Book> getBooksInfo() {
+        return books;
     }
 
-    public void setBooksInfo(List<BookInfo> booksInfo) {
-        this.booksInfo = booksInfo;
+    public void setBooksInfo(List<Book> books) {
+        this.books = books;
     }
 
     public boolean isSaved() {
@@ -60,7 +60,7 @@ public class BooksContainer {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
-        sb.append("<BooksContainer>\n");
+        sb.append("<Container>\n");
         sb.append("<id>");
         sb.append(id);
         sb.append("</id>\n");
@@ -73,18 +73,18 @@ public class BooksContainer {
         sb.append("<saved>");
         sb.append(saved);
         sb.append("</saved>\n");
-        if (booksInfo != null) {
-            sb.append("<booksInfo>");
-            for (Object obj : booksInfo) {
+        if (books != null) {
+            sb.append("<books>");
+            for (Object obj : books) {
                 sb.append("<item>");
                 sb.append(obj);
                 sb.append("</item>\n");
             }
-            sb.append("</booksInfo>\n");
+            sb.append("</books>\n");
         } else {
-            sb.append("<booksInfo/>\n");
+            sb.append("<books/>\n");
         }
-        sb.append("</BooksContainer>\n");
+        sb.append("</Container>\n");
 
         return sb.toString();
     }

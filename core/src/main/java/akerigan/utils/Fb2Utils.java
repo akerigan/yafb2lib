@@ -1,6 +1,6 @@
 package akerigan.utils;
 
-import akerigan.fb2.domain.BookInfo;
+import akerigan.fb2.domain.Book;
 import de.schlichtherle.util.zip.ZipEntry;
 import de.schlichtherle.util.zip.ZipFile;
 
@@ -31,22 +31,22 @@ public class Fb2Utils {
 
     private static XMLInputFactory factory = XMLInputFactory.newInstance();
 
-    public static List<BookInfo> getBooksInfo(File zippedFb2File, String encoding) throws IOException, XMLStreamException, NoSuchAlgorithmException {
+    public static List<Book> getBooksInfo(File zippedFb2File, String encoding) throws IOException, XMLStreamException, NoSuchAlgorithmException {
         return getBooksInfo(zippedFb2File, encoding, false);
     }
 
-    public static List<BookInfo> getBooksInfo(File zippedFb2File, String encoding, boolean addDigest) throws IOException, XMLStreamException, NoSuchAlgorithmException {
-        List<BookInfo> result = new LinkedList<BookInfo>();
+    public static List<Book> getBooksInfo(File zippedFb2File, String encoding, boolean addDigest) throws IOException, XMLStreamException, NoSuchAlgorithmException {
+        List<Book> result = new LinkedList<Book>();
         ZipFile zipFile = new ZipFile(zippedFb2File, encoding);
         Enumeration<ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             ZipEntry entry = entries.nextElement();
             if (entry.getName().toLowerCase().endsWith(".fb2")) {
-                BookInfo bookInfo = getBookInfo(zipFile.getInputStream(entry), addDigest);
-                if (bookInfo != null) {
-                    bookInfo.setName(entry.getName());
-                    bookInfo.setSize(entry.getSize());
-                    result.add(bookInfo);
+                Book book = getBookInfo(zipFile.getInputStream(entry), addDigest);
+                if (book != null) {
+                    book.setName(entry.getName());
+                    book.setSize(entry.getSize());
+                    result.add(book);
                 }
             }
         }
@@ -54,11 +54,11 @@ public class Fb2Utils {
         return result;
     }
 
-    public static BookInfo getBookInfo(InputStream fb2InputStream, boolean addDigest) throws XMLStreamException, NoSuchAlgorithmException, IOException {
+    public static Book getBookInfo(InputStream fb2InputStream, boolean addDigest) throws XMLStreamException, NoSuchAlgorithmException, IOException {
         if (fb2InputStream != null) {
-            BookInfo bookInfo = new BookInfo();
+            Book book = new Book();
             Map<String, String> description = new LinkedHashMap<String, String>();
-            bookInfo.setDescription(description);
+            book.setDescription(description);
             XMLEventReader reader;
             if (addDigest) {
                 MessageDigest sha1Hash = MessageDigest.getInstance("SHA1");
@@ -69,12 +69,16 @@ public class Fb2Utils {
                 while (ch != -1) {
                     ch = digestInputStream.read();
                 }
-                bookInfo.setSha1(StringUtils.hexencode(digestInputStream.getMessageDigest().digest()));
+                book.setSha1(StringUtils.hexencode(digestInputStream.getMessageDigest().digest()));
+                reader.close();
+                digestInputStream.close();
             } else {
                 reader = factory.createXMLEventReader(fb2InputStream);
                 fillDescription("", reader, description);
+                reader.close();
+                fb2InputStream.close();
             }
-            return bookInfo;
+            return book;
         } else {
             return null;
         }
@@ -121,7 +125,11 @@ public class Fb2Utils {
         if (value != null) {
             String characters = value.toString().trim();
             if (characters != null && characters.length() > 0) {
-                result.put(parentName, characters);
+                if (parentName.startsWith("title-info.author.")) {
+                    result.put(parentName, StringUtils.capitalize3(characters.trim(), " "));
+                } else {
+                    result.put(parentName, characters);
+                }
             }
         }
         return true;

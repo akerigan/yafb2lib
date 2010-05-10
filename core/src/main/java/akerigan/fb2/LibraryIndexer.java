@@ -1,7 +1,7 @@
 package akerigan.fb2;
 
-import akerigan.fb2.domain.BookInfo;
-import akerigan.fb2.domain.BooksContainer;
+import akerigan.fb2.domain.Book;
+import akerigan.fb2.domain.Container;
 import akerigan.fb2.service.DbService;
 import akerigan.utils.Fb2Utils;
 import akerigan.utils.file.FileLister;
@@ -36,7 +36,6 @@ public class LibraryIndexer {
         if (appProperties != null) {
             ApplicationContext ctx = new ClassPathXmlApplicationContext("/appContext.xml");
             DbService service = (DbService) ctx.getBean("dbService");
-            service.init();
             FileLister lister = new FileLister();
             List<File> baseDirs = appProperties.getBaseDirs();
             if (baseDirs != null) {
@@ -61,31 +60,28 @@ public class LibraryIndexer {
                     if (containerName != null) {
                         try {
                             if (lowerContainerName.endsWith(".zip")) {
-                                BooksContainer container = service.getBooksContainer(containerName);
+                                Container container = service.getContainer(containerName);
                                 if (container == null) {
-                                    container = new BooksContainer();
+                                    container = new Container();
                                     container.setName(containerName);
                                     container.setSize(file.length());
                                 }
-                                if (container.getId() == 0 || container.getSize() != file.length()
-                                        || !container.isSaved()) {
+                                if (container.getId() == 0 || container.getSize() != file.length() || !container.isSaved()) {
                                     container.setSize(file.length());
-                                    container.setBooksInfo(Fb2Utils.getBooksInfo(file, "IBM-866", true));
-                                    service.storeBooksContainer(container);
+                                    service.mergeContainer(container, file, "IBM-866");
                                 } else {
                                     log.info("container skipped: " + containerName);
                                 }
                             } else if (lowerContainerName.endsWith(".fb2")) {
-                                BookInfo dbBookInfo = service.getBookInfo(0, containerName);
-                                if (dbBookInfo == null || dbBookInfo.getSize() != file.length()
-                                        || !dbBookInfo.isSaved()) {
-                                    BookInfo bookInfo = Fb2Utils.getBookInfo(new FileInputStream(file), true);
-                                    if (dbBookInfo != null) {
-                                        bookInfo.setId(dbBookInfo.getId());
+                                Book dbBook = service.getBook(0, containerName);
+                                if (dbBook == null || dbBook.getSize() != file.length() || !dbBook.isSaved()) {
+                                    Book book = Fb2Utils.getBookInfo(new FileInputStream(file), true);
+                                    if (dbBook != null) {
+                                        book.setId(dbBook.getId());
                                     }
-                                    bookInfo.setName(containerName);
-                                    bookInfo.setSize(file.length());
-                                    service.storeBookInfo(bookInfo);
+                                    book.setName(containerName);
+                                    book.setSize(file.length());
+                                    service.mergeBook(book);
                                 } else {
                                     log.info("book skipped: " + containerName);
                                 }
