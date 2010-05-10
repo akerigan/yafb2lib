@@ -31,12 +31,10 @@ public class H2DbService extends DbService {
         }
         if (!tables.contains("DESCRIPTION")) {
             template.update("create table description(id identity primary key, book int, name varchar(256), value varchar(16384))");
-        } else {
-            template.update("alter table description alter column value varchar(16384)");
         }
 
         Set<String> indexes = new TreeSet<String>(
-                template.query("select indexname from pg_indexes where schemaname='public'", StringMapper.getInstance()));
+                template.query("select index_name from information_schema.indexes", StringMapper.getInstance()));
 /*
         if (!indexes.contains("SHA1_IDX")) {
             template.update("create index sha1_idx ON files(sha1)");
