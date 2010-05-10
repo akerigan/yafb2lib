@@ -79,4 +79,16 @@ public class H2DbService extends DbService {
         }
     }
 
+    @Override
+    public void deleteBook(int book) {
+        deleteDescription(book);
+        template.update("delete from book where id=?", book);
+        log.info("book deleted: " + book);
+    }
+
+    @Override
+    public void deleteDescription(int book) {
+        template.update("delete from description where book=?", book);
+        log.info("book description deleted: " + book);
+    }
 }

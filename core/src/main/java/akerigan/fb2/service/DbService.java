@@ -130,18 +130,12 @@ public abstract class DbService {
         log.info("container stored: " + container.getName());
     }
 
-    public void deleteBook(int book) {
-        template.update("delete from description where book=?", book);
-        deleteDescription(book);
-        log.info("book deleted: " + book);
-    }
+    public abstract void deleteBook(int book);
 
-    public void deleteDescription(int book) {
-        template.update("delete from book where id=?", book);
-        log.info("book description deleted: " + book);
-    }
+    public abstract void deleteDescription(int book);
 
     public List<String> getAuthorsLastNames() {
+
         return template.query("select distinct value from description " +
                 "where name='title-info.author.last-name' order by value", StringMapper.getInstance());
     }

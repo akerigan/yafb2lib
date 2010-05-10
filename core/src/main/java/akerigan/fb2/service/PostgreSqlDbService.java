@@ -1,6 +1,8 @@
 package akerigan.fb2.service;
 
 import akerigan.db.StringMapper;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,6 +14,8 @@ import java.util.TreeSet;
  * @author Vlad Vinichenko (akerigan@gmail.com)
  */
 public class PostgreSqlDbService extends DbService {
+
+    private Log log = LogFactory.getLog(getClass());
 
     @Override
     public void init() {
@@ -64,5 +68,17 @@ public class PostgreSqlDbService extends DbService {
     @Override
     protected int getGeneratedBookId(int container, String name) {
         return template.queryForInt("select currval(pg_get_serial_sequence('book', 'id'));");
+    }
+
+    @Override
+    public void deleteBook(int book) {
+        template.update("delete from book where id=?", book);
+        log.info("book deleted: " + book);
+    }
+
+    @Override
+    public void deleteDescription(int book) {
+        template.update("delete from description where book=?", book);
+        log.info("book description deleted: " + book);
     }
 }
