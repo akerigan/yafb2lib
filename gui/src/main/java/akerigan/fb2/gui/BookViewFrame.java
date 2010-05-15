@@ -126,11 +126,12 @@ public class BookViewFrame extends JFrame {
                             bookInfoTableModel.addEntry(entry.getKey(), entry.getValue());
                         }
                         bookInfoTableModel.addEntry("----------", "----------");
-                        bookInfoTableModel.fireTableRowsInserted(0, Integer.MAX_VALUE);
                     }
                 } catch (Exception ex) {
                     log.error("Error reading file", ex);
                 }
+                bookInfoTableModel.fireTableRowsInserted(0, Integer.MAX_VALUE);
+                frame.pack();
             } else {
                 log.info("Open command cancelled by user.");
             }

@@ -37,6 +37,8 @@ public class LibraryFrame extends JFrame {
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
+        builder.addSeparator("Search parameters", cc.xyw(1, 1, 3));
+        builder.addSeparator("Sorting parameters", cc.xyw(1, 1, 3));
 
         return builder.getPanel();
     }
