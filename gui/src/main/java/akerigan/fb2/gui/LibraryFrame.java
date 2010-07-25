@@ -15,6 +15,8 @@ import java.awt.*;
  */
 public class LibraryFrame extends JFrame {
 
+    private JList descriptionTypesList;
+
     public LibraryFrame() {
         super("Yet another fb2 library");
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -44,7 +46,7 @@ public class LibraryFrame extends JFrame {
     }
 
     private void initComponents() {
-
+        descriptionTypesList = new JList();
     }
 
 }

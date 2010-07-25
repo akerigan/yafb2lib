@@ -38,7 +38,11 @@ public class StringUtils {
 
     public static String capitalize(String src) {
         if (src != null) {
-            return src.substring(0, 1).toUpperCase() + src.substring(1);
+            if (src.length() == 1) {
+                return src.toUpperCase();
+            } else {
+                return src.substring(0, 1).toUpperCase() + src.substring(1);
+            }
         } else {
             return null;
         }
@@ -96,5 +100,18 @@ public class StringUtils {
 
     public static String decapitalize(String src) {
         return src.substring(0, 1).toLowerCase() + src.substring(1);
+    }
+
+    public static String trim(String s) {
+        if (s != null) {
+            String result = s.trim();
+            if (result.length() > 0) {
+                return result;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
     }
 }

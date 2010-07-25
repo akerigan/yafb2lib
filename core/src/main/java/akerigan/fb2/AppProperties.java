@@ -1,5 +1,7 @@
 package akerigan.fb2;
 
+import akerigan.utils.file.FileUtils;
+
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,8 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 
-import static akerigan.fb2.CoreConstants.BASE_DIRS_PROP;
-import static akerigan.fb2.CoreConstants.PROPS_FILE;
+import static akerigan.fb2.CoreConstants.*;
 
 /**
  * Date: 01.05.2010
@@ -22,6 +23,8 @@ public class AppProperties {
     private Properties props;
 
     private List<File> baseDirs;
+
+    private File workDir;
 
     public AppProperties() throws IOException {
         String userHome = System.getProperty("user.home");
@@ -36,21 +39,33 @@ public class AppProperties {
         }
     }
 
+    private String getProperty(String name) {
+        if (props.containsKey(name)) {
+            return (String) props.get(name);
+        } else {
+            throw new IllegalStateException("Property not found: " + name);
+        }
+    }
+
     public List<File> getBaseDirs() {
         if (baseDirs == null) {
-            if (props.containsKey(BASE_DIRS_PROP)) {
-                baseDirs = new LinkedList<File>();
-                String baseDirsProp = (String) props.get(BASE_DIRS_PROP);
-                for (String baseDir : baseDirsProp.split("\\s*;\\s*")) {
-                    File baseDirFile = new File(baseDir);
-                    if (baseDirFile.exists() && baseDirFile.isDirectory()) {
-                        baseDirs.add(baseDirFile);
-                    }
+            baseDirs = new LinkedList<File>();
+            String baseDirsProp = getProperty(BASE_DIRS_PROP);
+            for (String baseDir : baseDirsProp.split("\\s*;\\s*")) {
+                File baseDirFile = new File(baseDir);
+                if (baseDirFile.exists() && baseDirFile.isDirectory()) {
+                    baseDirs.add(baseDirFile);
                 }
-            } else {
-                throw new IllegalStateException("Property not found: " + BASE_DIRS_PROP);
             }
         }
         return baseDirs;
+    }
+
+    public File getWorkDir() {
+        if (workDir == null) {
+            workDir = new File(getProperty(WORK_DIR_PROP));
+            FileUtils.makeDirs(workDir);
+        }
+        return workDir;
     }
 }

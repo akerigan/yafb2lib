@@ -75,6 +75,17 @@ public class Book {
     }
 
     @Override
+    public boolean equals(Object o) {
+        Book book = (Book) o;
+        return this == o || !(o == null || getClass() != o.getClass()) && sha1.equals(book.sha1);
+    }
+
+    @Override
+    public int hashCode() {
+        return sha1.hashCode();
+    }
+
+    @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder();
         sb.append("<Book>\n");

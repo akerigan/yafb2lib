@@ -1,8 +1,6 @@
 package akerigan.fb2.service;
 
-import akerigan.db.BookMapper;
-import akerigan.db.ContainerMapper;
-import akerigan.db.StringMapper;
+import akerigan.db.*;
 import akerigan.fb2.Fb2ContainerIterator;
 import akerigan.fb2.domain.Book;
 import akerigan.fb2.domain.Container;
@@ -135,10 +133,37 @@ public abstract class DbService {
     public abstract void deleteDescription(int book);
 
     public List<String> getAuthorsLastNames() {
-
         return template.query("select distinct value from description " +
                 "where name='title-info.author.last-name' order by value", StringMapper.getInstance());
     }
 
+    public List<String> getDescriptionTypes() {
+        return template.query("select distinct name from description order by name", StringMapper.getInstance());
+    }
+
+    public List<Book> getBooksByDescriptionPattern(String pattern) {
+        return template.query("select distinct * from book where id in " +
+                "(select distinct book from description where value like ?)",
+                BookMapper.getInstance(), pattern);
+    }
+
+    public Container getContainer(int container) {
+        return template.queryForObject("select * from container where id=?", ContainerMapper.getInstance(), container);
+    }
+
+    public Map<Integer, Map<String, String>> getBooksDescription(String pattern) {
+        BooksDescriptionCallbackHandler handler = new BooksDescriptionCallbackHandler();
+        template.getJdbcOperations().query("select book, name, value from description where id in " +
+                "(select distinct book from description where value like ?) order by id", new Object[]{pattern},
+                handler);
+        return handler.getResult();
+    }
+
+    public Map<String, String> getDescription(int book) {
+        DescriptionCallbackHandler handler = new DescriptionCallbackHandler();
+        template.getJdbcOperations().query("select name, value from description where book=? order by id",
+                new Object[]{book}, handler);
+        return handler.getResult();
+    }
 
 }

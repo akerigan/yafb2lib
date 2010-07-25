@@ -12,4 +12,6 @@ public class CoreConstants {
 
     public static final String BASE_DIRS_PROP = "base.dirs";
 
+    public static final String WORK_DIR_PROP = "work.dir";
+
 }
